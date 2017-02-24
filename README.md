@@ -44,6 +44,7 @@ The web-app (which will also be a mobile app.) will be an app that broadcasts yo
 - (optional) Learn & work with Swift for iOS app
 - Deploying and configuring RestAPI to work with mobile devices
 
-##Proposal \#2
+<!--##Proposal \#2
 ###Project Name
 The project Name is **CMYK Buyer** (subject to change)
+-->
