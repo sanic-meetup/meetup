@@ -1,8 +1,8 @@
 # Team Sanic Project Proposals
------
+<!-- -----
 This is the project proposal for Team Sanic, we submit two proposals (proposal \#1 and \#2 respectively). Proposal \#1 is our main idea and Proposal \#2 is our backup Idea.
 
------
+----- -->
 ###Team Members
 - Daniel Persaud (<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu_psdppsyLMN0iFDBxy0jRhdKff1VQrKtZpfXorJeFdSkzf6hK96U-Lc" width="30px" height="auto"/>persa188)
 - Brandon Mowat (<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSu_psdppsyLMN0iFDBxy0jRhdKff1VQrKtZpfXorJeFdSkzf6hK96U-Lc" width="30px" height="auto"/>brandonmowat)
