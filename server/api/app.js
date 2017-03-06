@@ -6,6 +6,7 @@ var app = express();
 var sanitizer = require('sanitizer');
 var validator = require('express-validator');
 var jwt = require('jsonwebtoken');
+var conf = require('./conf')
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -17,7 +18,7 @@ app.use(validator([]));
 
 //db
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://daniel:daniel123@ds119750.mlab.com:19750/freetime');
+mongoose.connect(conf.mongouri);
 
 //models
 var User = require("./models/user");
