@@ -105,7 +105,7 @@ app.post('/signin/', function (req, res, next) {
 
   User.find({username: user.username}, function(err, result){
     if (err) return res.status(500).end(err);
-    if (!result || !checkPassword(result[0], user.password)) return res.status(401).end("Unauthorized");
+    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end("Unauthorized");
 
     // successful auth,  create a token
     var t = 60*60*24;
