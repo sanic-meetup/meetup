@@ -4,6 +4,7 @@
 - open the conf.js file and set your username and password
 ``node app.js``
 - connect @ **https**://localhost:3000
+
 ##Users API
 ###Registering A New User
 - description: register a new user
