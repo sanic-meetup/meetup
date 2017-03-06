@@ -6,7 +6,8 @@ var app = express();
 var sanitizer = require('sanitizer');
 var validator = require('express-validator');
 var jwt = require('jsonwebtoken');
-var conf = require('./conf')
+var conf = require('./conf');
+var fs = require('fs');
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -26,8 +27,15 @@ var User = require("./models/user");
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
+var md = require("node-markdown").Markdown;
 app.get("/", function(req, res, next) {
-  res.send("successfully connected to api");
+  fs.readFile("../README.md", function (err, data) {
+    if (err) {
+        res.sendStatus(500);
+    }
+
+    res.send(md(data.toString()));
+  });
 });
 
 //middleware to verify a token
