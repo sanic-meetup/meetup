@@ -2,7 +2,7 @@
 ##Users API
 ###Registering A New User
 - description: register a new user
-- request: `POST /api/users/`
+- request: `POST /users/`
   - content-type: `application/json`
   - body: object
     - username: (string) the username
@@ -21,7 +21,7 @@ curl -X PUT -H "Content-Type: application/json" -H "Cache-Control: no-cache" -H 
 
 ###Logging In
 - description: register a new user
-- request: `POST /api/signin/`
+- request: `POST /signin/`
   - content-type: `application/json`
   - body: object
     - username: (string) the username
