@@ -2,6 +2,7 @@
 ##setup
 ``npm init``
 - open the conf.js file and set your username and password  
+
 ``node app.js``
 - connect @ **https**://localhost:3000
 
