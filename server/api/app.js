@@ -62,7 +62,7 @@ apiRoutes.use(function (req, res, next) {
 //apply apiroutes only to routes with prefix /api
 app.use('/api', apiRoutes);
 
-app.post("/api/users/", function (req, res, next) {
+app.post("/users/", function (req, res, next) {
   //some basic validation
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
@@ -91,7 +91,7 @@ var checkPassword = function(user, password){
         return (user.password === value);
 };
 
-app.post('/api/signin/', function (req, res, next) {
+app.post('/signin/', function (req, res, next) {
   //sanitize
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
