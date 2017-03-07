@@ -27,15 +27,27 @@ var User = require("./models/user");
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
-var md = require("node-markdown").Markdown;
+app.use(express.static('html'));
 app.get("/", function(req, res, next) {
-  fs.readFile("../README.md", function (err, data) {
-    if (err) {
-        res.sendStatus(500);
-    }
+  fs.readFile('../README.md', 'utf8', function (err,data) {
+  if (err) {
+    res.send("could not load api docs");
+  }
+    var v = ```
+    <!DOCTYPE html>
+    <html>
+    <title>API Documentation</title>
 
-    res.send(md(data.toString()));
-  });
+    <xmp theme="united" style="display:none;">
+    ```;
+    v += data;
+    v += ```
+      </xmp>
+
+      <script src="https://strapdownjs.com/v/0.2/strapdown.js"></script>
+      </html>```;
+    });
+  res.send(v);
 });
 
 //middleware to verify a token
