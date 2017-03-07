@@ -6,7 +6,8 @@ var app = express();
 var sanitizer = require('sanitizer');
 var validator = require('express-validator');
 var jwt = require('jsonwebtoken');
-var conf = require('./conf')
+var conf = require('./conf');
+var fs = require('fs');
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -26,8 +27,27 @@ var User = require("./models/user");
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
+app.use(express.static('html'));
 app.get("/", function(req, res, next) {
-  res.send("successfully connected to api");
+  fs.readFile('../README.md', 'utf8', function (err,data) {
+  if (err) {
+    res.send("could not load api docs");
+  }
+    var v = ```
+    <!DOCTYPE html>
+    <html>
+    <title>API Documentation</title>
+
+    <xmp theme="united" style="display:none;">
+    ```;
+    v += data;
+    v += ```
+      </xmp>
+
+      <script src="https://strapdownjs.com/v/0.2/strapdown.js"></script>
+      </html>```;
+    });
+  res.send(v);
 });
 
 //middleware to verify a token

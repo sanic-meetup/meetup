@@ -44,3 +44,15 @@ curl -X PUT -H "Content-Type: application/json" -H "Cache-Control: no-cache" -H 
 ``GET "/api/testauth"``
 send token using ?token="token" or body or header
 returns 200 if successful
+
+##Sample Config
+```
+var username = 'daniel';
+var password = 'daniel123';
+
+var conf = {
+  mongouri: "mongodb://" + username + ":" + password + "@ds119750.mlab.com:19750/freetime"
+};
+
+module.exports = conf;
+```
