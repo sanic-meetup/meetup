@@ -29,14 +29,17 @@ var fr_request = require("./models/fr_request");
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
 app.get("/", function(req, res, next) {
+  var mode = "dev";
   fs.readFile('../README.md', 'utf8', function (err,data) {
-  if (err) {
-    res.send("could not load api docs");
-  }
-    var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
-    v += data;
-    v += "</xmp><script src=\"https://strapdownjs.com/v/0.2/strapdown.js\"></script></html>";
-      res.send(v);
+    if (err) {
+      res.send("could not load api docs");
+    }
+    if (mode === "dev") {
+      var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
+      v += data;
+      v += "</xmp><script src=\"https://strapdownjs.com/v/0.2/strapdown.js\"></script></html>";
+        res.send(v);
+      } else res.send("It Works!");
     });
 });
 
@@ -127,6 +130,9 @@ app.post('/signin/', function (req, res, next) {
   });
 });
 
+/**
+* test function only
+*/
 app.get("/api/testauth", function(req, res, next){
     res.status(200).send("authorized");
 });
