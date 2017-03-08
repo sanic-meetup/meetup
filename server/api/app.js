@@ -23,11 +23,11 @@ mongoose.connect(conf.mongouri);
 
 //models
 var User = require("./models/user");
+var fr_request = require("./models/fr_request");
 
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
-app.use(express.static('html'));
 app.get("/", function(req, res, next) {
   fs.readFile('../README.md', 'utf8', function (err,data) {
   if (err) {
@@ -82,7 +82,7 @@ app.post("/users/", function (req, res, next) {
 
   var new_user = new User({
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   });
 
   new_user.save(function(err) {
@@ -129,6 +129,55 @@ app.post('/signin/', function (req, res, next) {
 
 app.get("/api/testauth", function(req, res, next){
     res.status(200).send("authorized");
+});
+
+//update the user's location
+app.put("/api/location/", function (req, res, next) {
+  //create the object & sanitize
+  var newloc = {
+    longitude: sanitizer.sanitize(req.body.longitude),
+    latitude: sanitizer.sanitize(req.body.latitude),
+    height: sanitizer.sanitize(req.body.height)
+  };
+
+  //sanitize & validate
+  req.body.username = sanitizer.sanitize(req.body.username);
+  req.checkBody().notEmpty();
+
+  //check permissions
+  if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
+    return res.status(401).end("Unauthorized");
+  }
+  //update and return the location info
+  User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
+    if (err) return res.status(500).end(err);
+    //for response
+    res.status(200).send(data.location);
+  });
+});
+
+/**
+* a route to make a friend request, not yet implemented
+* @TODO:
+* [x] friend request model for database
+* [x] import friend request model to this file
+      - the friend request model is fr_request
+* [] implement push notifications and/or nodemailer to send the
+     friend request link
+*/
+app.post("/api/friendrequest/", function(req, res, next) {
+  res.status(200).send("not yet implemented");
+});
+
+/*
+* a route to add a friend this should work as follows,
+* a request was made using /api/friendrequest and a link was generated
+* with somthing like ../?token="token"&frequest="generated request link"
+* the token will be used for auth and the frequest link will be queried in the db
+* to perform the actual friend request
+*/
+app.get("/api/addfriend/", function(req, res, next) {
+  res.status(200).send("not yet implemented");
 });
 
 //https setup

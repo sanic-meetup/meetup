@@ -6,11 +6,16 @@ var crypto = require("crypto");
 // create a schema
 var userSchema = new Schema({
   name: String,
+  status: String,
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   salt: { type: String },
   admin: Boolean,
-  location: String,
+  location: {
+    longitude : Number,
+    latitude: Number,
+    height: Number
+  },
   meta: {
     age: Number,
     website: String
@@ -25,6 +30,7 @@ userSchema.pre('save', function(next) {
   hash.update(this.password);
   this.salt = salt;
   this.password = hash.digest('base64');
+  this.admin = false;
   next();
 });
 
