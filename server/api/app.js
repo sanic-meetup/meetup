@@ -33,21 +33,11 @@ app.get("/", function(req, res, next) {
   if (err) {
     res.send("could not load api docs");
   }
-    var v = ```
-    <!DOCTYPE html>
-    <html>
-    <title>API Documentation</title>
-
-    <xmp theme="united" style="display:none;">
-    ```;
+    var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
     v += data;
-    v += ```
-    </xmp>
-
-    <script src="https://strapdownjs.com/v/0.2/strapdown.js"></script>
-    </html>```;
+    v += "</xmp><script src=\"https://strapdownjs.com/v/0.2/strapdown.js\"></script></html>";
+      res.send(v);
     });
-  res.send(v);
 });
 
 //middleware to verify a token
