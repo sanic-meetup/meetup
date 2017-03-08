@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<head>
+  <title>Pusher Test</title>
+  <script src="https://js.pusher.com/4.0/pusher.min.js"></script>
+  <script>
+
+    // Enable pusher logging - don't include this in production
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('c44a3af2941478d93548', {
+      encrypted: true
+    });
+
+    var channel = pusher.subscribe('testuser');
+    channel.bind('friend-request', function(data) {
+      document.getElementById("pchannel").innerText="channel: testuser";
+      document.getElementById("pevent").innerText="event: friend-request"
+      document.getElementById("pcontent").innerText="message: "+data.message;
+    });
+  </script>
+  <body>
+    <div id="pchannel"></div>
+    <div id="pevent"></div>
+    <div id="pcontent"></div>
+  <body>
+</head>
