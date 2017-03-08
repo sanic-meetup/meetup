@@ -42,10 +42,10 @@ app.get("/", function(req, res, next) {
     ```;
     v += data;
     v += ```
-      </xmp>
+    </xmp>
 
-      <script src="https://strapdownjs.com/v/0.2/strapdown.js"></script>
-      </html>```;
+    <script src="https://strapdownjs.com/v/0.2/strapdown.js"></script>
+    </html>```;
     });
   res.send(v);
 });
