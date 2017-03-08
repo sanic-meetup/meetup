@@ -28,6 +28,16 @@ var fr_request = require("./models/fr_request");
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
+//for push notifications
+var Pusher = require('pusher');
+
+var pusher = new Pusher({
+  appId: '311795',
+  key: 'c44a3af2941478d93548',
+  secret: '31d232d42bd6b466088b',
+  encrypted: true
+});
+
 app.get("/", function(req, res, next) {
   var mode = "dev";
   fs.readFile('../README.md', 'utf8', function (err,data) {
@@ -172,6 +182,9 @@ app.put("/api/location/", function (req, res, next) {
      friend request link
 */
 app.post("/api/friendrequest/", function(req, res, next) {
+  pusher.trigger(req.body.username, 'friend-request', {
+    "message": "sample-random-gen-link"
+  });
   res.status(200).send("not yet implemented");
 });
 
