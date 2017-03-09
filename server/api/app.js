@@ -87,6 +87,9 @@ apiRoutes.use(function (req, res, next) {
 //apply apiroutes only to routes with prefix /api
 app.use('/api', apiRoutes);
 
+/**
+* for creating a new user, see docs
+*/
 app.post("/users/", function (req, res, next) {
   //some basic validation
   req.body.username = sanitizer.sanitize(req.body.username);
@@ -112,6 +115,9 @@ app.post("/users/", function (req, res, next) {
 
 });
 
+/**
+* private method for checking passwd
+*/
 var checkPassword = function(user, password){
         var hash = crypto.createHmac('sha512', user.salt);
         hash.update(password);
@@ -145,7 +151,7 @@ app.post('/signin/', function (req, res, next) {
 });
 
 /**
-* test function only
+* test route only
 */
 app.get("/api/testauth", function(req, res, next){
     res.status(200).send("authorized");
@@ -187,7 +193,6 @@ app.put("/api/location/", function (req, res, next) {
 */
 app.post("/api/friendrequest/", function(req, res, next) {
   //sanitize
-  console.log(req.body.invitee);
   req.body.inviter = sanitizer.sanitize(req.body.inviter);
   req.body.invitee = sanitizer.sanitize(req.body.invitee);
   req.checkBody().notEmpty();
