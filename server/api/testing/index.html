@@ -15,7 +15,7 @@
     channel.bind('friend-request', function(data) {
       document.getElementById("pchannel").innerText="channel: testuser";
       document.getElementById("pevent").innerText="event: friend-request"
-      document.getElementById("pcontent").innerText="message: "+data.message;
+      document.getElementById("pcontent").innerText="message: "+ JSON.stringify(data);
     });
   </script>
   <body>

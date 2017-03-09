@@ -16,6 +16,7 @@ var userSchema = new Schema({
     latitude: Number,
     height: Number
   },
+  email: {type: String, required: true},
   meta: {
     age: Number,
     website: String

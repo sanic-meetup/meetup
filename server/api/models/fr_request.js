@@ -4,9 +4,10 @@ var Schema = mongoose.Schema;
 
 // create a schema
 var fr_requestSchema = new Schema({
-  user1: { type: String, required: true, unique: true },
-  user2: { type: String, required: true, unique: true },
-  link: String,
+  users: {
+    user1: { type: String, required: true, index: {unique: false}},
+    user2: { type: String, required: true, index: {unique: false}},
+  },
   created_at: Date,
   updated_at: Date
 });

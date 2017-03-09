@@ -8,6 +8,7 @@ var validator = require('express-validator');
 var jwt = require('jsonwebtoken');
 var conf = require('./conf');
 var fs = require('fs');
+var helper = require('sendgrid').mail;
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -90,12 +91,15 @@ app.post("/users/", function (req, res, next) {
   //some basic validation
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
+  req.body.email = sanitizer.sanitize(req.body.email);
   req.checkBody('username', 'username field cannot be empty').notEmpty();
   req.checkBody('password', 'password field cannot be empty').notEmpty();
+  req.checkBody('email', 'email field cannot be empty').notEmpty();
 
   var new_user = new User({
     username: req.body.username,
     password: req.body.password,
+    email: req.body.email
   });
 
   new_user.save(function(err) {
@@ -182,10 +186,40 @@ app.put("/api/location/", function (req, res, next) {
      friend request link
 */
 app.post("/api/friendrequest/", function(req, res, next) {
-  pusher.trigger(req.body.username, 'friend-request', {
-    "message": "sample-random-gen-link"
+  //sanitize
+  console.log(req.body.invitee);
+  req.body.inviter = sanitizer.sanitize(req.body.inviter);
+  req.body.invitee = sanitizer.sanitize(req.body.invitee);
+  req.checkBody().notEmpty();
+  //check permissions
+  if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.inviter) {
+    return res.status(401).end("Unauthorized");
+  }
+
+  var new_request = new fr_request({
+    users:{
+      user1: req.body.inviter,
+      user2: req.body.invitee
+    }
   });
-  res.status(200).send("not yet implemented");
+
+  new_request.save(function(err, data) {
+    //if err user exists
+    if (err) res.status(409).send(err);
+    else {
+      var msg = "https://whereverwehosttheapi/addfriend/?token="+data._id;
+      //send the push notification to the invitee
+      pusher.trigger(req.body.invitee, 'friend-request', {
+        "request-id": msg
+      });
+      //send the email notification
+      //@TODO change to user email
+      sendmail(msg, "k.ganeshamoorthy@mail.utoronto.ca", "new friend request");
+      res.status(200).send(data);
+    }
+  });
+
+  // res.status(200).send("not yet implemented");
 });
 
 /*
@@ -198,6 +232,28 @@ app.post("/api/friendrequest/", function(req, res, next) {
 app.get("/api/addfriend/", function(req, res, next) {
   res.status(200).send("not yet implemented");
 });
+
+/**
+* a helper function that sends email (from support@sanic.ca)
+* data = message content, dest_email = recipient, sub = message subject
+*/
+function sendmail(data, dest_email, subj){
+  //email setup, move to config file later
+  from_email = new helper.Email("support@sanic.ca");
+  to_email = new helper.Email(dest_email);
+  subject = subj;
+  content = new helper.Content("text/plain", data);
+  mail = new helper.Mail(from_email, subject, to_email, content);
+  var sg = require('sendgrid')('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');
+  var request = sg.emptyRequest({
+    method: 'POST',
+    path: '/v3/mail/send',
+    body: mail.toJSON()
+  });
+  sg.API(request, function(error, response) {
+    if (error) console.log(error);
+  });
+}
 
 //https setup
 var https = require("https");

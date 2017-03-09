@@ -14,6 +14,7 @@
   - body: object
     - username: (string) the username
     - password: (string) the password
+    - email: (string) an email
 - response: 200 | 500 if server error | 409 if user already exists
   - content-type: `application/json`
   - body: object
@@ -24,7 +25,8 @@
 ```
 {
   "username": "test2",
-  "password": "test2"
+  "password": "test2",
+  "email": "mail@domain.com"
 }
 ```
 
@@ -42,6 +44,17 @@
     - token: (string) the token used to authenticate in other methods
     - expiresIn: (int) when the token expires in seconds
 
+###Making A Friend Request (IPR)
+** This method is unstable and is still under development **
+- description: make a friend request
+- request: `POST /api/friendrequest/`
+  - content-type: `application/json`
+  - body: object
+    - inviter: (string) username of user making request
+    - invitee: (string) username of user inviter wants to be friends with
+  - repsonse: ? | ? | ?
+    - an email and push notification will be sent, the standard response codes
+      will probably be sent
 
 **example request body (postman)**,
 ```
