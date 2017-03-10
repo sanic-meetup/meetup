@@ -25,6 +25,7 @@ mongoose.connect(conf.mongouri);
 //models
 var User = require("./models/user");
 var follower = require("./models/follower");
+var following = require("./models/following");
 
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
@@ -204,7 +205,11 @@ app.post("/api/follow/", function(req, res, next) {
 
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
     if (err) return res.status(500).end(err);
-    res.sendStatus(200);
+    //add to following list
+    following.findOneAndUpdate({username: req.body.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+      if (err) return res.status(500).end(err);
+      res.sendStatus(200);
+    });
   });
 });
 
@@ -220,6 +225,12 @@ app.get("/api/follow", function (req, res, next) {
     u = req.query.username;
   }
 
+  following.findOne({username: u}, function (err, doc) {
+    if (err) return res.status(500).end(err);
+    if (doc) {
+      res.status(200).send({"following": doc.following});
+    } else { res.status(200).send({"following": []}); }
+  });
 });
 
 /**
