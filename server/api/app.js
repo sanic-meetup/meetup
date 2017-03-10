@@ -25,6 +25,7 @@ mongoose.connect(conf.mongouri);
 //models
 var User = require("./models/user");
 var follower = require("./models/follower");
+var following = require("./models/following");
 
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
@@ -220,6 +221,7 @@ app.get("/api/follow", function (req, res, next) {
     u = req.query.username;
   }
 
+  //@TODO
 });
 
 /**
