@@ -154,7 +154,7 @@ app.post('/signin/', function (req, res, next) {
 * test route only
 */
 app.get("/api/testauth", function(req, res, next){
-    res.status(200).send("authorized");
+    res.status(200).send({success: true});
 });
 
 //update the user's location
@@ -208,11 +208,22 @@ app.post("/api/follow/", function(req, res, next) {
   });
 });
 
+app.get("/api/follow", function (req, res, next) {
+  // a function to get everyone you follow
+});
+
 /**
-* gets the followers for requesting user
+* gets the followers for requesting user or if query param username is set then
+* that user
 */
 app.get("/api/followers/", function(req, res, next) {
-  follower.findOne({username: req.decoded._doc.username}, function (err, doc) {
+  var u = req.decoded._doc.username;
+  req.query.username = sanitizer.sanitize(req.query.username);
+  if (req.query.username) {
+    u = req.query.username;
+  }
+
+  follower.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(err);
     if (doc) {
       res.status(200).send({"followers": doc.followers});
@@ -221,14 +232,21 @@ app.get("/api/followers/", function(req, res, next) {
 });
 
 /**
-* returns the requesting users' info
+* returns the requesting users' info or if query param username is set then that
 * @TODO add some sanitization && validation
 */
 app.get("/api/user/", function(req, res, next) {
-  User.findOne({username: req.decoded._doc.username}, function (err, doc) {
+  var u = req.decoded._doc.username;
+  req.query.username = sanitizer.sanitize(req.query.username);
+  if (req.query.username) {
+    u = req.query.username;
+  }
+
+  User.findOne({username: u}, function (err, doc) {
     res.status(200).send(doc);
   });
 });
+
 
 app.put("/api/status/", function(req, res, next){
   res.status(200).send(doc);
