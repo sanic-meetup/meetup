@@ -9,11 +9,6 @@ var userSchema = new Schema({
   status:{
     availability: { type: String, enum: ["Available", "Busy", "Not Available"]},
     message: { type: String}
-    location: {
-      longitude : Number,
-      latitude: Number,
-      height: Number
-    }
   },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
