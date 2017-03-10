@@ -257,7 +257,9 @@ app.get("/api/user/", function(req, res, next) {
   });
 });
 
-
+/*
+* Set your the status of the current user
+*/
 app.put("/api/status/", function(req, res, next){
   res.status(200).send(doc);
 });
