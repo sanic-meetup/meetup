@@ -15,4 +15,4 @@ var following_schema = new Schema({
 var following = mongoose.model('following', following_schema);
 
 // make this available to our users in our Node applications
-module.exports = follower;
+module.exports = following;
