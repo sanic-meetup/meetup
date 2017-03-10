@@ -206,7 +206,7 @@ app.post("/api/follow/", function(req, res, next) {
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
     if (err) return res.status(500).end(err);
     //add to following list
-    following.findOneAndUpdate({username: req.body.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+    following.findOneAndUpdate({username: req.decoded._doc.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
       if (err) return res.status(500).end(err);
       res.sendStatus(200);
     });
@@ -217,7 +217,7 @@ app.post("/api/follow/", function(req, res, next) {
 * if query username is set then gets everyone username follows else everyone requesting
 * user follows + their status
 */
-app.get("/api/follow", function (req, res, next) {
+app.get("/api/follow/", function (req, res, next) {
   // a function to get everyone you follow
   var u = req.decoded._doc.username;
   req.query.username = sanitizer.sanitize(req.query.username);
@@ -228,7 +228,11 @@ app.get("/api/follow", function (req, res, next) {
   following.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(err);
     if (doc) {
-      res.status(200).send({"following": doc.following});
+      // res.status(200).send({"following": doc.following});
+      User.find ({username: {$in: doc.following}}, function (err, docs) {
+        console.log(docs);
+        res.status(200).send(docs);
+      });
     } else { res.status(200).send({"following": []}); }
   });
 });
@@ -248,6 +252,9 @@ app.get("/api/followers/", function(req, res, next) {
     if (err) return res.status(500).end(err);
     if (doc) {
       res.status(200).send({"followers": doc.followers});
+      // User.find ({username: {$in: doc.followers}}, function (err, docs) {
+      //   res.status(200).send(docs);
+      // });
     } else { res.status(200).send({"followers": []}); }
   });
 });
