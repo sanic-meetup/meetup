@@ -203,18 +203,27 @@ app.post("/api/follow/", function(req, res, next) {
   req.checkBody().notEmpty();
 
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
-    if (err) return res.status(500).end("Unauthorized");
+    if (err) return res.status(500).end(err);
     res.sendStatus(200);
   });
 });
 
 /**
-* gets a follower for user with username - username
+* gets the followers for requesting user
 */
-app.get("/api/follow/:username", function(req, res, next) {
-
+app.get("/api/followers/", function(req, res, next) {
+  follower.findOne({username: req.decoded._doc.username}, function (err, doc) {
+    if (err) return res.status(500).end(err);
+    if (doc) {
+      res.status(200).send({"followers": doc.followers});
+    } else { res.status(200).send({"followers": []}); }
+  });
 });
 
+/**
+* returns the requesting users' info
+* @TODO add some sanitization && validation
+*/
 app.get("/api/user/", function(req, res, next) {
   User.findOne({username: req.decoded._doc.username}, function (err, doc) {
     res.status(200).send(doc);
