@@ -43,14 +43,14 @@ app.get("/", function(req, res, next) {
   var mode = "dev";
   fs.readFile('../README.md', 'utf8', function (err,data) {
     if (err) {
-      res.send("could not load api docs");
+      return res.send("could not load api docs");
     }
     if (mode === "dev") {
       var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
       v += data;
       v += "</xmp><script src=\"https://strapdownjs.com/v/0.2/strapdown.js\"></script></html>";
-        res.send(v);
-      } else res.send("It Works!");
+        return res.send(v);
+      } else return res.send("It Works!");
     });
 });
 
@@ -187,8 +187,9 @@ app.post("/api/follow/", function(req, res, next) {
   req.body.username = sanitizer.sanitize(req.body.username);
   req.checkBody().notEmpty();
 
-  follower.findOne({username: req.body.username}, function(err, doc) {
-    console.log(doc);
+  follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
+    if (err) return res.status(500).end("Unauthorized");
+    res.sendStatus(200);
   });
 });
 /**

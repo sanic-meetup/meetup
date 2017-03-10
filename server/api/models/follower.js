@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 // create a schema
 var follower_schema = new Schema({
   username: { type: String, required: true, unique: true },
-  followers: {type: Object},
+  followers: {type: Array},
   created_at: Date,
   updated_at: Date
 });
