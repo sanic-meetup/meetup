@@ -6,7 +6,15 @@ var crypto = require("crypto");
 // create a schema
 var userSchema = new Schema({
   name: String,
-  status: String,
+  status:{
+    availability: { type: String, enum: ["Available", "Busy", "Not Available"]},
+    message: { type: String}
+    location: {
+      longitude : Number,
+      latitude: Number,
+      height: Number
+    }
+  },
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   salt: { type: String },

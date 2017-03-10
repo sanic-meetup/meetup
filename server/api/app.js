@@ -230,6 +230,10 @@ app.get("/api/user/", function(req, res, next) {
   });
 });
 
+app.put("/api/status/", function(req, res, next){
+  res.status(200).send(doc);
+});
+
 /**
 * a helper function that sends email (from support@sanic.ca)
 * data = message content, dest_email = recipient, sub = message subject
