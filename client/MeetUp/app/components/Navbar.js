@@ -74,7 +74,7 @@ export default class Navbar extends React.Component {
     return <View style={[styles.navBarContainer]}>
       <View style={styles.statusBar}></View>
       <View style={[styles.navBar]}>
-        <View style={styles.customTitle}><Text style={styles.navBarTitleText}>Title</Text></View>
+        <View style={styles.customTitle}><Text style={styles.navBarTitleText}>{this.props.title || ""}</Text></View>
       </View>
     </View>
   }
