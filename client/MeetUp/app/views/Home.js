@@ -1,3 +1,5 @@
+'use-strict'
+
 import React, { Component } from 'react';
 import { Text, View, ScrollView } from 'react-native';
 import Navbar from "../components/Navbar";
@@ -5,7 +7,9 @@ import Card from "../components/Card";
 
 
 const styles = {
-
+  sceneContainer: {
+    backgroundColor: "#eeeeee"
+  }
 };
 
 export default class Home extends Component {
@@ -14,7 +18,7 @@ export default class Home extends Component {
   }
 
   render() {
-    return <View style={{flex: 1}}>
+    return <View style={[{flex: 1}, styles.sceneContainer]}>
         <Navbar title="Home"/>
         <ScrollView>
           <Card/>
