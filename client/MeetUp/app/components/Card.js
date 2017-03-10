@@ -1,13 +1,19 @@
+'use-strict'
+
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 
 const styles = {
   cardContainer: {
     margin: 8,
-    height: 200,
     borderRadius: 8,
-    backgroundColor: 'black',
+    backgroundColor: 'white',
   },
+  profileImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20
+  }
 };
 
 export default class Card extends Component {
@@ -16,6 +22,8 @@ export default class Card extends Component {
   }
 
   render() {
-    return <View style={[styles.cardContainer]}></View>
+    return <View style={[styles.cardContainer]}>
+      <Image style={styles.profileImage} source={{uri: 'https://avatars3.githubusercontent.com/u/5758214?v=3&s=460'}}/>
+    </View>
   }
 };
