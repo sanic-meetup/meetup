@@ -24,7 +24,7 @@ mongoose.connect(conf.mongouri);
 
 //models
 var User = require("./models/user");
-var fr_request = require("./models/fr_request");
+var follower = require("./models/follower");
 
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
@@ -182,62 +182,15 @@ app.put("/api/location/", function (req, res, next) {
   });
 });
 
-/**
-* a route to make a friend request, not yet implemented
-* @TODO:
-* [x] friend request model for database
-* [x] import friend request model to this file
-      - the friend request model is fr_request
-* [] implement push notifications and/or nodemailer to send the
-     friend request link
-*/
-app.post("/api/friendrequest/", function(req, res, next) {
-  //sanitize
-  req.body.inviter = sanitizer.sanitize(req.body.inviter);
-  req.body.invitee = sanitizer.sanitize(req.body.invitee);
+app.post("/api/follow/", function(req, res, next) {
+  //standard sanitization
+  req.body.username = sanitizer.sanitize(req.body.username);
   req.checkBody().notEmpty();
-  //check permissions
-  if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.inviter) {
-    return res.status(401).end("Unauthorized");
-  }
 
-  var new_request = new fr_request({
-    users:{
-      user1: req.body.inviter,
-      user2: req.body.invitee
-    }
+  follower.findOne({username: req.body.username}, function(err, doc) {
+    console.log(doc);
   });
-
-  new_request.save(function(err, data) {
-    //if err user exists
-    if (err) res.status(409).send(err);
-    else {
-      var msg = "https://whereverwehosttheapi/addfriend/?token="+data._id;
-      //send the push notification to the invitee
-      pusher.trigger(req.body.invitee, 'friend-request', {
-        "request-id": msg
-      });
-      //send the email notification
-      //@TODO change to user email
-      sendmail(msg, "k.ganeshamoorthy@mail.utoronto.ca", "new friend request");
-      res.status(200).send(data);
-    }
-  });
-
-  // res.status(200).send("not yet implemented");
 });
-
-/*
-* a route to add a friend this should work as follows,
-* a request was made using /api/friendrequest and a link was generated
-* with somthing like ../?token="token"&frequest="generated request link"
-* the token will be used for auth and the frequest link will be queried in the db
-* to perform the actual friend request
-*/
-app.get("/api/addfriend/", function(req, res, next) {
-  res.status(200).send("not yet implemented");
-});
-
 /**
 * a helper function that sends email (from support@sanic.ca)
 * data = message content, dest_email = recipient, sub = message subject
