@@ -228,3 +228,9 @@ var config = {
 https.createServer(config, app).listen(3000, function () {
     console.log('HTTPS on port 3000');
 });
+
+//for dev only
+var http = require("http");
+http.createServer(app).listen(5000, function() {
+  console.log("http on 5000");
+});
