@@ -208,8 +208,18 @@ app.post("/api/follow/", function(req, res, next) {
   });
 });
 
+/**
+* if query username is set then gets everyone username follows else everyone requesting
+* user follows + their status
+*/
 app.get("/api/follow", function (req, res, next) {
   // a function to get everyone you follow
+  var u = req.decoded._doc.username;
+  req.query.username = sanitizer.sanitize(req.query.username);
+  if (req.query.username) {
+    u = req.query.username;
+  }
+
 });
 
 /**
