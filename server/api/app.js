@@ -214,10 +214,10 @@ app.post("/api/follow/", function(req, res, next) {
 });
 
 /**
-* if query username is set then gets everyone username follows else everyone requesting
-* user follows + their status
+* Giving token/param of a user returns the status and
+* location of everyone the user is following
 */
-app.get("/api/follow/", function (req, res, next) {
+app.get("/api/following/", function (req, res, next) {
   // a function to get everyone you follow
   var u = req.decoded._doc.username;
   req.query.username = sanitizer.sanitize(req.query.username);
@@ -238,8 +238,7 @@ app.get("/api/follow/", function (req, res, next) {
 });
 
 /**
-* gets the followers for requesting user or if query param username is set then
-* that user
+* Gets the list of a followers for a given user via token/params. 
 */
 app.get("/api/followers/", function(req, res, next) {
   var u = req.decoded._doc.username;
