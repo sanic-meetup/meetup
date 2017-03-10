@@ -11,10 +11,10 @@
       encrypted: true
     });
 
-    var channel = pusher.subscribe('testuser');
-    channel.bind('friend-request', function(data) {
-      document.getElementById("pchannel").innerText="channel: testuser";
-      document.getElementById("pevent").innerText="event: friend-request"
+    var channel = pusher.subscribe('test');
+    channel.bind('location-update', function(data) {
+      document.getElementById("pchannel").innerText="channel: test";
+      document.getElementById("pevent").innerText="event: location-updatet"
       document.getElementById("pcontent").innerText="message: "+ JSON.stringify(data);
     });
   </script>

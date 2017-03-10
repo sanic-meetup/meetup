@@ -178,10 +178,25 @@ app.put("/api/location/", function (req, res, next) {
   User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
     if (err) return res.status(500).end(err);
     //for response
+    follower.findOne({username: req.body.username}, function (err, doc) {
+      if (err) return res.status(500).end(err);
+      //if user has followers notify them via push notification
+      if (doc) {
+        for (var i = 0; i < doc.followers.length; i ++) {
+          pusher.trigger(doc.followers[i], 'location-update', {
+            username: req.body.username,
+            location: data.location
+          });
+        }
+      }
+    });
     res.status(200).send(data.location);
   });
 });
 
+/**
+* follow a user
+*/
 app.post("/api/follow/", function(req, res, next) {
   //standard sanitization
   req.body.username = sanitizer.sanitize(req.body.username);
@@ -192,6 +207,20 @@ app.post("/api/follow/", function(req, res, next) {
     res.sendStatus(200);
   });
 });
+
+/**
+* gets a follower for user with username - username
+*/
+app.get("/api/follow/:username", function(req, res, next) {
+
+});
+
+app.get("/api/user/", function(req, res, next) {
+  User.findOne({username: req.decoded._doc.username}, function (err, doc) {
+    res.status(200).send(doc);
+  });
+});
+
 /**
 * a helper function that sends email (from support@sanic.ca)
 * data = message content, dest_email = recipient, sub = message subject
