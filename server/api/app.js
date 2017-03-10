@@ -154,7 +154,7 @@ app.post('/signin/', function (req, res, next) {
 * test route only
 */
 app.get("/api/testauth", function(req, res, next){
-    res.status(200).send("authorized");
+    res.status(200).send({success: true});
 });
 
 //update the user's location
@@ -225,10 +225,30 @@ app.get("/api/followers/", function(req, res, next) {
 * @TODO add some sanitization && validation
 */
 app.get("/api/user/", function(req, res, next) {
-  User.findOne({username: req.decoded._doc.username}, function (err, doc) {
+  var u = req.decoded._doc.username;
+  if (req.param.username) {
+    u = req.param.uesrname;
+  }
+
+  User.findOne({username: u}, function (err, doc) {
     res.status(200).send(doc);
   });
 });
+
+/**
+* returns the usernames information
+* @TODO add some sanitization && validation
+*/
+app.get("/api/user/:username", function(req, res, next) {
+  console.log("hi");
+  req.param.username = sanitizer.sanitize(req.param.username);
+  req.checkParams().notEmpty();
+
+  User.findOne({username: req.param.username}, function (err, doc) {
+    res.status(200).send(doc);
+  });
+});
+
 
 /**
 * a helper function that sends email (from support@sanic.ca)
