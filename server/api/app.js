@@ -206,7 +206,7 @@ app.post("/api/follow/", function(req, res, next) {
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
     if (err) return res.status(500).end(err);
     //add to following list
-    following.findOneAndUpdate({username: req.body.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+    following.findOneAndUpdate({username: req.decoded._doc.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
       if (err) return res.status(500).end(err);
       res.sendStatus(200);
     });
@@ -214,10 +214,10 @@ app.post("/api/follow/", function(req, res, next) {
 });
 
 /**
-* if query username is set then gets everyone username follows else everyone requesting
-* user follows + their status
+* Giving token/param of a user returns the status and
+* location of everyone the user is following
 */
-app.get("/api/follow", function (req, res, next) {
+app.get("/api/following/", function (req, res, next) {
   // a function to get everyone you follow
   var u = req.decoded._doc.username;
   req.query.username = sanitizer.sanitize(req.query.username);
@@ -228,14 +228,17 @@ app.get("/api/follow", function (req, res, next) {
   following.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(err);
     if (doc) {
-      res.status(200).send({"following": doc.following});
+      // res.status(200).send({"following": doc.following});
+      User.find ({username: {$in: doc.following}}, function (err, docs) {
+        console.log(docs);
+        res.status(200).send(docs);
+      });
     } else { res.status(200).send({"following": []}); }
   });
 });
 
 /**
-* gets the followers for requesting user or if query param username is set then
-* that user
+* Gets the list of a followers for a given user via token/params.
 */
 app.get("/api/followers/", function(req, res, next) {
   var u = req.decoded._doc.username;
@@ -248,6 +251,9 @@ app.get("/api/followers/", function(req, res, next) {
     if (err) return res.status(500).end(err);
     if (doc) {
       res.status(200).send({"followers": doc.followers});
+      // User.find ({username: {$in: doc.followers}}, function (err, docs) {
+      //   res.status(200).send(docs);
+      // });
     } else { res.status(200).send({"followers": []}); }
   });
 });
@@ -268,10 +274,55 @@ app.get("/api/user/", function(req, res, next) {
   });
 });
 
-
+/*
+* Set your the status of the current user
+*/
 app.put("/api/status/", function(req, res, next){
-  res.status(200).send(doc);
+
+  //sanitize & validate
+  req.checkBody().notEmpty();
+  var new_status = {
+    availability: sanitizer.sanitize(req.body.availability),
+    message: sanitizer.sanitize(req.body.message)
+  };
+  req.body.inform = sanitizer.sanitize(req.body.inform);
+
+  User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
+    if (err) return res.status(500).end(err);
+    //for response
+    if(req.body.inform){
+      notifyFollowers(req.decoded._doc.username, 'status_update', data);
+    }
+    res.status(200).send(data.status);
+  });
 });
+
+
+/*
+* Get current users status
+*/
+app.get("/api/status/", function(req, res, next){
+  User.findOne({username: req.decoded._doc.username}, function(err, data) {
+    if (err) return res.status(500).end(err);
+    //for response
+    res.status(200).send(data.status);
+  });
+});
+
+/**
+* Helper Function to send notification to all following users.
+*/
+function notifyFollowers(username, nevent, data){
+  follower.findOne({username: username}, function (err, doc) {
+    if (err) return res.status(500).end(err);
+    //if user has followers notify them via push notification
+    if (doc) {
+      for (var i = 0; i < doc.followers.length; i ++) {
+        pusher.trigger(doc.followers[i], nevent, data);
+      }
+    }
+  });
+};
 
 /**
 * a helper function that sends email (from support@sanic.ca)
