@@ -3,3 +3,6 @@ sendgrid.env
 sendgrid.env
 sendgrid.env
 sendgrid.env
+#OS junk files
+[Tt]humbs.db
+*.DS_Store

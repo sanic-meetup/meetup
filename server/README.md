@@ -20,7 +20,6 @@
   - body: object
     - username: the username of new user
 
-
 **example request body (postman)**,
 ```
 {
@@ -29,6 +28,7 @@
   "email": "mail@domain.com"
 }
 ```
+
 
 ###Logging In
 - description: register a new user
@@ -44,26 +44,120 @@
     - token: (string) the token used to authenticate in other methods
     - expiresIn: (int) when the token expires in seconds
 
-###Making A Friend Request (IPR)
-** This method is unstable and is still under development **
-- description: make a friend request
-- request: `POST /api/friendrequest/`
+**example request body (postman)**,
+```
+
+```
+
+
+###Get User Info
+- description: Get info for the current/given user
+- request: `GET /api/followers/:username`
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
   - body: object
-    - inviter: (string) username of user making request
-    - invitee: (string) username of user inviter wants to be friends with
-  - repsonse: ? | ? | ?
-    - an email and push notification will be sent, the standard response codes
-      will probably be sent
+    - usernames: (string) the username
+    - longitude: (number) the longitude
+    - latitude: (number) the latitude
+    - height: (number) the height
+    - availability: (enum) availability status
+    - message: (string) status message
+    - email: (string) email of the user
+    - meta:
+      - age: (number) age of the user
+      - website: (string) website of the user
 
 **example request body (postman)**,
 ```
-{
-	"username": "test2",
-	"password": "test2"
-}
+
 ```
-##Location API
+
+
+###Follow a User
+- description: follow another user
+- request: `POST /api/follow/`
+  - content-type: `application/json`
+  - body: object
+    - username: (string) the username of the person wished to follow
+    - token: the request token (recommend sending in body or header)
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: None
+
+**example request body (postman)**,
+```
+
+```
+
+
+###Get List of Followers
+- description: Get a list of followers of the current/given user
+- request: `GET /api/followers/:username`
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: list of object
+    - usernames: (string) the username
+
+**example request body (postman)**,
+```
+
+```
+
+##Status & Location API
+###Get Status/Location of Current Users
+- description: Get the status & location of the current/given user
+- request: `GET /api/status/`
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: object
+    - availability: (enum) availability status
+    - message: (string) status message
+
+**example request body (postman)**,
+```
+
+```
+
+
+###Set Status/Location of Current Users
+- description: Set the status & location of the current/given user
+- request: `PUT /api/status/`
+  - content-type: `application/json`
+  - body: object
+    - availability: (enum) availability status
+    - message: (string) status message
+    - inform: (boolean) if followers should be notified
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: object
+    - availability: (enum) availability status
+    - message: (string) status message
+
+**example request body (postman)**,
+```
+
+```
+
+
+###Get Status/Location of Following Users
+- description: Get the status & location of the user's the current/given user is following
+- request: `GET /api/following/:username`
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: list of object
+    - username: (string) the username
+    - longitude: (number) the longitude
+    - latitude: (number) the latitude
+    - height: (number) the height
+    - availability: (enum) availability status
+    - message: (string) status message
+
+**example request body (postman)**,
+```
+
+```
+
+
 ###Setting A users location
 - description: register a new user
 - request: `PUT /api/location`
@@ -80,7 +174,6 @@
     - longitude: (number) the longitude
     - latitude: (number) the latitude
     - height: (number) the height
-
 
   **example request body (postman)**,
   ```
