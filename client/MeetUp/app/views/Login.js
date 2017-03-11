@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { Button, Text, TextInput, View, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import { server } from '../Constants';
 import Navbar from "../components/Navbar";
 
 const PADDING = 10;
@@ -58,32 +59,12 @@ export default class Login extends React.Component {
     }
   }
 
-  _login() {
-    return fetch('https://localhost:3000/users/', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: AsyncStorage.getItem('token'),
-        })
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        return responseJson;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   /**
   * Sign in a user
   */
   signIn(username, password) {
     console.log(username, password);
-    return fetch('http://localhost:5000/signin/', {
+    return fetch('http://'+server+'/signin/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -117,7 +98,7 @@ export default class Login extends React.Component {
   componentDidMount() {
     this.authenticateUser((res) => {
       if (res.success) {
-        fetch('http://localhost:5000/api/testauth?token=' + res.token, {
+        fetch('http://'+server+'/api/testauth?token=' + res.token, {
             method: 'GET',
             headers: {
               'Accept': 'application/json',
@@ -126,8 +107,10 @@ export default class Login extends React.Component {
           })
           .then((response) => response.json())
           .then((responseJson) => {
-            if (responseJson.success)
+            if (responseJson.success) {
+              console.log("Success! We got a token!");
               this.goToHome(res.token);
+            }
           })
           .catch((error) => {
             console.error(error);

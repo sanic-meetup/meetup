@@ -9,6 +9,8 @@ const styles = {
     marginBottom: 4,
     borderRadius: 8,
     backgroundColor: 'white',
+    borderBottomWidth: 3,
+    borderBottomColor: '#e9e9e9',
   },
   contentContainer: {
     padding: 8,
