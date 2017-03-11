@@ -238,7 +238,7 @@ app.get("/api/following/", function (req, res, next) {
 });
 
 /**
-* Gets the list of a followers for a given user via token/params. 
+* Gets the list of a followers for a given user via token/params.
 */
 app.get("/api/followers/", function(req, res, next) {
   var u = req.decoded._doc.username;
@@ -278,8 +278,51 @@ app.get("/api/user/", function(req, res, next) {
 * Set your the status of the current user
 */
 app.put("/api/status/", function(req, res, next){
-  res.status(200).send(doc);
+
+  //sanitize & validate
+  req.checkBody().notEmpty();
+  var new_status = {
+    availability: sanitizer.sanitize(req.body.availability),
+    message: sanitizer.sanitize(req.body.message)
+  };
+  req.body.inform = sanitizer.sanitize(req.body.inform);
+
+  User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
+    if (err) return res.status(500).end(err);
+    //for response
+    if(req.body.inform){
+      notifyFollowers(req.decoded._doc.username, 'status_update', data);
+    }
+    res.status(200).send(data.status);
+  });
 });
+
+
+/*
+* Get current users status
+*/
+app.get("/api/status/", function(req, res, next){
+  User.findOne({username: req.decoded._doc.username}, function(err, data) {
+    if (err) return res.status(500).end(err);
+    //for response
+    res.status(200).send(data.status);
+  });
+});
+
+/**
+* Helper Function to send notification to all following users.
+*/
+function notifyFollowers(username, nevent, data){
+  follower.findOne({username: username}, function (err, doc) {
+    if (err) return res.status(500).end(err);
+    //if user has followers notify them via push notification
+    if (doc) {
+      for (var i = 0; i < doc.followers.length; i ++) {
+        pusher.trigger(doc.followers[i], nevent, data);
+      }
+    }
+  });
+};
 
 /**
 * a helper function that sends email (from support@sanic.ca)
