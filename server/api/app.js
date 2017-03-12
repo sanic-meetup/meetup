@@ -264,7 +264,6 @@ app.get("/api/following/", function (req, res, next) {
     if (doc) {
       // res.status(200).send({"following": doc.following});
       User.find ({username: {$in: doc.following}}, function (err, docs) {
-        console.log(docs);
         res.status(200).send(docs);
       });
     } else { res.status(200).send(str({"following": []})); }
