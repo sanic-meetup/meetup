@@ -358,7 +358,11 @@ app.delete("/api/user/", function(req, res, next){
 
   User.remove({username: req.body.username});
   following.remove({username: req.body.username});
-  //follower.update{}
+  follower.remove({username: req.body.username});
+  following.update({}, {$pull: {following: req.body.username}});
+  follower.update({}, {$pull: {followers: req.body.username}});
+
+  res.sendStatus(200);
 });
 
 /**
