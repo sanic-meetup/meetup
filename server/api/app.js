@@ -118,6 +118,7 @@ app.post("/users/", function (req, res, next) {
 
 });
 
+
 /**
 * private method for checking passwd
 */
@@ -128,6 +129,11 @@ var checkPassword = function(user, password){
         return (user.password === value);
 };
 
+
+/*
+* Given a username and password signs into the app and returns a token if
+* log in was valid. 400 if Unauthorized.
+*/
 app.post('/signin/', function (req, res, next) {
   //sanitize
   req.body.username = sanitizer.sanitize(req.body.username);
@@ -160,7 +166,10 @@ app.get("/api/testauth", function(req, res, next){
     res.status(200).send({success: true});
 });
 
-//update the user's location
+
+/*
+* Update the user's location
+*/
 app.put("/api/location/", function (req, res, next) {
   //create the object & sanitize
   var newloc = {
@@ -198,7 +207,7 @@ app.put("/api/location/", function (req, res, next) {
 });
 
 /**
-* follow a user
+* Follow a user
 */
 app.post("/api/follow/", function(req, res, next) {
   //standard sanitization
@@ -281,8 +290,7 @@ app.get("/api/followers/", function(req, res, next) {
 });
 
 /**
-* returns the requesting users' info or if query param username is set then that
-* @TODO add some sanitization && validation
+* Returns the requesting users' info or if query param username is set then that
 */
 app.get("/api/user/", function(req, res, next) {
   var u = req.decoded._doc.username;
