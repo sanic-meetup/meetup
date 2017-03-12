@@ -1,9 +1,11 @@
 'use-strict'
 
 import React, { Component } from 'react';
-import { Text, View, ScrollView } from 'react-native';
+import { Text, View, ScrollView, AsyncStorage } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
+import { server } from '../Constants';
 
 
 const styles = {
@@ -15,27 +17,61 @@ const styles = {
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    this.token = props.data;
+    this.state = {
+      token: props.token,
+    }
   }
 
-  following() {
-    return fetch('https://localhost:3000/api/following/', {
-        method: 'POST',
+  componentWillMount() {
+    this.getUsername((res) => {
+      if (res.success) {
+        console.log("USERNAME",res.username);
+        this.setState({username: res.username});
+        this.following((json) => {
+          console.log("JSON",json);
+        });
+      } else {
+        console.warn("Couldn't get username... Back to login...");
+        Actions.login();
+      }
+    });
+  }
+
+  getUsername = async (callback) => {
+    try {
+      const value = await AsyncStorage.getItem('username');
+      if (value !== null){
+        // We have data!!
+        callback({success: true, username: value});
+      } else {
+        console.warn("Login.js: username Not Set. Going back to login...");
+        Actions.login();
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+  }
+
+  following(callback) {
+    return fetch('http://'+server+'/api/following/?token='+this.state.token, {
+        method: 'GET',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: this.token,
-        })
+        }
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        return responseJson;
+        callback(responseJson);
       })
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  renderCards() {
+    return (<Card available={true} username="Brandon" locationName="Toronto"/>);
   }
 
   render() {
@@ -43,8 +79,7 @@ export default class Home extends Component {
         <Navbar title="Home"/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView>
-            <Card available={true}/>
-            <Card available={false}/>
+            {this.renderCards()}
           </ScrollView>
         </View>
       </View>
