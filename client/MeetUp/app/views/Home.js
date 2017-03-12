@@ -28,7 +28,7 @@ export default class Home extends Component {
         console.log("USERNAME",res.username);
         this.setState({username: res.username});
         this.following((json) => {
-          console.log("JSON",json);
+          this.setState({statuses: json}); // TODO: need to pull true statuses
         });
       } else {
         console.warn("Couldn't get username... Back to login...");
@@ -71,7 +71,10 @@ export default class Home extends Component {
   }
 
   renderCards() {
-    return (<Card available={true} username="Brandon" locationName="Toronto"/>);
+    console.log(this.state.statuses);
+    if (!this.state.statuses)
+      return <Text>No statuses</Text>
+    return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={true} username={curr.username}/>)}));
   }
 
   render() {
