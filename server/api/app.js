@@ -323,7 +323,7 @@ function notifyFollowers(username, nevent, data){
       }
     }
   });
-};
+}
 
 /**
 * a helper function that sends email (from support@sanic.ca)
