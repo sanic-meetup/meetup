@@ -9,6 +9,7 @@ var jwt = require('jsonwebtoken');
 var conf = require('./conf');
 var fs = require('fs');
 var helper = require('sendgrid').mail;
+var stat = require('./utils/utils.js').statcodes;
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -99,7 +100,7 @@ app.post("/users/", function (req, res, next) {
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
   req.body.email = sanitizer.sanitize(req.body.email);
-  if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end();
+  if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end(stat._400);
 
   var new_user = new User({
     username: req.body.username,
@@ -109,7 +110,7 @@ app.post("/users/", function (req, res, next) {
 
   new_user.save(function(err) {
     //if err user exists
-    if (err) res.status(409).send('new user not created');
+    if (err) res.status(409).send(stat._409);
     else {
       res.status(200).send({username:req.body.username});
     }
@@ -131,7 +132,7 @@ app.post('/signin/', function (req, res, next) {
   //sanitize
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
-  if (!req.body.username || ! req.body.password) return res.status(400).send(JSON.stringify({response:"unauthorized"}));
+  if (!req.body.username || ! req.body.password) return res.status(400).send(stat._400);
 
   var user = new User({
       username: req.body.username,
@@ -139,8 +140,8 @@ app.post('/signin/', function (req, res, next) {
     });
 
   User.find({username: user.username}, function(err, result){
-    if (err) return res.status(500).end(err);
-    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end(JSON.stringify({response:"Unauthorized"}));
+    if (err) return res.status(500).end(stat._500);
+    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end(stat._401);
 
     // successful auth,  create a token
     var t = 60*60*24;
@@ -178,10 +179,10 @@ app.put("/api/location/", function (req, res, next) {
   }
   //update and return the location info
   User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //for response
     follower.findOne({username: req.body.username}, function (err, doc) {
-      if (err) return res.status(500).end(err);
+      if (err) return res.status(500).end(stat._500);
       //if user has followers notify them via push notification
       if (doc) {
         for (var i = 0; i < doc.followers.length; i ++) {
@@ -205,10 +206,10 @@ app.post("/api/follow/", function(req, res, next) {
   req.checkBody().notEmpty();
 
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //add to following list
     following.findOneAndUpdate({username: req.decoded._doc.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
-      if (err) return res.status(500).end(err);
+      if (err) return res.status(500).end(stat._500);
       res.sendStatus(200);
     });
   });
@@ -227,7 +228,7 @@ app.get("/api/following/", function (req, res, next) {
   }
 
   following.findOne({username: u}, function (err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     if (doc) {
       // res.status(200).send({"following": doc.following});
       User.find ({username: {$in: doc.following}}, function (err, docs) {
@@ -249,7 +250,7 @@ app.get("/api/followers/", function(req, res, next) {
   }
 
   follower.findOne({username: u}, function (err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     if (doc) {
       res.status(200).send({"followers": doc.followers});
       // User.find ({username: {$in: doc.followers}}, function (err, docs) {
@@ -289,7 +290,7 @@ app.put("/api/status/", function(req, res, next){
   req.body.inform = sanitizer.sanitize(req.body.inform);
 
   User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //for response
     if(req.body.inform){
       notifyFollowers(req.decoded._doc.username, 'status_update', data);
@@ -304,7 +305,7 @@ app.put("/api/status/", function(req, res, next){
 */
 app.get("/api/status/", function(req, res, next){
   User.findOne({username: req.decoded._doc.username}, function(err, data) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //for response
     res.status(200).send(data.status);
   });
@@ -315,7 +316,7 @@ app.get("/api/status/", function(req, res, next){
 */
 function notifyFollowers(username, nevent, data){
   follower.findOne({username: username}, function (err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //if user has followers notify them via push notification
     if (doc) {
       for (var i = 0; i < doc.followers.length; i ++) {
