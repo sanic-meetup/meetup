@@ -60,11 +60,13 @@
   - content-type: `application/json`
   - body: object
     - usernames: (string) the username
-    - longitude: (number) the longitude
-    - latitude: (number) the latitude
-    - height: (number) the height
-    - availability: (enum) availability status
-    - message: (string) status message
+    - location: user's location
+      - longitude: (number) the longitude
+      - latitude: (number) the latitude
+      - height: (number) the height
+    - status: user's status
+      - availability: (enum) availability status
+      - message: (string) status message
     - email: (string) email of the user
     - meta:
       - age: (number) age of the user
@@ -155,11 +157,13 @@
   - content-type: `application/json`
   - body: list of object
     - username: (string) the username
-    - longitude: (number) the longitude
-    - latitude: (number) the latitude
-    - height: (number) the height
-    - availability: (enum) availability status
-    - message: (string) status message
+    - location: user's location
+      - longitude: (number) the longitude
+      - latitude: (number) the latitude
+      - height: (number) the height
+    - status: user's status
+      - availability: (enum) availability status
+      - message: (string) status message
 
 **example request body (postman)**,
 ```
