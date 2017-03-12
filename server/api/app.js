@@ -358,15 +358,18 @@ app.delete("/api/user/", function(req, res, next){
   }
 
   //Remove User and all their relations
-  User.remove({username: req.body.username}, true);
-  following.remove({username: req.body.username}, true);
-  follower.remove({username: req.body.username}, true);
-  // console.log("here");
-  following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
-    follower.update({}, {$pull: {followers: req.body.username}}, {},function(err,docs){
-      res.sendStatus(200);
+  User.remove({username: req.body.username}, function(err, doc) {
+    following.remove({username: req.body.username}, function(err, doc) {
+      follower.remove({username: req.body.username}, function(err, doc){
+        following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
+          follower.update({}, {$pull: {followers: req.body.username}}, {},function(err,docs){
+            res.sendStatus(200);
+          });
+        });
+      });
     });
   });
+  // console.log("here");
 });
 
 /**
