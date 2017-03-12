@@ -71,7 +71,7 @@ export default class Card extends Component {
       <View style={styles.contentContainer}>
         <View style={styles.profileImageContainer}>
           <View style={[styles.profileImageStatus, this.props.available?styles.available:styles.busy]}></View>
-          <Image style={styles.profileImage} source={{uri: 'https://avatars3.githubusercontent.com/u/5758214?v=3&s=460'}}/>
+          <Image style={styles.profileImage} source={{uri: 'https://d13yacurqjgara.cloudfront.net/users/158131/screenshots/1269168/kickpoint.jpg'}}/>
         </View>
         <View style={styles.cardContext}>
           <Text style={styles.username}>{this.props.username}</Text>
