@@ -353,16 +353,19 @@ app.delete("/api/user/", function(req, res, next){
 
   //check permissions
   if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
-    return res.status(401).end("Unauthorized");
+    return res.status(401).end(stat._401);
   }
 
-  User.remove({username: req.body.username});
-  following.remove({username: req.body.username});
-  follower.remove({username: req.body.username});
-  following.update({}, {$pull: {following: req.body.username}});
-  follower.update({}, {$pull: {followers: req.body.username}});
-
-  res.sendStatus(200);
+  //Remove User and all their relations
+  User.remove({username: req.body.username}, true);
+  following.remove({username: req.body.username}, true);
+  follower.remove({username: req.body.username}, true);
+  // console.log("here");
+  following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
+    follower.update({}, {$pull: {followers: req.body.username}}, {},function(err,docs){
+      res.sendStatus(200);
+    });
+  });
 });
 
 /**
