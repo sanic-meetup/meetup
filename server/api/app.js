@@ -30,6 +30,9 @@ var following = require("./models/following");
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 
+//for test suite
+exports.app = app;
+
 //for push notifications
 var Pusher = require('pusher');
 
@@ -96,9 +99,7 @@ app.post("/users/", function (req, res, next) {
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
   req.body.email = sanitizer.sanitize(req.body.email);
-  req.checkBody('username', 'username field cannot be empty').notEmpty();
-  req.checkBody('password', 'password field cannot be empty').notEmpty();
-  req.checkBody('email', 'email field cannot be empty').notEmpty();
+  if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end();
 
   var new_user = new User({
     username: req.body.username,

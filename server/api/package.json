@@ -4,7 +4,7 @@
   "description": "the app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "author": "",
   "license": "ISC",
@@ -20,7 +20,18 @@
     "mongoose": "^4.8.6",
     "multer": "^1.3.0",
     "pusher": "^1.5.1",
+    "request": "^2.81.0",
     "sanitizer": "^0.1.3",
     "sendgrid": "^4.7.1"
+  },
+  "devDependencies": {
+  "chai": "^3.5.0",
+  "chai-http": "^2.0.1",
+  "mocha": "^2.4.5"
+  },
+  "scripts": {
+    "start": "SET NODE_ENV=dev && node server.js",
+    "test": "mocha --timeout 10000"
   }
+
 }
