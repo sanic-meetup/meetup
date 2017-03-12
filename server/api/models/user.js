@@ -35,6 +35,11 @@ userSchema.pre('save', function(next) {
   this.salt = salt;
   this.password = hash.digest('base64');
   this.admin = false;
+  this.status = {
+    availability: 'Not Available',
+    message: "I didn't set a message therfore #trump2020"
+  };
+  this.location = undefined;
   next();
 });
 

@@ -10,6 +10,8 @@ var conf = require('./conf');
 var fs = require('fs');
 var helper = require('sendgrid').mail;
 var stat = require('./utils/utils.js').statcodes;
+var docstrip = require('./utils/utils.js').docstrip;
+var str = require('./utils/utils.js').stringify;
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -112,7 +114,7 @@ app.post("/users/", function (req, res, next) {
     //if err user exists
     if (err) res.status(409).send(stat._409);
     else {
-      res.status(200).send({username:req.body.username});
+      res.status(200).send(str({username:req.body.username}));
     }
   });
 
@@ -149,7 +151,7 @@ app.post('/signin/', function (req, res, next) {
       expiresIn: t // expires in 24 hours (measured in seconds)
     });
 
-    res.status(200).send({username: user.username, token: token, expiesIn: t});
+    res.status(200).send(str({username: user.username, token: token, expiesIn: t}));
   });
 });
 
@@ -157,7 +159,7 @@ app.post('/signin/', function (req, res, next) {
 * test route only
 */
 app.get("/api/testauth", function(req, res, next){
-    res.status(200).send({success: true});
+    res.status(200).send(str({success: true}));
 });
 
 //update the user's location
@@ -175,7 +177,7 @@ app.put("/api/location/", function (req, res, next) {
 
   //check permissions
   if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
-    return res.status(401).end("Unauthorized");
+    return res.status(401).end(stat._400);
   }
   //update and return the location info
   User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
@@ -193,7 +195,7 @@ app.put("/api/location/", function (req, res, next) {
         }
       }
     });
-    res.status(200).send(data.location);
+    res.status(200).send(str(data.location));
   });
 });
 
@@ -255,7 +257,7 @@ app.get("/api/following/", function (req, res, next) {
         console.log(docs);
         res.status(200).send(docs);
       });
-    } else { res.status(200).send({"following": []}); }
+    } else { res.status(200).send(str({"following": []})); }
   });
 });
 
@@ -272,11 +274,11 @@ app.get("/api/followers/", function(req, res, next) {
   follower.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
     if (doc) {
-      res.status(200).send({"followers": doc.followers});
+      res.status(200).send(str({"followers": doc.followers}));
       // User.find ({username: {$in: doc.followers}}, function (err, docs) {
       //   res.status(200).send(docs);
       // });
-    } else { res.status(200).send({"followers": []}); }
+    } else { res.status(200).send(str({"followers": []})); }
   });
 });
 
@@ -292,7 +294,7 @@ app.get("/api/user/", function(req, res, next) {
   }
 
   User.findOne({username: u}, function (err, doc) {
-    res.status(200).send(doc);
+    res.status(200).send(docstrip(doc));
   });
 });
 
@@ -315,7 +317,7 @@ app.put("/api/status/", function(req, res, next){
     if(req.body.inform){
       notifyFollowers(req.decoded._doc.username, 'status_update', data);
     }
-    res.status(200).send(data.status);
+    res.status(200).send(str(data.status));
   });
 });
 
@@ -327,7 +329,7 @@ app.get("/api/status/", function(req, res, next){
   User.findOne({username: req.decoded._doc.username}, function(err, data) {
     if (err) return res.status(500).end(stat._500);
     //for response
-    res.status(200).send(data.status);
+    res.status(200).send(str(data.status));
   });
 });
 
