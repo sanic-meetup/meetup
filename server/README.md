@@ -54,6 +54,7 @@
 - description: Get info for the current/given user
 - request: `GET /api/user/`
   - query:
+    - token: the request token
     - username: username that differs from current user (optional)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
@@ -96,6 +97,7 @@
 - description: Get a list of followers of the current/given user
 - request: `GET /api/followers/`
   - query:
+    - token: the request token
     - username: username that differs from current user (optional)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
@@ -147,6 +149,7 @@
 - description: Get the status & location of the user's the current/given user is following
 - request: `GET /api/following/`
   - query:
+    - token: the request token
     - username: username that differs from current user (optional)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
