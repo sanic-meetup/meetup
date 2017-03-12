@@ -102,6 +102,7 @@ app.post("/users/", function (req, res, next) {
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
   req.body.email = sanitizer.sanitize(req.body.email);
+
   if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end(stat._400);
 
   var new_user = new User({
