@@ -1,3 +1,4 @@
+/*jshint esversion:6*/
 let mongoose = require("mongoose");
 let user = require("../models/user");
 let follower = require("../models/follower");
