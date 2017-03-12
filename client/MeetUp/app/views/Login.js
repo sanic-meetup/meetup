@@ -80,8 +80,9 @@ export default class Login extends React.Component {
         try {
           AsyncStorage.setItem('username', responseJson.username);
           AsyncStorage.setItem('token', responseJson.token);
+          console.log(responseJson.username);
           if (responseJson.username)
-            this.goToHome(responseJson.token);
+            this.goToHome({token: responseJson.token});
         } catch (error) {
           console.error(error);
         }
@@ -109,7 +110,7 @@ export default class Login extends React.Component {
           .then((responseJson) => {
             if (responseJson.success) {
               console.log("Success! We got a token!");
-              this.goToHome(res.token);
+              this.goToHome({token: res.token});
             }
           })
           .catch((error) => {

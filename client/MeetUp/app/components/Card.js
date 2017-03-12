@@ -9,12 +9,15 @@ const styles = {
     marginBottom: 4,
     borderRadius: 8,
     backgroundColor: 'white',
-    borderBottomWidth: 3,
-    borderBottomColor: '#e9e9e9',
+    borderBottomWidth: 4,
+    borderLeftWidth: 2,
+    borderRightWidth: 2,
+    borderColor: '#e9e9e9',
   },
   contentContainer: {
     padding: 8,
     flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center'
   },
   profileImage: {
@@ -44,6 +47,17 @@ const styles = {
     width: 14,
     height: 14,
     zIndex: 10,
+  },
+  cardContext: {
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: 8,
+  },
+  username: {
+
+  },
+  locationName: {
+
   }
 };
 
@@ -58,6 +72,10 @@ export default class Card extends Component {
         <View style={styles.profileImageContainer}>
           <View style={[styles.profileImageStatus, this.props.available?styles.available:styles.busy]}></View>
           <Image style={styles.profileImage} source={{uri: 'https://avatars3.githubusercontent.com/u/5758214?v=3&s=460'}}/>
+        </View>
+        <View style={styles.cardContext}>
+          <Text style={styles.username}>{this.props.username}</Text>
+          <Text style={styles.locationName}>{this.props.locationName}</Text>
         </View>
       </View>
     </View>

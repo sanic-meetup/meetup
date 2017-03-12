@@ -4,7 +4,8 @@
   "description": "the app",
   "main": "app.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "start": "SET NODE_ENV=dev && node server.js",
+    "test": "mocha --timeout 10000"
   },
   "author": "",
   "license": "ISC",
@@ -25,13 +26,9 @@
     "sendgrid": "^4.7.1"
   },
   "devDependencies": {
-  "chai": "^3.5.0",
-  "chai-http": "^2.0.1",
-  "mocha": "^2.4.5"
-  },
-  "scripts": {
-    "start": "SET NODE_ENV=dev && node server.js",
-    "test": "mocha --timeout 10000"
+    "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
+    "mocha": "^2.4.5",
+    "supertest": "^3.0.0"
   }
-
 }
