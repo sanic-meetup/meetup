@@ -214,6 +214,26 @@ app.post("/api/follow/", function(req, res, next) {
   });
 });
 
+
+/**
+* Unfollow a user
+*/
+app.post("/api/unfollow/", function(req, res, next) {
+  //standard sanitization
+  req.body.username = sanitizer.sanitize(req.body.username);
+  req.checkBody().notEmpty();
+
+  follower.update({username: req.body.username}, {$pull: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
+    if (err) return res.status(500).end(err);
+    //add to following list
+    following.update({username: req.decoded._doc.username}, {$pull: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+      if (err) return res.status(500).end(err);
+      res.sendStatus(200);
+    });
+  });
+});
+
+
 /**
 * Giving token/param of a user returns the status and
 * location of everyone the user is following
