@@ -95,6 +95,23 @@
 ```
 
 
+###Unfollow a User
+- description: Unfollow another user
+- request: `POST /api/unfollow/`
+  - content-type: `application/json`
+  - body: object
+    - username: (string) the username of the person wished to unfollow
+    - token: the request token (recommend sending in body or header)
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: None
+
+**example request body (postman)**,
+```
+
+```
+
+
 ###Get List of Followers
 - description: Get a list of followers of the current/given user
 - request: `GET /api/followers/`
