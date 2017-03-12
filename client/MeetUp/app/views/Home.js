@@ -74,12 +74,12 @@ export default class Home extends Component {
     console.log(this.state.statuses);
     if (!this.state.statuses)
       return <Text>No statuses</Text>
-    return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={true} username={curr.username}/>)}));
+    return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
   }
 
   render() {
     return <View style={[{flex: 1}, styles.sceneContainer]}>
-        <Navbar title="Home"/>
+        <Navbar title="MeetUp"/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView>
             {this.renderCards()}

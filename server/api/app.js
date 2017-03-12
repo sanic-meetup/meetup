@@ -131,7 +131,7 @@ app.post('/signin/', function (req, res, next) {
   //sanitize
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
-  if (!req.body.username || ! req.body.password) return res.status(400).send("Bad Request");
+  if (!req.body.username || ! req.body.password) return res.status(400).send(JSON.stringify({response:"unauthorized"}));
 
   var user = new User({
       username: req.body.username,
@@ -140,7 +140,7 @@ app.post('/signin/', function (req, res, next) {
 
   User.find({username: user.username}, function(err, result){
     if (err) return res.status(500).end(err);
-    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end("Unauthorized");
+    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end(JSON.stringify({response:"Unauthorized"}));
 
     // successful auth,  create a token
     var t = 60*60*24;

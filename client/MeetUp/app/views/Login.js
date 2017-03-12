@@ -77,6 +77,8 @@ export default class Login extends React.Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
+        if (responseJson.response === 'Unauthorized')
+          return
         try {
           AsyncStorage.setItem('username', responseJson.username);
           AsyncStorage.setItem('token', responseJson.token);
