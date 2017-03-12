@@ -131,7 +131,7 @@ app.post('/signin/', function (req, res, next) {
   //sanitize
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
-  if (!req.body.username || ! req.body.password) return res.status(400).send(JSON.jsonify({"msg":"Bad Request"}));
+  if (!req.body.username || ! req.body.password) return res.status(400).send({"msg":"Bad Request"});
 
   var user = new User({
       username: req.body.username,
