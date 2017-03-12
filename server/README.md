@@ -52,7 +52,10 @@
 
 ###Get User Info
 - description: Get info for the current/given user
-- request: `GET /api/followers/:username`
+- request: `GET /api/user/`
+  - query:
+    - token: the request token
+    - username: username that differs from current user (optional)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
   - body: object
@@ -92,7 +95,10 @@
 
 ###Get List of Followers
 - description: Get a list of followers of the current/given user
-- request: `GET /api/followers/:username`
+- request: `GET /api/followers/`
+  - query:
+    - token: the request token
+    - username: username that differs from current user (optional)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
   - body: list of object
@@ -141,7 +147,10 @@
 
 ###Get Status/Location of Following Users
 - description: Get the status & location of the user's the current/given user is following
-- request: `GET /api/following/:username`
+- request: `GET /api/following/`
+  - query:
+    - token: the request token
+    - username: username that differs from current user (optional)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
   - body: list of object
@@ -160,7 +169,7 @@
 
 ###Setting A users location
 - description: register a new user
-- request: `PUT /api/location`
+- request: `PUT /api/location/`
   - content-type: `application/json`
   - body: object
     - token: the request token (recommend sending in body or header)
