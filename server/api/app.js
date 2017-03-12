@@ -339,6 +339,26 @@ app.get("/api/status/", function(req, res, next){
   });
 });
 
+
+/*
+* Deletes the current user
+*/
+app.delete("/api/user/", function(req, res, next){
+
+  //sanitize & validate
+  req.body.username = sanitizer.sanitize(req.body.username);
+  req.checkBody().notEmpty();
+
+  //check permissions
+  if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
+    return res.status(401).end("Unauthorized");
+  }
+
+  User.remove({username: req.body.username});
+  following.remove({username: req.body.username});
+  //follower.update{}
+});
+
 /**
 * Helper Function to send notification to all following users.
 */
