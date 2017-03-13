@@ -46,6 +46,8 @@ var pusher = new Pusher({
   encrypted: true
 });
 
+app.use("/static/", express.static(__dirname + '/static'));
+
 app.get("/", function(req, res, next) {
   var mode = "dev";
   fs.readFile('../README.md', 'utf8', function (err,data) {
@@ -55,7 +57,7 @@ app.get("/", function(req, res, next) {
     if (mode === "dev") {
       var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
       v += data;
-      v += "</xmp><script src=\"https://strapdownjs.com/v/0.2/strapdown.js\"></script></html>";
+      v += "</xmp><script src=\"/static/strapdown.js\"></script></html>";
         return res.send(v);
       } else return res.send("It Works!");
     });
