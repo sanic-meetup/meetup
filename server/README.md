@@ -2,19 +2,25 @@
 ##Current HTTPS Endpoint(s)
 ``https://sanic.ca:2096`` (signed certificate, suitable for production use)
 
-``http://kmain.ddns.net:81`` (self-signed unverified certificates, not suitable for production use)
+``https://kmain.ddns.net:81`` (self-signed unverified certificates, not suitable for production use)
 
 ``https://server.sanic.ca:2096`` (self-signed unverified certificates, not suitable for production use)
 
 ##Current HTTP Endpoint(s) ~ (Temp endpoints for debugging & testing, REMOVE for production)
 ``http://kmain.ddns.net:82``
-**http disabled for sanic.ca**
 
-##setup
+**http requests disabled for sanic.ca**
+
+##Memcached Server(s)
+- not yet impl
+
+##local setup
 ``npm init``
 - open the conf.js file and set your username and password, if no file exists see the sample conf.js contents below and copy paste it into a conf.js file
 
 ``node app.js``
+or
+``nodemon app.js``
 - connect @ **https**://localhost:3000
 
 ##Users API
