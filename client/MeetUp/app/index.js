@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import { Image, Text, View } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
-
+import { colors } from './Constants';
 
 // Scene's
 import Login from './views/Login';
@@ -63,12 +64,28 @@ export const animationStyle = (props) => {
 /* ... */
 
 export default class App extends React.Component {
+
+  handleTabSelect(tabScene) {
+    Actions[tabScene.props.sceneKey]();
+  }
+
   render() {
     return <Router>
-      <Scene key="root" hideNavBar={true}>
-        <Scene key="login" component={Login} title="Login" animationStyle={animationStyle}/>
-        <Scene key="home" component={Home} title="Home" type={ActionConst.REPLACE}/>
+      <Scene key="root" hideNavBar type={ActionConst.REPLACE}>
+        <Scene key="login" component={Login} title="Login" type={ActionConst.REPLACE}/>
+        <Scene key="home" component={Home} title="MeetUp" type={ActionConst.REPLACE}/>
+        {/*}<Scene key="tabs" hideNavBar tabs={true} tabBarStyle={{backgroundColor: colors.white}} onSelect={(tabScene) => {this.handleTabSelect(tabScene)}} type={ActionConst.REPLACE}>
+          <Scene key="tab1" component={Home} hideNavBar title="MeetUp" icon={TabIcon} tabBarTitle="Status"/>
+        </Scene>*/}
       </Scene>
     </Router>
+  }
+}
+
+class TabIcon extends React.Component {
+  render(){
+    return (
+      <Text style={{color: this.props.selected ? colors.purple :'black'}}>{this.props.tabBarTitle}</Text>
+    );
   }
 }

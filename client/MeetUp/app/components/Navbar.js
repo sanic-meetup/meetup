@@ -5,7 +5,7 @@
 */
 
 import React, { Component, Stylesheet } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { colors } from '../Constants';
 
@@ -18,7 +18,7 @@ const STATUS_BAR_HEIGHT = 20;
 */
 const styles = {
   navBarContainer: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.white,
   },
   statusBar: {
     height: STATUS_BAR_HEIGHT,
@@ -62,7 +62,7 @@ const styles = {
   navBarTitleText: {
     fontSize: 17,
     letterSpacing: 0.5,
-    color: colors.white,
+    color: colors.black,
     fontWeight: '500',
   }
 };

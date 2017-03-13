@@ -5,12 +5,20 @@ import { Text, View, ScrollView, AsyncStorage } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
+import SetStatusInline from "../components/SetStatusInline";
 import { server } from '../Constants';
 
 
 const styles = {
   sceneContainer: {
     backgroundColor: "#eeeeee"
+  }
+};
+
+const rightButtonConfig = {
+  'title': "status",
+  handler: () => {
+
   }
 };
 
@@ -23,6 +31,7 @@ export default class Home extends Component {
   }
 
   componentWillMount() {
+    setInterval(() => {this.updateStatuses()},2000);
     this.getUsername((res) => {
       if (res.success) {
         console.log("USERNAME",res.username);
@@ -34,6 +43,12 @@ export default class Home extends Component {
         console.warn("Couldn't get username... Back to login...");
         Actions.login();
       }
+    });
+  }
+
+  updateStatuses() {
+    this.following((json) => {
+      this.setState({statuses: json});
     });
   }
 
@@ -79,7 +94,8 @@ export default class Home extends Component {
 
   render() {
     return <View style={[{flex: 1}, styles.sceneContainer]}>
-        <Navbar title="MeetUp"/>
+        <Navbar title="MeetUp" rightButton={rightButtonConfig}/>
+        <SetStatusInline token={this.state.token}/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView>
             {this.renderCards()}
