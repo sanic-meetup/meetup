@@ -18,7 +18,7 @@ describe('USER API Tests', () => {
   /*
   * Test making a user
   */
-  describe('/POST user', () => {
+  describe(' user', () => {
       beforeEach((done) => { //Before each test we empty the database
           user.remove({username:"test"}, (err) => {
              done();
@@ -26,13 +26,10 @@ describe('USER API Tests', () => {
       });
 
       it('registering a valid user', (done) => {
-        chai.request(server)
-            .post('/users/')
-            .send(vars.testuser)
-            .end((err, res) => {
+        agent.post('/users/').type('json').send(vars.testuser)
+            .end(function(err, res) {
                 res.should.have.status(200);
-                res.body.should.eql(vars.testuser_resp);
-              done();
+                done();
             });
       });//end it
 
@@ -82,7 +79,7 @@ describe('USER API Tests', () => {
         .end(function(err, res){
           res.should.have.status(401);
           done();
-        })
+        });
       });//end it
     }); //end desc
 

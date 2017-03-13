@@ -9,6 +9,9 @@ var jwt = require('jsonwebtoken');
 var conf = require('./conf');
 var fs = require('fs');
 var helper = require('sendgrid').mail;
+var stat = require('./utils/utils.js').statcodes;
+var docstrip = require('./utils/utils.js').docstrip;
+var str = require('./utils/utils.js').stringify;
 
 //body parser stuff
 var bodyParser = require('body-parser');
@@ -99,7 +102,8 @@ app.post("/users/", function (req, res, next) {
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
   req.body.email = sanitizer.sanitize(req.body.email);
-  if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end();
+
+  if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end(stat._400);
 
   var new_user = new User({
     username: req.body.username,
@@ -109,13 +113,14 @@ app.post("/users/", function (req, res, next) {
 
   new_user.save(function(err) {
     //if err user exists
-    if (err) res.status(409).send('new user not created');
+    if (err) res.status(409).send(stat._409);
     else {
-      res.status(200).send({username:req.body.username});
+      res.status(200).send(str({username:req.body.username}));
     }
   });
 
 });
+
 
 /**
 * private method for checking passwd
@@ -127,11 +132,16 @@ var checkPassword = function(user, password){
         return (user.password === value);
 };
 
+
+/*
+* Given a username and password signs into the app and returns a token if
+* log in was valid. 400 if Unauthorized.
+*/
 app.post('/signin/', function (req, res, next) {
   //sanitize
   req.body.username = sanitizer.sanitize(req.body.username);
   req.body.password = sanitizer.sanitize(req.body.password);
-  if (!req.body.username || ! req.body.password) return res.status(400).send(JSON.stringify({response:"unauthorized"}));
+  if (!req.body.username || ! req.body.password) return res.status(400).send(stat._400);
 
   var user = new User({
       username: req.body.username,
@@ -139,8 +149,8 @@ app.post('/signin/', function (req, res, next) {
     });
 
   User.find({username: user.username}, function(err, result){
-    if (err) return res.status(500).end(err);
-    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end(JSON.stringify({response:"Unauthorized"}));
+    if (err) return res.status(500).end(stat._500);
+    if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end(stat._401);
 
     // successful auth,  create a token
     var t = 60*60*24;
@@ -148,7 +158,7 @@ app.post('/signin/', function (req, res, next) {
       expiresIn: t // expires in 24 hours (measured in seconds)
     });
 
-    res.status(200).send({username: user.username, token: token, expiesIn: t});
+    res.status(200).send(str({username: user.username, token: token, expiesIn: t}));
   });
 });
 
@@ -156,10 +166,13 @@ app.post('/signin/', function (req, res, next) {
 * test route only
 */
 app.get("/api/testauth", function(req, res, next){
-    res.status(200).send({success: true});
+    res.status(200).send(str({success: true}));
 });
 
-//update the user's location
+
+/*
+* Update the user's location
+*/
 app.put("/api/location/", function (req, res, next) {
   //create the object & sanitize
   var newloc = {
@@ -174,14 +187,14 @@ app.put("/api/location/", function (req, res, next) {
 
   //check permissions
   if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
-    return res.status(401).end("Unauthorized");
+    return res.status(401).end(stat._400);
   }
   //update and return the location info
   User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //for response
     follower.findOne({username: req.body.username}, function (err, doc) {
-      if (err) return res.status(500).end(err);
+      if (err) return res.status(500).end(stat._500);
       //if user has followers notify them via push notification
       if (doc) {
         for (var i = 0; i < doc.followers.length; i ++) {
@@ -192,12 +205,12 @@ app.put("/api/location/", function (req, res, next) {
         }
       }
     });
-    res.status(200).send(data.location);
+    res.status(200).send(str(data.location));
   });
 });
 
 /**
-* follow a user
+* Follow a user
 */
 app.post("/api/follow/", function(req, res, next) {
   //standard sanitization
@@ -205,14 +218,34 @@ app.post("/api/follow/", function(req, res, next) {
   req.checkBody().notEmpty();
 
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //add to following list
     following.findOneAndUpdate({username: req.decoded._doc.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+      if (err) return res.status(500).end(stat._500);
+      res.sendStatus(200);
+    });
+  });
+});
+
+
+/**
+* Unfollow a user
+*/
+app.post("/api/unfollow/", function(req, res, next) {
+  //standard sanitization
+  req.body.username = sanitizer.sanitize(req.body.username);
+  req.checkBody().notEmpty();
+
+  follower.update({username: req.body.username}, {$pull: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
+    if (err) return res.status(500).end(err);
+    //add to following list
+    following.update({username: req.decoded._doc.username}, {$pull: {following: req.body.username}}, {upsert: true}, function(err, doc) {
       if (err) return res.status(500).end(err);
       res.sendStatus(200);
     });
   });
 });
+
 
 /**
 * Giving token/param of a user returns the status and
@@ -227,14 +260,13 @@ app.get("/api/following/", function (req, res, next) {
   }
 
   following.findOne({username: u}, function (err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     if (doc) {
       // res.status(200).send({"following": doc.following});
       User.find ({username: {$in: doc.following}}, function (err, docs) {
-        console.log(docs);
         res.status(200).send(docs);
       });
-    } else { res.status(200).send({"following": []}); }
+    } else { res.status(200).send(str({"following": []})); }
   });
 });
 
@@ -249,19 +281,18 @@ app.get("/api/followers/", function(req, res, next) {
   }
 
   follower.findOne({username: u}, function (err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     if (doc) {
-      res.status(200).send({"followers": doc.followers});
+      res.status(200).send(str({"followers": doc.followers}));
       // User.find ({username: {$in: doc.followers}}, function (err, docs) {
       //   res.status(200).send(docs);
       // });
-    } else { res.status(200).send({"followers": []}); }
+    } else { res.status(200).send(str({"followers": []})); }
   });
 });
 
 /**
-* returns the requesting users' info or if query param username is set then that
-* @TODO add some sanitization && validation
+* Returns the requesting users' info or if query param username is set then that
 */
 app.get("/api/user/", function(req, res, next) {
   var u = req.decoded._doc.username;
@@ -271,7 +302,7 @@ app.get("/api/user/", function(req, res, next) {
   }
 
   User.findOne({username: u}, function (err, doc) {
-    res.status(200).send(doc);
+    res.status(200).send(docstrip(doc));
   });
 });
 
@@ -289,12 +320,12 @@ app.put("/api/status/", function(req, res, next){
   req.body.inform = sanitizer.sanitize(req.body.inform);
 
   User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //for response
     if(req.body.inform){
       notifyFollowers(req.decoded._doc.username, 'status_update', data);
     }
-    res.status(200).send(data.status);
+    res.status(200).send(str(data.status));
   });
 });
 
@@ -304,10 +335,40 @@ app.put("/api/status/", function(req, res, next){
 */
 app.get("/api/status/", function(req, res, next){
   User.findOne({username: req.decoded._doc.username}, function(err, data) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //for response
-    res.status(200).send(data.status);
+    res.status(200).send(str(data.status));
   });
+});
+
+
+/*
+* Deletes the current user
+*/
+app.delete("/api/user/", function(req, res, next){
+
+  //sanitize & validate
+  req.body.username = sanitizer.sanitize(req.body.username);
+  req.checkBody().notEmpty();
+
+  //check permissions
+  if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
+    return res.status(401).end(stat._401);
+  }
+
+  //Remove User and all their relations
+  User.remove({username: req.body.username}, function(err, doc) {
+    following.remove({username: req.body.username}, function(err, doc) {
+      follower.remove({username: req.body.username}, function(err, doc){
+        following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
+          follower.update({}, {$pull: {followers: req.body.username}}, {},function(err,docs){
+            res.sendStatus(200);
+          });
+        });
+      });
+    });
+  });
+  // console.log("here");
 });
 
 /**
@@ -315,7 +376,7 @@ app.get("/api/status/", function(req, res, next){
 */
 function notifyFollowers(username, nevent, data){
   follower.findOne({username: username}, function (err, doc) {
-    if (err) return res.status(500).end(err);
+    if (err) return res.status(500).end(stat._500);
     //if user has followers notify them via push notification
     if (doc) {
       for (var i = 0; i < doc.followers.length; i ++) {

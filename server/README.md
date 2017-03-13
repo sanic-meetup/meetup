@@ -95,6 +95,23 @@
 ```
 
 
+###Unfollow a User
+- description: Unfollow another user
+- request: `POST /api/unfollow/`
+  - content-type: `application/json`
+  - body: object
+    - username: (string) the username of the person wished to unfollow
+    - token: the request token (recommend sending in body or header)
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: None
+
+**example request body (postman)**,
+```
+
+```
+
+
 ###Get List of Followers
 - description: Get a list of followers of the current/given user
 - request: `GET /api/followers/`
@@ -112,7 +129,7 @@
 ```
 
 ##Status & Location API
-###Get Status/Location of Current Users
+###Get Status of Current Users
 - description: Get the status & location of the current/given user
 - request: `GET /api/status/`
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
@@ -127,12 +144,12 @@
 ```
 
 
-###Set Status/Location of Current Users
+###Set Status of Current Users
 - description: Set the status & location of the current/given user
 - request: `PUT /api/status/`
   - content-type: `application/json`
   - body: object
-    - availability: (enum) availability status
+    - availability: (enum: ["Available", "Busy", "Not Available"]) availability status
     - message: (string) status message
     - inform: (boolean) if followers should be notified
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
