@@ -1,34 +1,39 @@
 /*jshint esversion:6*/
-var crypto = require('crypto');
-var path = require('path');
-var express = require('express');
-var app = express();
-var sanitizer = require('sanitizer');
-var validator = require('express-validator');
-var jwt = require('jsonwebtoken');
-var conf = require('./conf');
-var fs = require('fs');
-var helper = require('sendgrid').mail;
-var stat = require('./utils/utils.js').statcodes;
-var docstrip = require('./utils/utils.js').docstrip;
-var str = require('./utils/utils.js').stringify;
+/*jshint -W030*/
+var crypto = require('crypto'),
+  path = require('path'),
+  express = require('express');
+  app = express(),
+  sanitize = require('sanitizer').sanitize,
+  validator = require('express-validator'),
+  jwt = require('jsonwebtoken'),
+  conf = require('./conf'),
+  fs = require('fs'),
+  helper = require('sendgrid').mail,
+  utils = require('./utils/utils.js'),
+  stat = utils.statcodes,
+  docstrip = utils.docstrip,
+  str = utils.stringify,
+  checkPassword = utils.checkPassword,
+  bodyParser = require('body-parser'),
+  mongoose = require('mongoose'),
+  Pusher = require('pusher'),
+  https = require('https');
 
-//body parser stuff
-var bodyParser = require('body-parser');
+//bodyparser conf
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-//validator
+//validator conf
 app.use(validator([]));
 
-//db
-var mongoose = require('mongoose');
+//db conf
 mongoose.connect(conf.mongouri);
 
 //models
-var User = require("./models/user");
-var follower = require("./models/follower");
-var following = require("./models/following");
+var User = require("./models/user"),
+  follower = require("./models/follower"),
+  following = require("./models/following");
 
 //for auth
 app.set('superSecret', 'this is a supersecret secret key'); // secret variable
@@ -37,61 +42,16 @@ app.set('superSecret', 'this is a supersecret secret key'); // secret variable
 exports.app = app;
 
 //for push notifications
-var Pusher = require('pusher');
+var pusher = new Pusher(utils.pusher_conf);
 
-var pusher = new Pusher({
-  appId: '311795',
-  key: 'c44a3af2941478d93548',
-  secret: '31d232d42bd6b466088b',
-  encrypted: true
-});
-
+//for strapdown library & other static files we may use later on
 app.use("/static/", express.static(__dirname + '/static'));
 
-app.get("/", function(req, res, next) {
-  var mode = "dev";
-  fs.readFile('../README.md', 'utf8', function (err,data) {
-    if (err) {
-      return res.send("could not load api docs");
-    }
-    if (mode === "dev") {
-      var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
-      v += data;
-      v += "</xmp><script src=\"/static/strapdown.js\"></script></html>";
-        return res.send(v);
-      } else return res.send("It Works!");
-    });
-});
+app.get("/", utils.render_index);
 
 //middleware to verify a token
 var apiRoutes = express.Router();
-apiRoutes.use(function (req, res, next) {
-  //this function is from the scoth.io tut - see the credits.md
-  // check header or url parameters or post parameters for token
-   var token = req.body.token || req.query.token || req.headers['x-access-token'];
-
-   // decode token
-   if (token) {
-     // verifies secret and checks exp
-     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-       if (err) {
-         return res.json({ success: false, message: 'Failed to authenticate token.' });
-       } else {
-         // if everything is good, save to request for use in other routes
-         req.decoded = decoded;
-         next();
-       }
-     });
-
-   } else {
-     // if there is no token
-     // return an error
-     return res.status(403).send({
-         success: false,
-         message: 'No token provided.'
-     });
-   }
-});
+apiRoutes.use(utils.tokenauth);
 
 //apply apiroutes only to routes with prefix /api
 app.use('/api', apiRoutes);
@@ -101,9 +61,9 @@ app.use('/api', apiRoutes);
 */
 app.post("/users/", function (req, res, next) {
   //some basic validation
-  req.body.username = sanitizer.sanitize(req.body.username);
-  req.body.password = sanitizer.sanitize(req.body.password);
-  req.body.email = sanitizer.sanitize(req.body.email);
+  req.body.username = sanitize(req.body.username);
+  req.body.password = sanitize(req.body.password);
+  req.body.email = sanitize(req.body.email);
 
   if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end(stat._400);
 
@@ -123,26 +83,14 @@ app.post("/users/", function (req, res, next) {
 
 });
 
-
-/**
-* private method for checking passwd
-*/
-var checkPassword = function(user, password){
-        var hash = crypto.createHmac('sha512', user.salt);
-        hash.update(password);
-        var value = hash.digest('base64');
-        return (user.password === value);
-};
-
-
 /*
 * Given a username and password signs into the app and returns a token if
 * log in was valid. 400 if Unauthorized.
 */
 app.post('/signin/', function (req, res, next) {
   //sanitize
-  req.body.username = sanitizer.sanitize(req.body.username);
-  req.body.password = sanitizer.sanitize(req.body.password);
+  req.body.username = sanitize(req.body.username);
+  req.body.password = sanitize(req.body.password);
   if (!req.body.username || ! req.body.password) return res.status(400).send(stat._400);
 
   var user = new User({
@@ -178,13 +126,13 @@ app.get("/api/testauth", function(req, res, next){
 app.put("/api/location/", function (req, res, next) {
   //create the object & sanitize
   var newloc = {
-    longitude: sanitizer.sanitize(req.body.longitude),
-    latitude: sanitizer.sanitize(req.body.latitude),
-    height: sanitizer.sanitize(req.body.height)
+    longitude: sanitize(req.body.longitude),
+    latitude: sanitize(req.body.latitude),
+    height: sanitize(req.body.height)
   };
 
   //sanitize & validate
-  req.body.username = sanitizer.sanitize(req.body.username);
+  req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
   //check permissions
@@ -216,7 +164,7 @@ app.put("/api/location/", function (req, res, next) {
 */
 app.post("/api/follow/", function(req, res, next) {
   //standard sanitization
-  req.body.username = sanitizer.sanitize(req.body.username);
+  req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
   follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
@@ -235,7 +183,7 @@ app.post("/api/follow/", function(req, res, next) {
 */
 app.post("/api/unfollow/", function(req, res, next) {
   //standard sanitization
-  req.body.username = sanitizer.sanitize(req.body.username);
+  req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
   follower.update({username: req.body.username}, {$pull: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
@@ -256,7 +204,7 @@ app.post("/api/unfollow/", function(req, res, next) {
 app.get("/api/following/", function (req, res, next) {
   // a function to get everyone you follow
   var u = req.decoded._doc.username;
-  req.query.username = sanitizer.sanitize(req.query.username);
+  req.query.username = sanitize(req.query.username);
   if (req.query.username) {
     u = req.query.username;
   }
@@ -277,7 +225,7 @@ app.get("/api/following/", function (req, res, next) {
 */
 app.get("/api/followers/", function(req, res, next) {
   var u = req.decoded._doc.username;
-  req.query.username = sanitizer.sanitize(req.query.username);
+  req.query.username = sanitize(req.query.username);
   if (req.query.username) {
     u = req.query.username;
   }
@@ -298,7 +246,7 @@ app.get("/api/followers/", function(req, res, next) {
 */
 app.get("/api/user/", function(req, res, next) {
   var u = req.decoded._doc.username;
-  req.query.username = sanitizer.sanitize(req.query.username);
+  req.query.username = sanitize(req.query.username);
   if (req.query.username) {
     u = req.query.username;
   }
@@ -316,16 +264,16 @@ app.put("/api/status/", function(req, res, next){
   //sanitize & validate
   req.checkBody().notEmpty();
   var new_status = {
-    availability: sanitizer.sanitize(req.body.availability),
-    message: sanitizer.sanitize(req.body.message)
+    availability: sanitize(req.body.availability),
+    message: sanitize(req.body.message)
   };
-  req.body.inform = sanitizer.sanitize(req.body.inform);
+  req.body.inform = sanitize(req.body.inform);
 
   User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
     if (err) return res.status(500).end(stat._500);
     //for response
     if(req.body.inform){
-      notifyFollowers(req.decoded._doc.username, 'status_update', data);
+      utils.notifyFollowers(req.decoded._doc.username, 'status_update', data);
     }
     res.status(200).send(str(data.status));
   });
@@ -350,7 +298,7 @@ app.get("/api/status/", function(req, res, next){
 app.delete("/api/user/", function(req, res, next){
 
   //sanitize & validate
-  req.body.username = sanitizer.sanitize(req.body.username);
+  req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
   //check permissions
@@ -370,49 +318,9 @@ app.delete("/api/user/", function(req, res, next){
       });
     });
   });
-  // console.log("here");
 });
 
-/**
-* Helper Function to send notification to all following users.
-*/
-function notifyFollowers(username, nevent, data){
-  follower.findOne({username: username}, function (err, doc) {
-    if (err) return res.status(500).end(stat._500);
-    //if user has followers notify them via push notification
-    if (doc) {
-      for (var i = 0; i < doc.followers.length; i ++) {
-        pusher.trigger(doc.followers[i], nevent, data);
-      }
-    }
-  });
-}
-
-/**
-* a helper function that sends email (from support@sanic.ca)
-* data = message content, dest_email = recipient, sub = message subject
-*/
-function sendmail(data, dest_email, subj){
-  //email setup, move to config file later
-  from_email = new helper.Email("support@sanic.ca");
-  to_email = new helper.Email(dest_email);
-  subject = subj;
-  content = new helper.Content("text/plain", data);
-  mail = new helper.Mail(from_email, subject, to_email, content);
-  var sg = require('sendgrid')('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');
-  var request = sg.emptyRequest({
-    method: 'POST',
-    path: '/v3/mail/send',
-    body: mail.toJSON()
-  });
-  sg.API(request, function(error, response) {
-    if (error) console.log(error);
-  });
-}
-
 //https setup
-var https = require("https");
-var fs = require('fs');
 var privateKey = fs.readFileSync( 'certs/server.key' );
 var certificate = fs.readFileSync( 'certs/server.crt' );
 var config = {
