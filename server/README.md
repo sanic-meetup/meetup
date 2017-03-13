@@ -1,7 +1,9 @@
 # Server
 ##Current HTTPS Endpoint(s)
 ``https://sanic.ca:2096`` (signed certificate, suitable for production use)
+
 ``http://kmain.ddns.net:81`` (self-signed unverified certificates, not suitable for production use)
+
 ``https://server.sanic.ca:2096`` (self-signed unverified certificates, not suitable for production use)
 
 ##Current HTTP Endpoint(s) ~ (Temp endpoints for debugging & testing, REMOVE for production)
