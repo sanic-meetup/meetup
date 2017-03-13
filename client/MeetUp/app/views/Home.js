@@ -28,6 +28,7 @@ export default class Home extends Component {
     this.state = {
       token: props.token,
       updateFormOpen: false,
+      statuses: undefined
     }
   }
 
@@ -45,6 +46,12 @@ export default class Home extends Component {
         Actions.login();
       }
     });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state == nextState) {
+      return false;
+    } return true;
   }
 
   updateStatuses() {
