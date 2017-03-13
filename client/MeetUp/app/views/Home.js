@@ -27,6 +27,7 @@ export default class Home extends Component {
     super(props);
     this.state = {
       token: props.token,
+      updateFormOpen: false,
     }
   }
 
@@ -50,6 +51,15 @@ export default class Home extends Component {
     this.following((json) => {
       this.setState({statuses: json});
     });
+  }
+
+  toggleStatusForm() {
+    console.log(this.state.updateFormOpen);
+    if (this.state.updateFormOpen) {
+      this.setState({updateFormOpen: false});
+      return;
+    } this.setState({updateFormOpen: true});
+    return;
   }
 
   getUsername = async (callback) => {
@@ -86,7 +96,6 @@ export default class Home extends Component {
   }
 
   renderCards() {
-    console.log(this.state.statuses);
     if (!this.state.statuses)
       return <Text>No statuses</Text>
     return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
@@ -94,8 +103,8 @@ export default class Home extends Component {
 
   render() {
     return <View style={[{flex: 1}, styles.sceneContainer]}>
-        <Navbar title="MeetUp" rightButton={rightButtonConfig}/>
-        <SetStatusInline token={this.state.token}/>
+        <Navbar onPress={this.toggleStatusForm.bind(this)} title="MeetUp" rightButton={rightButtonConfig}/>
+        <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView>
             {this.renderCards()}
