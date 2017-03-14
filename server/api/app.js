@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(validator([]));
 
 //db conf
-mongoose.connect(conf.mongouri, ultis.mongo_options);
+mongoose.connect(conf.mongouri, utils.mongo_options);
 
 //models
 var User = require("./models/user"),
