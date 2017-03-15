@@ -49,9 +49,9 @@ export default class Home extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (this.state == nextState) {
+    if (JSON.stringify(this.state) == JSON.stringify(nextState)) { // TODO: no string comparison
       return false;
-    } return true;
+    } console.log("Updating!");return true;
   }
 
   updateStatuses() {
