@@ -235,8 +235,8 @@ or
 
 ##Sample conf.js file
 ```
-var username = 'daniel';
-var password = 'daniel123';
+var username = 'username';
+var password = 'password';
 
 var conf = {
   mongouri: "mongodb://" + username + ":" + password + "@ds119750.mlab.com:19750/freetime"
