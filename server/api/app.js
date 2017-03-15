@@ -29,6 +29,7 @@ app.use(validator([]));
 
 //db conf
 mongoose.connect(conf.mongouri, utils.mongo_options);
+mongoose.Promise = global.Promise;
 
 //models
 var User = require("./models/user"),
@@ -61,6 +62,7 @@ app.use('/api', apiRoutes);
 */
 app.post("/users/", function (req, res, next) {
   //some basic validation
+  res.setHeader('Content-Type', 'application/json');
   req.body.username = sanitize(req.body.username);
   req.body.password = sanitize(req.body.password);
   req.body.email = sanitize(req.body.email);
@@ -107,7 +109,7 @@ app.post('/signin/', function (req, res, next) {
     var token = jwt.sign(result[0], app.get('superSecret'), {
       expiresIn: t // expires in 24 hours (measured in seconds)
     });
-
+    res.setHeader('Content-Type', 'application/json');
     res.status(200).send(str({username: user.username, token: token, expiesIn: t}));
   });
 });
@@ -202,6 +204,7 @@ app.post("/api/unfollow/", function(req, res, next) {
 * location of everyone the user is following
 */
 app.get("/api/following/", function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
   // a function to get everyone you follow
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
@@ -224,6 +227,7 @@ app.get("/api/following/", function (req, res, next) {
 * Gets the list of a followers for a given user via token/params.
 */
 app.get("/api/followers/", function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
   if (req.query.username) {
@@ -245,6 +249,7 @@ app.get("/api/followers/", function(req, res, next) {
 * Returns the requesting users' info or if query param username is set then that
 */
 app.get("/api/user/", function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
   if (req.query.username) {
@@ -260,7 +265,7 @@ app.get("/api/user/", function(req, res, next) {
 * Set your the status of the current user
 */
 app.put("/api/status/", function(req, res, next){
-
+  res.setHeader('Content-Type', 'application/json');
   //sanitize & validate
   req.checkBody().notEmpty();
   var new_status = {
@@ -284,6 +289,7 @@ app.put("/api/status/", function(req, res, next){
 * Get current users status
 */
 app.get("/api/status/", function(req, res, next){
+  res.setHeader('Content-Type', 'application/json');
   User.findOne({username: req.decoded._doc.username}, function(err, data) {
     if (err) return res.status(500).end(stat._500);
     //for response
@@ -296,7 +302,7 @@ app.get("/api/status/", function(req, res, next){
 * Deletes the current user
 */
 app.delete("/api/user/", function(req, res, next){
-
+  res.setHeader('Content-Type', 'application/json');
   //sanitize & validate
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();

@@ -18,8 +18,8 @@ describe('USER API Tests', () => {
   /*
   * Test making a user
   */
-  describe(' user', () => {
-      beforeEach((done) => { //Before each test we empty the database
+  describe('/POST users', () => {
+      before((done) => { //Before each test we empty the database
           user.remove({username:"test"}, (err) => {
              done();
           });
@@ -84,20 +84,89 @@ describe('USER API Tests', () => {
     }); //end desc
 
     //@TODO finish these tests
-    describe('/GET following', () => {
+    describe('/GET /api/following', () => {
         before((done) => { //add user test
-            new user(vars.testuser).save();
-            new following(vars.testfollowing_1).save();
-            done();
+            vars.get_token(vars.testuser,
+            function(token) {
+              global.testuser_token = token;
+              vars.get_token(vars.daniel, function(token) {
+                global.daniel_token = token;
+                done();
+              });
+            });
         });
 
-        it('getting followers for valid uesr with follower should work', (done) => {
-          agent.post('/signin/').type('json').send(vars.testuser)
+        it('checking all of test\'s followers w/ token should work', (done) => {
+          agent.get('/api/following/?token='+global.testuser_token)
+          .type('json')
+          .send(vars.testuser)
           .end(function(err, res){
-            agent.get('/api/following/?token='+res.body.token)
-            .end(function(err, res) {
+            res.should.have.status(200);
+            res.body.should.be.a('array');
+            done();
+          });
+        });
+
+        it('checking who a user follows using a daniel\'s token'+
+         'should work', (done) => {
+          agent.get('/api/following/?token='+global.daniel_token)
+          .type('json')
+          .send(vars.testuser)
+          .end(function(err, res){
+            res.should.have.status(200);
+            res.body.should.be.a('array');
+            done();
+          });
+        });
+
+        it('checking who another user follows using username query ' +
+         'should work', (done) => {
+          agent.get('/api/following/?username=test&token='+global.daniel_token)
+          .type('json')
+          .send(vars.testuser)
+          .end(function(err, res){
+            res.should.have.status(200);
+            res.body.should.be.a('array');
+            done();
+          });
+        });
+
+    });//end desc
+
+    //@TODO finish these tests
+    describe('/POST /api/follow', () => {
+        before((done) => { //add user test
+            new user(vars.testuser3).save();
+            vars.get_token(vars.testuser3,
+            function(token) {
+              global.testuser3_token = token;
+              vars.get_token(vars.daniel, function(token) {
+                global.daniel_token = token;
+                done();
+              });
+            });
+        });
+
+        after((done) => {
+          //remove testuser3
+          agent.delete('/api/user/?token='+global.testuser3_token)
+          .type('json').end(function(err, res){
+            done();
+          });
+        });
+
+        it('following a valid user should work', (done) => {
+          agent.post('/api/follow/?token='+global.daniel_token)
+          .type('json')
+          .send({username: vars.testuser3.username})
+          .end(function(err, res){
+            //check followers match up
+            agent.get('/api/followers/?token='+global.testuser3_token)
+            .type('json')
+            .end(function(err, res){
               res.should.have.status(200);
-              res.body.should.eql(["test2"]);
+              res.body.followers.should.be.a('array');
+              res.body.followers.should.eql(['daniel']);
               done();
             });
           });
@@ -106,20 +175,51 @@ describe('USER API Tests', () => {
     });//end desc
 
     //@TODO finish these tests
-    describe('/POST follow', () => {
-        before((done) => { //add user test
-            new user(vars.testuser).save();
-            done();
+    describe('/GET /api/followers', () => {
+      before((done) => { //add user test
+          vars.get_token(vars.testuser,
+          function(token) {
+            global.testuser_token = token;
+            vars.get_token(vars.daniel, function(token) {
+              global.daniel_token = token;
+              done();
+            });
+          });
+      });
+
+      it('getting all a valid users followers should work', (done) => {
+        agent.get('/api/followers/?token='+global.testuser_token)
+        .type('json')
+        .send(vars.testuser)
+        .end(function(err, res){
+          res.should.have.status(200);
+          res.body.followers.should.be.a('array');
+          done();
         });
+      });
 
-    });//end desc
-
-    //@TODO finish these tests
-    describe('/GET followers', () => {
-        before((done) => { //add user test
-            new user(vars.testuser).save();
-            done();
+      it('getting all of daniel\'s followers with token method '+
+       'should work', (done) => {
+        agent.get('/api/followers/?token='+global.daniel_token)
+        .type('json')
+        .send(vars.testuser)
+        .end(function(err, res){
+          res.should.have.status(200);
+          res.body.followers.should.be.a('array');
+          done();
         });
+      });
 
+      it('getting another users\' folowers using username query ' +
+       'should work', (done) => {
+        agent.get('/api/followers/?username=test&token='+global.daniel_token)
+        .type('json')
+        .send(vars.testuser)
+        .end(function(err, res){
+          res.should.have.status(200);
+          res.body.followers.should.be.a('array');
+          done();
+        });
+      });
     });//end desc
 });//end outer (USER API TESTS)
