@@ -64,7 +64,7 @@ export default class Login extends React.Component {
   */
   signIn(username, password) {
     console.log(username, password);
-    return fetch('http://'+server+'/signin/', {
+    return fetch('https://'+server+'/signin/', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -101,7 +101,7 @@ export default class Login extends React.Component {
   componentDidMount() {
     this.authenticateUser((res) => {
       if (res.success) {
-        fetch('http://'+server+'/api/testauth?token=' + res.token, {
+        fetch('https://'+server+'/api/testauth?token=' + res.token, {
             method: 'GET',
             headers: {
               'Accept': 'application/json',

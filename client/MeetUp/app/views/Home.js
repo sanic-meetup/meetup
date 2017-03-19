@@ -61,7 +61,6 @@ export default class Home extends Component {
   }
 
   toggleStatusForm() {
-    console.log(this.state.updateFormOpen);
     if (this.state.updateFormOpen) {
       this.setState({updateFormOpen: false});
       return;
@@ -86,7 +85,7 @@ export default class Home extends Component {
   }
 
   following(callback) {
-    return fetch('http://'+server+'/api/following/?token='+this.state.token, {
+    return fetch('https://'+server+'/api/following/?token='+this.state.token, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',

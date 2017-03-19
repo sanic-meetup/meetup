@@ -1,7 +1,7 @@
 'use-strict'
 
 import React, { Component } from 'react';
-import { Button, Text, TouchableOpacity, View, ScrollView, AsyncStorage, Animated } from 'react-native';
+import { Button, Text, TouchableOpacity, View, ScrollView, AsyncStorage, Animated, LayoutAnimation } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { colors, server } from '../Constants';
 
@@ -10,7 +10,7 @@ const styles = {
   sceneContainer: {
     backgroundColor: colors.black,
     padding: 10,
-    height: 89
+    height: 84
   },
   availabilityButtons: {
     flexDirection: 'row',
@@ -46,6 +46,7 @@ const styles = {
 export default class SetStatusInline extends Component {
   constructor(props) {
     super(props);
+    this._onPress = this._onPress.bind(this);
     this.state = {
       token: props.token,
       selected: undefined,
@@ -54,7 +55,21 @@ export default class SetStatusInline extends Component {
       location: undefined,
       open: props.open
     }
+    this.height = 0
   }
+
+  componentWillMount() {
+    this.setState({open: this.props.open});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.open !== nextProps.open) {
+      this.setState({open: nextProps.open});
+      console.log("state open: ",this.state.open);
+    }
+  }
+
+  componentDidReceiveProps() {}
 
   updateSelectedAvailability(status) {
     this.setState({selected: status});
@@ -62,7 +77,7 @@ export default class SetStatusInline extends Component {
 
   submitUpdateAvailability(callback) {
     this.setState({open: !this.state.open});
-    return fetch('http://'+server+'/api/status/?token='+this.state.token, {
+    return fetch('https://'+server+'/api/status/?token='+this.state.token, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -83,20 +98,16 @@ export default class SetStatusInline extends Component {
       });
   }
 
-  componentWillMount() {
-    this.setState({open: this.props.open});
+  componentWillUpdate() {
+    LayoutAnimation.easeInEaseOut();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.open !== nextProps.open) {
-      this.setState({open: nextProps.open});
-    }
-  }
+  componentDidUpdate() {}
 
   render() {
-    console.log(this.state.open);
+    this.height = this.state.open?84:0;
     return (
-      <View style={[{height: (this.state.open) ?84:0}, {overflow: 'hidden'}]}>
+      <View style={[{height: this.height}, {overflow: 'hidden'}]}>
         <View style={styles.sceneContainer}>
           <View style={styles.availabilityButtons}>
             <TouchableOpacity
