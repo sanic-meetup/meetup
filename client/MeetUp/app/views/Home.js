@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import SetStatusInline from "../components/SetStatusInline";
+import TabBar from "../components/TabBar";
 import { server } from '../Constants';
 
 
@@ -120,6 +121,7 @@ export default class Home extends Component {
             {this.renderCards()}
           </ScrollView>
         </View>
+        <TabBar/>
       </View>
   }
 };
