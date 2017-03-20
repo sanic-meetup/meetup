@@ -16,4 +16,3 @@ RUN npm install -g nodemon
 EXPOSE 3000
 # run the nodejs application
 CMD nodemon app.js
-CMD docker run sanic -p 3000:3000 -d sanic
