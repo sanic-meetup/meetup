@@ -335,7 +335,7 @@ var config = {
 };
 
 //https server
-https.createServer(config, app).listen(3000, function () {
+https.createServer(config, app).listen(3000, '0.0.0.0', function () {
     console.log('HTTPS on port 3000');
 });
 
