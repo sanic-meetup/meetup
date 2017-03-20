@@ -1,20 +1,20 @@
 # Server
-##Current HTTPS Endpoint(s)
+## Current HTTPS Endpoint(s)
 ``https://sanic.ca:2096`` (signed certificate, suitable for production use)
 
 ``https://kmain.ddns.net:81`` (self-signed unverified certificates, not suitable for production use)
 
 ``https://server.sanic.ca:2096`` (self-signed unverified certificates, not suitable for production use)
 
-##Current HTTP Endpoint(s) ~ (Temp endpoints for debugging & testing, REMOVE for production)
+## Current HTTP Endpoint(s) ~ (Temp endpoints for debugging & testing, REMOVE for production)
 ``http://kmain.ddns.net:82``
 
 **http requests disabled for sanic.ca**
 
-##Memcached Server(s)
+## Memcached Server(s)
 - not yet impl
 
-##local setup
+## local setup
 ``npm init``
 - open the conf.js file and set your username and password, if no file exists see the sample conf.js contents below and copy paste it into a conf.js file
 
@@ -23,8 +23,8 @@ or
 ``nodemon app.js``
 - connect @ **https**://localhost:3000
 
-##Users API
-###Registering A New User
+## Users API
+### Registering A New User
 - description: register a new user
 - request: `POST /users/`
   - content-type: `application/json`
@@ -47,7 +47,7 @@ or
 ```
 
 
-###Logging In
+### Logging In
 - description: register a new user
 - request: `POST /signin/`
   - content-type: `application/json`
@@ -67,7 +67,7 @@ or
 ```
 
 
-###Get User Info
+### Get User Info
 - description: Get info for the current/given user
 - request: `GET /api/user/`
   - query:
@@ -95,7 +95,7 @@ or
 ```
 
 
-###Follow a User
+### Follow a User
 - description: follow another user
 - request: `POST /api/follow/`
   - content-type: `application/json`
@@ -112,7 +112,7 @@ or
 ```
 
 
-###Unfollow a User
+### Unfollow a User
 - description: Unfollow another user
 - request: `POST /api/unfollow/`
   - content-type: `application/json`
@@ -129,7 +129,7 @@ or
 ```
 
 
-###Get List of Followers
+### Get List of Followers
 - description: Get a list of followers of the current/given user
 - request: `GET /api/followers/`
   - query:
@@ -145,8 +145,8 @@ or
 
 ```
 
-##Status & Location API
-###Get Status of Current Users
+## Status & Location API
+### Get Status of Current Users
 - description: Get the status & location of the current/given user
 - request: `GET /api/status/`
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
@@ -161,7 +161,7 @@ or
 ```
 
 
-###Set Status of Current Users
+### Set Status of Current Users
 - description: Set the status & location of the current/given user
 - request: `PUT /api/status/`
   - content-type: `application/json`
@@ -181,7 +181,7 @@ or
 ```
 
 
-###Get Status/Location of Following Users
+### Get Status/Location of Following Users
 - description: Get the status & location of the user's the current/given user is following
 - request: `GET /api/following/`
   - query:
@@ -205,7 +205,7 @@ or
 ```
 
 
-###Setting A users location
+### Setting A users location
 - description: register a new user
 - request: `PUT /api/location/`
   - content-type: `application/json`
@@ -233,7 +233,7 @@ or
   }
   ```
 
-##Sample conf.js file
+## Sample conf.js file
 ```
 var username = 'username';
 var password = 'password';
