@@ -1,6 +1,6 @@
 'use-strict'
 
-import React, { Component } from 'react';
+import React, { Component, LayoutAnimation } from 'react';
 import { Image, Text, View } from 'react-native';
 
 const styles = {
@@ -64,6 +64,12 @@ const styles = {
 export default class Card extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props !== nextProps) {
+      this.setState({open: nextProps.open});
+    }
   }
 
   render() {

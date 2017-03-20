@@ -1,7 +1,7 @@
 'use-strict'
 
 import React, { Component } from 'react';
-import { Text, View, ScrollView, AsyncStorage } from 'react-native';
+import { Text, View, ScrollView, AsyncStorage, LayoutAnimation } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
@@ -52,6 +52,10 @@ export default class Home extends Component {
     if (JSON.stringify(this.state) == JSON.stringify(nextState)) { // TODO: no string comparison
       return false;
     } console.log("Updating!");return true;
+  }
+
+  componentWillUpdate() {
+    LayoutAnimation.spring();
   }
 
   updateStatuses() {

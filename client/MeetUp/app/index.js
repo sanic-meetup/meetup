@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, LayoutAnimation } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import { colors } from './Constants';
 

@@ -43,10 +43,20 @@ const styles = {
   }
 };
 
+const CustomLayoutAnimation = {
+  duration: 200,
+  create: {
+    type: LayoutAnimation.Types.linear,
+    property: LayoutAnimation.Properties.opacity,
+  },
+  update: {
+    type: LayoutAnimation.Types.easeInEaseOut,
+  },
+};
+
 export default class SetStatusInline extends Component {
   constructor(props) {
     super(props);
-    this._onPress = this._onPress.bind(this);
     this.state = {
       token: props.token,
       selected: undefined,
@@ -55,6 +65,7 @@ export default class SetStatusInline extends Component {
       location: undefined,
       open: props.open
     }
+    // Not part of the state, but necessary to view.
     this.height = 0
   }
 
@@ -99,7 +110,8 @@ export default class SetStatusInline extends Component {
   }
 
   componentWillUpdate() {
-    LayoutAnimation.easeInEaseOut();
+    console.log(CustomLayoutAnimation);
+    LayoutAnimation.configureNext(CustomLayoutAnimation);
   }
 
   componentDidUpdate() {}
