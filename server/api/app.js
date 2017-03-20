@@ -341,6 +341,6 @@ https.createServer(config, app).listen(3000, function () {
 
 //for dev only
 var http = require("http");
-http.createServer(app).listen(5000, function() {
+http.createServer(app).listen(5000, '0.0.0.0',function() {
   console.log("http on 5000");
 });
