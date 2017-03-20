@@ -52,7 +52,7 @@ export default class Home extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (JSON.stringify(this.state) == JSON.stringify(nextState)) { // TODO: no string comparison
       return false;
-    } console.log("Updating!");return true;
+    } return true;
   }
 
   componentWillUpdate() {
