@@ -13,4 +13,4 @@ WORKDIR /home/nodejs/app
 RUN npm install --production
 RUN npm install -g nodemon
 # run the nodejs application
-CMD nodemon app.js
+CMD node app.js
