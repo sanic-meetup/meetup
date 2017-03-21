@@ -57,7 +57,6 @@ export default class Home extends Component {
   }
 
   componentWillUpdate() {
-    LayoutAnimation.spring();
   }
 
   updateStatuses() {
