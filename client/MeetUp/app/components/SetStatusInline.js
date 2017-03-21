@@ -110,7 +110,6 @@ export default class SetStatusInline extends Component {
   }
 
   componentWillUpdate() {
-    console.log(CustomLayoutAnimation);
     LayoutAnimation.configureNext(CustomLayoutAnimation);
   }
 

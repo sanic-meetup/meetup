@@ -29,7 +29,8 @@ export default class Home extends Component {
     this.state = {
       token: props.token,
       updateFormOpen: false,
-      statuses: undefined
+      statuses: undefined,
+      tabViewSelected: 'Feed'
     }
   }
 
@@ -106,6 +107,42 @@ export default class Home extends Component {
       });
   }
 
+  _renderTab() {
+    switch (this.state.tabViewSelected) {
+    case 'Feed':
+      return (
+        <View style={{flex: 1}}>
+          <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
+          <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
+            <ScrollView>
+              {this.renderCards()}
+            </ScrollView>
+          </View>
+        </View>
+      )
+      break;
+    case 'Search':
+      return (
+        <View style={{flex: 1}}><Text>Search</Text></View>
+      );
+      break;
+    case 'Account':
+      return (
+        <View style={{flex: 1}}><Text>Account</Text></View>
+      );
+      break;
+    default:
+      return (<View><Text>No Tab Selected</Text></View>)
+
+    }
+  }
+
+  _onTabPress = (tab) => {
+    console.log(tab);
+    this.setState({tabViewSelected: tab});
+    console.log(this.state.tabViewSelected);
+  }
+
   renderCards() {
     if (!this.state.statuses)
       return <Text>No statuses</Text>
@@ -113,15 +150,13 @@ export default class Home extends Component {
   }
 
   render() {
-    return <View style={[{flex: 1}, styles.sceneContainer]}>
+    return (
+      <View style={[{flex: 1}, styles.sceneContainer]}>
         <Navbar onPress={this.toggleStatusForm.bind(this)} title="MeetUp" rightButton={rightButtonConfig}/>
-        <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
-        <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
-          <ScrollView>
-            {this.renderCards()}
-          </ScrollView>
-        </View>
-        <TabBar/>
+        <TabBar tabSelected={this.state.tabViewSelected} onpress={this._onTabPress}>
+        {this._renderTab()}
+        </TabBar>
       </View>
+    )
   }
 };
