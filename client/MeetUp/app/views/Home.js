@@ -7,6 +7,9 @@ import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import SetStatusInline from "../components/SetStatusInline";
 import TabBar from "../components/TabBar";
+
+import { AccountTab, DiscoverTab } from '../tabViews';
+
 import { server } from '../Constants';
 
 
@@ -122,12 +125,12 @@ export default class Home extends Component {
       break;
     case 'Search':
       return (
-        <View style={{flex: 1}}><Text>Search</Text></View>
+        <DiscoverTab/>
       );
       break;
     case 'Account':
       return (
-        <View style={{flex: 1}}><Text>Account</Text></View>
+        <AccountTab/>
       );
       break;
     default:
