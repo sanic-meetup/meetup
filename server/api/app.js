@@ -50,6 +50,10 @@ app.use("/static/", express.static(__dirname + '/static'));
 
 app.get("/docs", utils.render_index);
 
+app.get("/", function (req, res, next) {
+  res.send("hi");
+});
+
 //middleware to verify a token
 var apiRoutes = express.Router();
 apiRoutes.use(utils.tokenauth);
