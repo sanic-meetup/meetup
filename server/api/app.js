@@ -48,7 +48,7 @@ var pusher = new Pusher(utils.pusher_conf);
 //for strapdown library & other static files we may use later on
 app.use("/static/", express.static(__dirname + '/static'));
 
-app.get("/", utils.render_index);
+app.get("/docs", utils.render_index);
 
 //middleware to verify a token
 var apiRoutes = express.Router();
