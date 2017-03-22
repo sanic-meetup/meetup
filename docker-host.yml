@@ -1,3 +1,5 @@
 ssl: 
     cert: /server/api/certs/server.crt 
     key: /server/api/certs/server.key
+
+domain: app.sanic.ca
