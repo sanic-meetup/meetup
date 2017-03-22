@@ -1,5 +1,7 @@
 # Server
 ## Current HTTPS Endpoint(s)
+``https://api.sanic.ca`` (signed certificate, suitable for production use, hosted on cms-weberver use for grading!!, auto-update on push)
+
 ``https://sanic.ca:2096`` (signed certificate, suitable for production use)
 
 ``https://kmain.ddns.net:81`` (self-signed unverified certificates, not suitable for production use)
