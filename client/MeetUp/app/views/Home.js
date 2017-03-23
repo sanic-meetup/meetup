@@ -31,6 +31,7 @@ export default class Home extends Component {
     super(props);
     this.state = {
       token: props.token,
+      username: undefined,
       updateFormOpen: false,
       statuses: undefined,
       tabViewSelected: 'Home'
@@ -38,28 +39,32 @@ export default class Home extends Component {
   }
 
   componentWillMount() {
+    // Update statuses of people User follows.
     setInterval(() => {this.updateStatuses()},2000);
+
+    // Attempt to get the user's info.
     this.getUsername((res) => {
-      if (res.success) {
+      if (res.success) { // on success...
         console.log("USERNAME",res.username);
-        this.setState({username: res.username});
+        this.setState({username: res.username}); // set username in state
+        this.getUserCurrentStatus((status) => { // get the users' status
+          this.setState({current_status: status});
+        });
         this.following((json) => {
           this.setState({statuses: json}); // TODO: need to pull true statuses
         });
-      } else {
+      } else { // couldn't get User's info
         console.warn("Couldn't get username... Back to login...");
         Actions.login();
       }
     });
   }
 
+  // Determine if we should re-render
   shouldComponentUpdate(nextProps, nextState) {
     if (JSON.stringify(this.state) == JSON.stringify(nextState)) { // TODO: no string comparison
       return false;
     } return true;
-  }
-
-  componentWillUpdate() {
   }
 
   updateStatuses() {
@@ -68,6 +73,7 @@ export default class Home extends Component {
     });
   }
 
+  // Logic to handle status update events in navbar
   toggleStatusForm() {
     if (this.state.updateFormOpen) {
       this.setState({updateFormOpen: false});
@@ -76,6 +82,7 @@ export default class Home extends Component {
     return;
   }
 
+  //  try to retrive a logged in user from local storage on device
   getUsername = async (callback) => {
     try {
       const value = await AsyncStorage.getItem('username');
@@ -92,6 +99,25 @@ export default class Home extends Component {
     }
   }
 
+  // Get the User's status and update UI in callback()
+  getUserCurrentStatus(callback) {
+    return fetch('https://'+server+'/api/user/?token='+this.state.token+'&?username='+this.state.username, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        callback(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  // Get the statuses of all the users that User follows
   following(callback) {
     return fetch('https://'+server+'/api/following/?token='+this.state.token, {
         method: 'GET',
@@ -109,6 +135,7 @@ export default class Home extends Component {
       });
   }
 
+  // Render the current selected tab
   _renderTab() {
     switch (this.state.tabViewSelected) {
     case 'Home':
