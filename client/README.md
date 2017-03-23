@@ -1,5 +1,5 @@
 # Client
- 
+
 ## Setup
 #### Run from command line
 to run on iOS, must be using a Mac and have Xcode installed.
@@ -27,3 +27,7 @@ channel.bind('my-event', function(data) {
   alert(data.message);
 });
 ```
+
+## TODO::
+- separate the home tab from `Home.js` and move to `/tabViews/`.
+- Make current status, and how to update it, more obvious. (Navbar)
