@@ -33,7 +33,7 @@ export default class Home extends Component {
       token: props.token,
       updateFormOpen: false,
       statuses: undefined,
-      tabViewSelected: 'Feed'
+      tabViewSelected: 'Home'
     }
   }
 
@@ -111,7 +111,7 @@ export default class Home extends Component {
 
   _renderTab() {
     switch (this.state.tabViewSelected) {
-    case 'Feed':
+    case 'Home':
       return (
         <View style={{flex: 1}}>
           <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
@@ -121,7 +121,7 @@ export default class Home extends Component {
             </ScrollView>
           </View>
         </View>
-      )
+      );
       break;
     case 'Search':
       return (

@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import { colors } from '../Constants';
 
-const feed = (<Icon name="notification" size={30} color={colors.black} />)
+const home = (<Icon name="home" size={30} color={colors.black} />)
 const search = (<Icon name="magnifying-glass" size={30} color={colors.black} />)
 const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
 
@@ -40,7 +40,7 @@ export default class TabBar extends Component {
         {this.props.children}
         <View style={styles.tabBarContainer}>
           <View style={styles.tabBar}>
-            <TouchableOpacity onPress={this._onTabPress.bind(this, 'Feed')} style={styles.tabBarItem}>{feed}</TouchableOpacity>
+            <TouchableOpacity onPress={this._onTabPress.bind(this, 'Home')} style={styles.tabBarItem}>{home}</TouchableOpacity>
             <TouchableOpacity onPress={this._onTabPress.bind(this, 'Search')} style={styles.tabBarItem}>{search}</TouchableOpacity>
             <TouchableOpacity onPress={this._onTabPress.bind(this, 'Account')} style={styles.tabBarItem}>{account}</TouchableOpacity>
           </View>

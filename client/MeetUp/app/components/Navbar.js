@@ -64,12 +64,18 @@ const styles = {
     letterSpacing: 0.5,
     color: colors.black,
     fontWeight: '500',
-  }
+  },
 };
+
+const strings = {
+  avail : "🎉 Available",
+  busy : "🚫 Busy"
+}
 
 export default class Navbar extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {}
   }
 
   render() {
