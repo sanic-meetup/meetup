@@ -161,6 +161,7 @@ app.put("/api/users/location/", function (req, res, next) {
     //for response
     follower.findOne({username: req.body.username}, function (err, doc) {
       if (err) return res.status(500).end(stat._500);
+      if(!doc) return res.status(404).end(stat._404);
       //if user has followers notify them via push notification
       if (doc) {
         for (var i = 0; i < doc.followers.length; i ++) {
@@ -228,6 +229,7 @@ app.get("/api/following/", function (req, res, next) {
 
   following.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
     if (doc) {
       // res.status(200).send({"following": doc.following});
       User.find ({username: {$in: doc.following}}, function (err, docs) {
@@ -250,6 +252,7 @@ app.get("/api/followers/", function(req, res, next) {
 
   follower.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
     if (doc) {
       res.status(200).send(str({"followers": doc.followers}));
       // User.find ({username: {$in: doc.followers}}, function (err, docs) {
@@ -270,7 +273,9 @@ app.get("/api/users/", function(req, res, next) {
     u = req.query.username;
   }
 
-  User.findOne({username: u}, function (err, doc) {
+  User.findOne({username: u}, {}, function (err, doc) {
+    if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
     res.status(200).send(docstrip(doc));
   });
 });
