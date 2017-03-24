@@ -47,10 +47,11 @@ export default class Login extends React.Component {
   */
   authenticateUser = async (callback) => {
     try {
-      const value = await AsyncStorage.getItem('token');
-      if (value !== null){
+      const token = await AsyncStorage.getItem('token');
+      const name = await AsyncStorage.getItem('username');
+      if (token !== null){
         // We have data!!
-        callback({success: true, token: value})
+        callback({success: true, token: token, username: name})
       } else
         console.warn("Login.js: User Token Not Set.");
     } catch (error) {
@@ -112,7 +113,7 @@ export default class Login extends React.Component {
           .then((responseJson) => {
             if (responseJson.success) {
               console.log("Success! We got a token!");
-              this.goToHome({token: res.token});
+              this.goToHome({token: res.token, username: res.username});
             }
           })
           .catch((error) => {
@@ -128,7 +129,7 @@ export default class Login extends React.Component {
     //this.goToHome(); // HACK: bypasses login
     return(
       <View style={[{flex: 1}, styles.container]}>
-        <Navbar title="Login"/>
+        <Navbar title="Login" status_enabled={false}/>
         <View style={styles.formContainer}>
 
           <Button onPress={this.goToHome.bind(this)} title="Go To Home"/>
