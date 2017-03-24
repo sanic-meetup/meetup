@@ -31,7 +31,8 @@ export default class Home extends Component {
     super(props);
     this.state = {
       token: props.token,
-      username: undefined,
+      username: props.username,
+      user_status: undefined,
       updateFormOpen: false,
       statuses: undefined,
       tabViewSelected: 'Home'
@@ -40,6 +41,7 @@ export default class Home extends Component {
 
   componentWillMount() {
     // Update statuses of people User follows.
+    this.updateStatuses()
     setInterval(() => {this.updateStatuses()},2000);
 
     // Attempt to get the user's info.
@@ -47,9 +49,6 @@ export default class Home extends Component {
       if (res.success) { // on success...
         console.log("USERNAME",res.username);
         this.setState({username: res.username}); // set username in state
-        this.getUserCurrentStatus((status) => { // get the users' status
-          this.setState({current_status: status});
-        });
         this.following((json) => {
           this.setState({statuses: json}); // TODO: need to pull true statuses
         });
@@ -70,6 +69,10 @@ export default class Home extends Component {
   updateStatuses() {
     this.following((json) => {
       this.setState({statuses: json});
+    });
+    this.getUserCurrentStatus((status) => { // get the users' status
+      this.setState({user_status : status.status.availability});
+      console.log(this.state.user_status);
     });
   }
 
@@ -181,7 +184,12 @@ export default class Home extends Component {
   render() {
     return (
       <View style={[{flex: 1}, styles.sceneContainer]}>
-        <Navbar onPress={this.toggleStatusForm.bind(this)} title="MeetUp" rightButton={rightButtonConfig}/>
+        <Navbar
+          status_enabled={true}
+          status={this.state.user_status}
+          onPress={this.toggleStatusForm.bind(this)}
+          rightButton={rightButtonConfig}
+        />
         <TabBar tabSelected={this.state.tabViewSelected} onpress={this._onTabPress}>
         {this._renderTab()}
         </TabBar>
