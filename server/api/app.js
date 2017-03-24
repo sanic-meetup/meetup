@@ -79,13 +79,21 @@ app.post("/users/", function (req, res, next) {
     email: req.body.email
   });
 
-  
-
+  //TODO findout why insert doesn't work
   new_user.save(function(err) {
-    //if err user exists
-    if (err) res.status(409).send(stat._409);
+    if (err) return res.status(409).send(stat._409);
     else {
-      res.status(200).send(str({username:req.body.username}));
+      follower.findOneAndUpdate({username: req.body.username}, {followers: []}, {upsert: true}, function(err, data){
+        if (err) return res.status(409).send(stat._409);
+        else{
+          following.findOneAndUpdate({username: req.body.username}, {following: []}, {upsert: true}, function(err, data){
+            if (err)  return res.status(409).send(stat._409);
+            else{
+              return res.status(200).send(str({username:req.body.username}));
+            }
+          });
+        }
+      });
     }
   });
 
