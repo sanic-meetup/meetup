@@ -24,8 +24,12 @@ var userSchema = new Schema({
     age: Number,
     website: String
   },
-  created_at: Date,
-  updated_at: Date
+},
+{
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
 });
 
 userSchema.pre('save', function(next) {
