@@ -74,7 +74,7 @@ export default class Home extends Component {
     } return true;
   }
 
-  onRefresh() {
+  _onRefresh() {
     this.setState({refreshing: true});
     this.updateStatuses(() => {
       this.setState({refreshing: false});
