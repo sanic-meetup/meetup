@@ -159,7 +159,7 @@ export default class Home extends Component {
       break;
     case 'Account':
       return (
-        <AccountTab/>
+        <AccountTab token={this.props.token} username={this.props.username}/>
       );
       break;
     default:

@@ -1,3 +1,4 @@
+/*jslint esversion:6*/
 import React, { Component } from 'react';
 import { Image, Text, View, LayoutAnimation } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
@@ -6,6 +7,7 @@ import { colors } from './Constants';
 // Scene's
 import Login from './views/Login';
 import Home from './views/Home';
+import Followers from './views/Followers';
 
 // animationStyle provided by : https://github.com/aksonov/react-native-router-flux/issues/1202
 export const animationStyle = (props) => {
@@ -77,6 +79,7 @@ export default class App extends React.Component {
         {/*}<Scene key="tabs" hideNavBar tabs={true} tabBarStyle={{backgroundColor: colors.white}} onSelect={(tabScene) => {this.handleTabSelect(tabScene)}} type={ActionConst.REPLACE}>
           <Scene key="tab1" component={Home} hideNavBar title="MeetUp" icon={TabIcon} tabBarTitle="Status"/>
         </Scene>*/}
+        <Scene key="followers" component={Followers} title="Followers" animationStyle={animationStyle}/>
       </Scene>
     </Router>
   }
