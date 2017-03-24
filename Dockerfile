@@ -13,6 +13,7 @@ WORKDIR /home/nodejs/app
 RUN npm install --production
 RUN npm install -g nodemon
 
-EXPOSE 3000
+#DO NOT EXPOSE 3000!!
+EXPOSE 5000
 # run the nodejs application
 CMD nodemon app.js
