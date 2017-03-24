@@ -88,7 +88,8 @@ export default class Navbar extends React.Component {
         text = strings.avail;
       else if (nextProps.status === "Busy")
         text = strings.busy;
-    }
+    } else
+      text = strings.unset;
     this.setState({status: text});
   }
 

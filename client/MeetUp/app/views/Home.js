@@ -1,7 +1,14 @@
 'use-strict'
 
 import React, { Component } from 'react';
-import { Text, View, ScrollView, AsyncStorage, LayoutAnimation } from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+  AsyncStorage,
+  LayoutAnimation,
+  RefreshControl,
+  } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
@@ -30,6 +37,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
       token: props.token,
       username: props.username,
       user_status: undefined,
@@ -66,13 +74,22 @@ export default class Home extends Component {
     } return true;
   }
 
-  updateStatuses() {
+  onRefresh() {
+    this.setState({refreshing: true});
+    this.updateStatuses(() => {
+      this.setState({refreshing: false});
+    })
+  }
+
+  updateStatuses(callback) {
     this.following((json) => {
       this.setState({statuses: json});
     });
     this.getUserCurrentStatus((status) => { // get the users' status
       this.setState({user_status : status.status.availability});
     });
+    if (callback)
+      callback();
   }
 
   // Logic to handle status update events in navbar
@@ -145,7 +162,14 @@ export default class Home extends Component {
         <View style={{flex: 1}}>
           <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
           <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
-            <ScrollView>
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing}
+                  onRefresh={this._onRefresh.bind(this)}
+                />
+              }
+            >
               {this.renderCards()}
             </ScrollView>
           </View>
