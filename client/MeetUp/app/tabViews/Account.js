@@ -56,7 +56,7 @@ export default class AccountTab extends Component {
     }
 
     return (
-        <View>
+        <View style={{flex:1}}>
         <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowers.bind(this)}>
           <View>
               <Text>Followers</Text>
