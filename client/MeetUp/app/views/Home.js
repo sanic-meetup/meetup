@@ -49,8 +49,8 @@ export default class Home extends Component {
 
   componentWillMount() {
     // Update statuses of people User follows.
-    this.updateStatuses()
-    setInterval(() => {this.updateStatuses()},2000);
+    
+    //setInterval(() => {this.updateStatuses()},2000);
 
     // Attempt to get the user's info.
     this.getUsername((res) => {
@@ -65,6 +65,10 @@ export default class Home extends Component {
         Actions.login();
       }
     });
+  }
+
+  componentDidMount() {
+    this.updateStatuses();
   }
 
   // Determine if we should re-render
