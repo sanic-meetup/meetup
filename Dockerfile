@@ -14,5 +14,6 @@ RUN npm install --production
 RUN npm install -g nodemon
 
 EXPOSE 5000
+EXPOSE 3000
 # run the nodejs application
 CMD node app.js
