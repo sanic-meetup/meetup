@@ -15,4 +15,4 @@ RUN npm install -g nodemon
 
 EXPOSE 5000
 # run the nodejs application
-CMD nodemon app.js
+CMD node app.js
