@@ -8,6 +8,7 @@ import { colors } from './Constants';
 import Login from './views/Login';
 import Home from './views/Home';
 import Followers from './views/Followers';
+import Following from './views/Following';
 
 // animationStyle provided by : https://github.com/aksonov/react-native-router-flux/issues/1202
 export const animationStyle = (props) => {
@@ -80,6 +81,7 @@ export default class App extends React.Component {
           <Scene key="tab1" component={Home} hideNavBar title="MeetUp" icon={TabIcon} tabBarTitle="Status"/>
         </Scene>*/}
         <Scene key="followers" component={Followers} title="Followers" animationStyle={animationStyle}/>
+        <Scene key="following" component={Following} title="Following" animationStyle={animationStyle}/>
       </Scene>
     </Router>
   }
