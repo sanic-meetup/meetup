@@ -72,7 +72,6 @@ export default class Home extends Component {
     });
     this.getUserCurrentStatus((status) => { // get the users' status
       this.setState({user_status : status.status.availability});
-      console.log(this.state.user_status);
     });
   }
 
@@ -170,9 +169,7 @@ export default class Home extends Component {
   }
 
   _onTabPress = (tab) => {
-    console.log(tab);
     this.setState({tabViewSelected: tab});
-    console.log(this.state.tabViewSelected);
   }
 
   renderCards() {
