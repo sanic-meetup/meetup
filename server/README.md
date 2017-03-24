@@ -71,7 +71,7 @@ or
 
 ### Get User Info
 - description: Get info for the current/given user
-- request: `GET /api/user/`
+- request: `GET /api/users/`
   - query:
     - token: the request token
     - username: username that differs from current user (optional)
@@ -99,7 +99,7 @@ or
 
 ### Follow a User
 - description: follow another user
-- request: `POST /api/follow/`
+- request: `POST /api/users/follow/`
   - content-type: `application/json`
   - body: object
     - username: (string) the username of the person wished to follow
@@ -116,7 +116,7 @@ or
 
 ### Unfollow a User
 - description: Unfollow another user
-- request: `POST /api/unfollow/`
+- request: `POST /api/users/unfollow/`
   - content-type: `application/json`
   - body: object
     - username: (string) the username of the person wished to unfollow
@@ -147,10 +147,23 @@ or
 
 ```
 
+### Delete a User
+- description: Delete the current/given user
+- request: `DELETE /api/users/`
+  - query:
+    - token: the request token
+    - username: username of the current user (can differ for admin)
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+
+**example request body (postman)**,
+```
+
+```
+
 ## Status & Location API
 ### Get Status of Current Users
 - description: Get the status & location of the current/given user
-- request: `GET /api/status/`
+- request: `GET /api/users/status/`
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
   - body: object
@@ -165,7 +178,7 @@ or
 
 ### Set Status of Current Users
 - description: Set the status & location of the current/given user
-- request: `PUT /api/status/`
+- request: `PUT /api/users/status/`
   - content-type: `application/json`
   - body: object
     - availability: (enum: ["Available", "Busy", "Not Available"]) availability status
@@ -209,7 +222,7 @@ or
 
 ### Setting A users location
 - description: register a new user
-- request: `PUT /api/location/`
+- request: `PUT /api/users/location/`
   - content-type: `application/json`
   - body: object
     - token: the request token (recommend sending in body or header)
