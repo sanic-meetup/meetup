@@ -49,7 +49,7 @@ export default class Home extends Component {
 
   componentWillMount() {
     // Update statuses of people User follows.
-    
+
     //setInterval(() => {this.updateStatuses()},2000);
 
     // Attempt to get the user's info.
@@ -182,7 +182,7 @@ export default class Home extends Component {
       break;
     case 'Search':
       return (
-        <DiscoverTab/>
+        <DiscoverTab token={this.props.token} username={this.props.username}/>
       );
       break;
     case 'Account':
