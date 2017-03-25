@@ -94,7 +94,7 @@ export default class App extends React.Component {
             <Scene key="account_1" component={AccountTab} title="Tab #1_1"/>
           </Scene>
         </Scene>
-        
+
       </Scene>
     </Router>
   }
