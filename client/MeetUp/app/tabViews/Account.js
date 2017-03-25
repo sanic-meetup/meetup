@@ -28,7 +28,7 @@ export default class AccountTab extends Component {
   }
 
   getAccInfo(callback) {
-    return fetch('https://'+server+'/api/user/?token='+this.state.token, {
+    return fetch('https://'+server+'/api/users/?token='+this.state.token, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',

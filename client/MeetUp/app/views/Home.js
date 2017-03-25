@@ -91,7 +91,7 @@ export default class Home extends Component {
     });
     this.getUserCurrentStatus((status) => { // get the users' status
       if (!(status.success === false))
-        this.setState({user_status : status.status.availability});
+        this.setState({user_status : status.availability});
     });
     if (callback)
       callback();
@@ -126,7 +126,7 @@ export default class Home extends Component {
 
   // Get the User's status and update UI in callback()
   getUserCurrentStatus(callback) {
-    return fetch('https://'+server+'/api/user/?token='+this.state.token+'&?username='+this.state.username, {
+    return fetch('https://'+server+'/api/users/status/?token='+this.state.token+'&username='+this.state.username, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
