@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Button } from 'react-native';
 var SearchBar = require('react-native-search-bar');
 import 'react-native-vector-icons';
 import { server } from '../Constants';
@@ -31,7 +31,6 @@ export default class DiscoverTab extends Component {
   * find a user
   */
   findUser(username, callback) {
-    console.warn(JSON.stringify(this.props.token));
     return fetch('https://'+server+'/api/users/?token='+this.state.token+"&username="+username, {
         method: 'GET',
         headers: {
@@ -41,8 +40,8 @@ export default class DiscoverTab extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.warn(JSON.stringify(responseJson));
-        this.setState({users: responseJson.username});
+        console.warn("submitted form: "+JSON.stringify(responseJson));
+        this.setState({users: [responseJson]});
       })
       .catch((error) => {
         console.error(error);
@@ -53,47 +52,69 @@ export default class DiscoverTab extends Component {
     // this.setState({ results });
     //@TODO:https://www.npmjs.com/package/react-native-searchbar
     // console.warn(results);
-    return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&username="+username, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.warn(JSON.stringify(responseJson));
-        this.setState({users: responseJson});
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (username) {
+      return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&limit=10&username="+username, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.warn(JSON.stringify(responseJson));
+          if (!responseJson.ok) {
+            console.warn("setting state");
+            this.setState({users: responseJson});
+          } else {
+            this.setState({users: []});
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else this.setState({users: []});
+  }
+
+  get_followButton_title() {
+    return "Follow";
   }
 
   render() {
     //each user will be contained in this
     const createItem = (item) => (
-      <View>
-       <Text
-          // key={item.id}
-          style="">
-          {item}
-       </Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+         <Text
+            key={item.id}
+            style=''
+          >
+            {item.username}
+         </Text>
+
+         {<Button
+         title={this.get_followButton_title()}
+         color="#841584"
+         style = {{
+           backgroundColor: 'red'
+         }}
+         />}
        </View>
     )
+
     //@TODO use the createItem with map(...) when kiwi makes backend method
     return (
       //search bar
-      <View style={{flex:1}}>
+      <View style={{flex:1, paddingTop: 20}}>
       <SearchBar
       	ref='searchBar'
+        autoCapitalize="none"
       	placeholder='Search'
       	onChangeText={this._handleResults.bind(this)}
       	onSearchButtonPress={this.findUser.bind(this)}
       	// onCancelButtonPress={...}
       	/>
         <ScrollView>
-        <Text>{this.state.users}</Text>
+        {this.state.users.map(createItem)}
         </ScrollView>
       </View>
     );

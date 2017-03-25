@@ -13,7 +13,6 @@ import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import SetStatusInline from "../components/SetStatusInline";
-import TabBar from "../components/TabBar";
 
 import { AccountTab, DiscoverTab } from '../tabViews';
 
