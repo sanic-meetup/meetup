@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-var SearchBar = require('react-native-search-bar');
+import SearchBar from 'react-native-searchbar';
 
 export default class DiscoverTab extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    //todo
   }
 
   /**
@@ -27,16 +31,14 @@ export default class DiscoverTab extends Component {
       });
   }
 
+  _handleResults(results) {
+    // this.setState({ results });
+    //@TODO:https://www.npmjs.com/package/react-native-searchbar
+    console.log();
+  }
+
   render() {
     return (
-      <View style={{flex: 1}}>
-        <SearchBar
-        	ref='searchBar'
-        	placeholder='Search'
-        	onChangeText={console.warn("change")}
-        	onSearchButtonPress={console.warn("submit")}
-        	onCancelButtonPress={console.warn("cancel")}
-        />
         <Text>Discover Tab</Text>
       </View>
     );
