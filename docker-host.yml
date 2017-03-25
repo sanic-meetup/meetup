@@ -1,4 +1,4 @@
 ssl: 
-    cert: ./cms-cert.crt
-    key: ./cms-key.key
+    cert: /cms-cert.crt
+    key: /cms-key.key
 domain: api.sanic.ca
