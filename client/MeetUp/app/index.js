@@ -1,14 +1,22 @@
 /*jslint esversion:6*/
 import React, { Component } from 'react';
-import { Image, Text, View, LayoutAnimation } from 'react-native';
+import { Image, Text, View, LayoutAnimation, AsyncStorage } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import { colors } from './Constants';
+import Icon from 'react-native-vector-icons/Entypo';
+
+const search = (<Icon name="magnifying-glass" size={30} color={colors.black} />)
+const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
 
 // Scene's
 import Login from './views/Login';
-import Home from './views/Home';
 import Followers from './views/Followers';
 import Following from './views/Following';
+
+// Tab Scenes
+import Home from './views/Home';
+import { AccountTab, DiscoverTab } from './tabViews';
+
 
 // animationStyle provided by : https://github.com/aksonov/react-native-router-flux/issues/1202
 export const animationStyle = (props) => {
@@ -67,21 +75,59 @@ export const animationStyle = (props) => {
 /* ... */
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+  }
 
-  handleTabSelect(tabScene) {
-    Actions[tabScene.props.sceneKey]();
+  componentWillMount() {
+    this.getUsername((res) => {
+      if (res.success) { // on success...
+        this.setState({username: res.username, token: res.token}); // set username in state
+        console.log("root", this.state);
+        Actions.tabbar({username: res.username, token: res.token});
+      } else { // couldn't get User's info
+        console.warn("Couldn't get username... Back to login...");
+        Actions.login();
+      }
+    });
+  }
+
+  getUsername = async (callback) => {
+    try {
+      const name = await AsyncStorage.getItem('username');
+      const token = await AsyncStorage.getItem('token');
+      if (name !== null && token !== null){
+        // We have data!!
+        callback({success: true, username: name, token: token});
+      } else {
+        console.warn("Login.js: username Not Set. Going back to login...");
+        Actions.login();
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+  }
+
+  _onPress(scene) {
+    Actions[scene](this.state);
   }
 
   render() {
     return <Router>
       <Scene key="root" hideNavBar type={ActionConst.REPLACE}>
         <Scene key="login" component={Login} title="Login" type={ActionConst.REPLACE}/>
-        <Scene key="home" component={Home} title="MeetUp" type={ActionConst.REPLACE}/>
-        {/*}<Scene key="tabs" hideNavBar tabs={true} tabBarStyle={{backgroundColor: colors.white}} onSelect={(tabScene) => {this.handleTabSelect(tabScene)}} type={ActionConst.REPLACE}>
-          <Scene key="tab1" component={Home} hideNavBar title="MeetUp" icon={TabIcon} tabBarTitle="Status"/>
-        </Scene>*/}
-        <Scene key="followers" component={Followers} title="Followers" animationStyle={animationStyle}/>
-        <Scene key="following" component={Following} title="Following" animationStyle={animationStyle}/>
+
+        <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff"}} tabs={true} type={ActionConst.REPLACE}>
+          <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} tabBarTitle="Tab #1" hideNavBar >
+            <Scene key="home_1" component={Home} title="Tab #1_1"/>
+          </Scene>
+          <Scene key="discover" onPress={this._onPress.bind(this, "discover")} icon={TabIcon} component={DiscoverTab} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}/>
+          <Scene key="account" onPress={this._onPress.bind(this, "account")} icon={TabIcon} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}>
+            <Scene key="account_1" component={AccountTab} title="Tab #1_1"/>
+          </Scene>
+        </Scene>
+
       </Scene>
     </Router>
   }
@@ -91,6 +137,15 @@ class TabIcon extends React.Component {
   render(){
     return (
       <Text style={{color: this.props.selected ? colors.purple :'black'}}>{this.props.tabBarTitle}</Text>
+    );
+  }
+}
+
+class HomeIcon extends React.Component {
+  render(){
+    const home = (<Icon name="home" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    return (
+      <View>{home}</View>
     );
   }
 }

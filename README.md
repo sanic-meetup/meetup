@@ -7,7 +7,15 @@ friend, or a YouTube celebrity.
 - [API documentation and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/server)
 - [Client app docs and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/client/)
 
-# Development
+# TODO:
 
-For development: please build out new functionality on a new branch, and merge
-when it's tested and working properly.
+- [ ] Cleaning front end code (IP) (Brandon)
+- [x] Fix TabBar (Brandon)
+- [ ] Discover Tab View (IP) (Daniel)
+- [ ] Cleaning/Fixing Backend (Kiwi)
+- [ ] Fix routes on client
+- [ ] Error handling so client doesn't crash
+- [ ] Unfollow (Client)
+- [ ] follow (Client)
+- [ ] Status detail View
+- [ ] Update location
