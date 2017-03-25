@@ -29,6 +29,7 @@ export default class DiscoverTab extends Component {
   * find a user
   */
   findUser(username, callback) {
+    console.warn(JSON.stringify(this.props.token));
     return fetch('https://'+server+'/api/users/?token='+this.state.token+"&username="+username, {
         method: 'GET',
         headers: {
