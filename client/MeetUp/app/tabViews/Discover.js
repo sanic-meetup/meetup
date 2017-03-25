@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Button } from 'react-native';
 var SearchBar = require('react-native-search-bar');
 import 'react-native-vector-icons';
 import { server } from '../Constants';
@@ -67,28 +67,40 @@ export default class DiscoverTab extends Component {
             console.warn("setting state");
             this.setState({users: responseJson});
           } else {
-            this.setState({users: "none found"})
+            this.setState({users: []});
           }
         })
         .catch((error) => {
           console.error(error);
         });
-    }
+    } else this.setState({users: []});
+  }
+
+  get_followButton_title() {
+    return "Follow";
   }
 
   render() {
     //each user will be contained in this
     const createItem = (item) => (
-      <View>
-       <Text
-          key={item.id}
-          style="">
-          {item.username}
-       </Text>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+         <Text
+            key={item.id}
+            style=''
+          >
+            {item.username}
+         </Text>
+
+         {<Button
+         title={this.get_followButton_title()}
+         color="#841584"
+         style = {{
+           backgroundColor: 'red'
+         }}
+         />}
        </View>
     )
 
-    console.warn("list: "+JSON.stringify(this.state.users));
     //@TODO use the createItem with map(...) when kiwi makes backend method
     return (
       //search bar
