@@ -36,6 +36,7 @@ const rightButtonConfig = {
 export default class Home extends Component {
   constructor(props) {
     super(props);
+    console.log("Home props", props);
     this.state = {
       refreshing: false,
       token: props.token,
@@ -89,7 +90,6 @@ export default class Home extends Component {
       this.setState({statuses: json});
     });
     this.getUserCurrentStatus((status) => { // get the users' status
-    console.log("status",status, this.state.token);
       if (!(status.success === false))
         this.setState({user_status : status.status.availability});
     });
@@ -164,7 +164,7 @@ export default class Home extends Component {
     this.setState({tabViewSelected: tab});
   }
 
-  renderCards() {console.log("statusesssss", this.state.statuses);
+  renderCards() {
     if (this.state.statuses.success === false)
       return <Text>No statuses</Text>
     return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));

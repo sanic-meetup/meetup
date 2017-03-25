@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -239,6 +240,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 58B5119B1A9E6C1200147676;
 			remoteInfo = RCTText;
+		};
+		CA20A2CF1E86D68300678883 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CEF7E3C064BB4CBC9BB2C09C /* RNSearchBar.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNSearchBar;
 		};
 		EFCCFD851E86036A0062AC8E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -540,6 +548,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		CA20A2B31E86D68100678883 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA20A2D01E86D68300678883 /* libRNSearchBar.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		EFCCFD691E86036A0062AC8E /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -706,6 +722,10 @@
 				{
 					ProductGroup = 146834001AC3E56700842450 /* Products */;
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+				},
+				{
+					ProductGroup = CA20A2B31E86D68100678883 /* Products */;
+					ProjectRef = CEF7E3C064BB4CBC9BB2C09C /* RNSearchBar.xcodeproj */;
 				},
 				{
 					ProductGroup = EFCCFD691E86036A0062AC8E /* Products */;
@@ -896,6 +916,13 @@
 			fileType = archive.ar;
 			path = libRCTText.a;
 			remoteRef = 832341B41AAA6A8300B99B32 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CA20A2D01E86D68300678883 /* libRNSearchBar.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNSearchBar.a;
+			remoteRef = CA20A2CF1E86D68300678883 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		EFCCFD861E86036A0062AC8E /* libRNVectorIcons.a */ = {
