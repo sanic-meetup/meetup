@@ -7,6 +7,7 @@ import { server } from '../Constants';
 export default class DiscoverTab extends Component {
   constructor(props) {
     super(props);
+    console.log("discover", props.username);
     this.state = {
       token: props.token,
       username: props.username,

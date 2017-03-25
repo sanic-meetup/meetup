@@ -1,6 +1,6 @@
 /*jslint esversion:6*/
 import React, { Component } from 'react';
-import { Image, Text, View, LayoutAnimation } from 'react-native';
+import { Image, Text, View, LayoutAnimation, AsyncStorage } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import { colors } from './Constants';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -75,9 +75,42 @@ export const animationStyle = (props) => {
 /* ... */
 
 export default class App extends React.Component {
+  constructor() {
+    super();
+  }
 
-  handleTabSelect(tabScene) {
-    Actions[tabScene.props.sceneKey]();
+  componentWillMount() {
+    this.getUsername((res) => {
+      if (res.success) { // on success...
+        this.setState({username: res.username, token: res.token}); // set username in state
+        console.log("root", this.state);
+        Actions.tabbar({username: res.username, token: res.token});
+      } else { // couldn't get User's info
+        console.warn("Couldn't get username... Back to login...");
+        Actions.login();
+      }
+    });
+  }
+
+  getUsername = async (callback) => {
+    try {
+      const name = await AsyncStorage.getItem('username');
+      const token = await AsyncStorage.getItem('token');
+      if (name !== null && token !== null){
+        // We have data!!
+        callback({success: true, username: name, token: token});
+      } else {
+        console.warn("Login.js: username Not Set. Going back to login...");
+        Actions.login();
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+  }
+
+  _onPress(scene) {
+    Actions[scene](this.state);
   }
 
   render() {
@@ -86,11 +119,11 @@ export default class App extends React.Component {
         <Scene key="login" component={Login} title="Login" type={ActionConst.REPLACE}/>
 
         <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff"}} tabs={true} type={ActionConst.REPLACE}>
-          <Scene key="home" initial={true} icon={HomeIcon} tabBarTitle="Tab #1" hideNavBar >
+          <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} tabBarTitle="Tab #1" hideNavBar >
             <Scene key="home_1" component={Home} title="Tab #1_1"/>
           </Scene>
-          <Scene key="discover" icon={TabIcon} component={DiscoverTab} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}/>
-          <Scene key="account" icon={TabIcon} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}>
+          <Scene key="discover" onPress={this._onPress.bind(this, "discover")} icon={TabIcon} component={DiscoverTab} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}/>
+          <Scene key="account" onPress={this._onPress.bind(this, "account")} icon={TabIcon} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}>
             <Scene key="account_1" component={AccountTab} title="Tab #1_1"/>
           </Scene>
         </Scene>
