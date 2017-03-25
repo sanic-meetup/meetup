@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Image, Text, View, LayoutAnimation, AsyncStorage } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import { colors } from './Constants';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const search = (<Icon name="magnifying-glass" size={30} color={colors.black} />)
 const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
@@ -122,9 +122,11 @@ export default class App extends React.Component {
           <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} tabBarTitle="Tab #1" hideNavBar >
             <Scene key="home_1" component={Home} title="Tab #1_1"/>
           </Scene>
-          <Scene key="discover" onPress={this._onPress.bind(this, "discover")} icon={TabIcon} component={DiscoverTab} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}/>
-          <Scene key="account" onPress={this._onPress.bind(this, "account")} icon={TabIcon} tabBarTitle="Tab #3" hideNavBar icon={TabIcon}>
-            <Scene key="account_1" component={AccountTab} title="Tab #1_1"/>
+          <Scene key="discover" icon={SearchIcon}  onPress={this._onPress.bind(this, "discover")} component={DiscoverTab} hideNavBar/>
+          <Scene key="account" icon={AccountIcon}  onPress={this._onPress.bind(this, "account")} hideNavBar>
+            <Scene key="account_1" component={AccountTab} title="Tab #1_1" animationStyle={animationStyle}/>
+            <Scene key="account_followers" component={Followers} title="Tab #1_1" animationStyle={animationStyle}/>
+            <Scene key="account_following" component={Following} title="Tab #1_1" animationStyle={animationStyle}/>
           </Scene>
         </Scene>
 
@@ -143,7 +145,7 @@ class TabIcon extends React.Component {
 
 class HomeIcon extends React.Component {
   render(){
-    const home = (<Icon name="ion-ios-home" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const home = (<Icon name="home" size={30} color={this.props.selected ? colors.purple : colors.black} />)
     return (
       <View>{home}</View>
     );
@@ -152,7 +154,7 @@ class HomeIcon extends React.Component {
 
 class SearchIcon extends React.Component {
   render(){
-    const discover = (<Icon name="ion-android-search" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const discover = (<Icon name="search" size={30} color={this.props.selected ? colors.purple : colors.black} />)
     return (
       <View>{discover}</View>
     );
@@ -161,7 +163,7 @@ class SearchIcon extends React.Component {
 
 class AccountIcon extends React.Component {
   render(){
-    const account = (<Icon name="ion-android-person" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const account = (<Icon name="person" size={30} color={this.props.selected ? colors.purple : colors.black} />)
     return (
       <View>{account}</View>
     );
