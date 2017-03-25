@@ -1,7 +1,14 @@
 'use-strict'
 
 import React, { Component } from 'react';
-import { Text, View, ScrollView, AsyncStorage, LayoutAnimation } from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+  AsyncStorage,
+  LayoutAnimation,
+  RefreshControl,
+  } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
@@ -30,6 +37,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
       token: props.token,
       username: props.username,
       user_status: undefined,
@@ -41,8 +49,8 @@ export default class Home extends Component {
 
   componentWillMount() {
     // Update statuses of people User follows.
-    this.updateStatuses()
-    setInterval(() => {this.updateStatuses()},2000);
+    
+    //setInterval(() => {this.updateStatuses()},2000);
 
     // Attempt to get the user's info.
     this.getUsername((res) => {
@@ -59,6 +67,10 @@ export default class Home extends Component {
     });
   }
 
+  componentDidMount() {
+    this.updateStatuses();
+  }
+
   // Determine if we should re-render
   shouldComponentUpdate(nextProps, nextState) {
     if (JSON.stringify(this.state) == JSON.stringify(nextState)) { // TODO: no string comparison
@@ -66,13 +78,22 @@ export default class Home extends Component {
     } return true;
   }
 
-  updateStatuses() {
+  _onRefresh() {
+    this.setState({refreshing: true});
+    this.updateStatuses(() => {
+      this.setState({refreshing: false});
+    })
+  }
+
+  updateStatuses(callback) {
     this.following((json) => {
       this.setState({statuses: json});
     });
     this.getUserCurrentStatus((status) => { // get the users' status
       this.setState({user_status : status.status.availability});
     });
+    if (callback)
+      callback();
   }
 
   // Logic to handle status update events in navbar
@@ -145,7 +166,14 @@ export default class Home extends Component {
         <View style={{flex: 1}}>
           <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
           <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
-            <ScrollView>
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing}
+                  onRefresh={this._onRefresh.bind(this)}
+                />
+              }
+            >
               {this.renderCards()}
             </ScrollView>
           </View>
@@ -159,7 +187,7 @@ export default class Home extends Component {
       break;
     case 'Account':
       return (
-        <AccountTab/>
+        <AccountTab token={this.props.token} username={this.props.username}/>
       );
       break;
     default:

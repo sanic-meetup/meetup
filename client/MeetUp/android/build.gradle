@@ -22,3 +22,4 @@ allprojects {
         }
     }
 }
+compile project(':react-native-vector-icons')
