@@ -90,6 +90,7 @@ or
     - meta:
       - age: (number) age of the user
       - website: (string) website of the user
+    - follows: (boolean) true iff current user follows the associated user
 
 **example request body (postman)**,
 ```
@@ -159,6 +160,7 @@ or
   - content-type: `application/json`
   - body: list of objects
     - usernames: (string) the username
+    - follows: (boolean) true iff current user follows the associated user
 
 **example request body (postman)**,
 ```
