@@ -45,11 +45,11 @@ export default class AccountTab extends Component {
   }
 
   _getFollowers(){
-    Actions.followers({token: this.state.token, username: this.state.username});
+    Actions.account_followers({token: this.state.token, username: this.state.username});
   }
 
   _getFollowing(){
-    Actions.following({token: this.state.token, username: this.state.username});
+    Actions.account_following({token: this.state.token, username: this.state.username});
   }
 
   render() {
