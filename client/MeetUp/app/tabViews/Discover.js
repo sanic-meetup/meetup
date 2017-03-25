@@ -17,6 +17,7 @@ export default class DiscoverTab extends Component {
 
   componentWillMount() {
     //todo
+    console.log(this.props.token);
   }
 
   // Determine if we should re-render
@@ -48,10 +49,25 @@ export default class DiscoverTab extends Component {
       });
   }
 
-  _handleResults(results) {
+  _handleResults(username) {
     // this.setState({ results });
     //@TODO:https://www.npmjs.com/package/react-native-searchbar
     // console.warn(results);
+    return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&username="+username, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.warn(JSON.stringify(responseJson));
+        this.setState({users: responseJson});
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   render() {
