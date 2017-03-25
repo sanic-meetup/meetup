@@ -52,26 +52,28 @@ export default class DiscoverTab extends Component {
     // this.setState({ results });
     //@TODO:https://www.npmjs.com/package/react-native-searchbar
     // console.warn(results);
-    return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&limit=10&username="+username, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.warn(JSON.stringify(responseJson));
-        if (!responseJson.ok) {
-          console.warn("setting state");
-          this.setState({users: responseJson});
-        } else {
-          this.setState({users: "none found"})
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (username) {
+      return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&limit=10&username="+username, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          }
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.warn(JSON.stringify(responseJson));
+          if (!responseJson.ok) {
+            console.warn("setting state");
+            this.setState({users: responseJson});
+          } else {
+            this.setState({users: "none found"})
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   }
 
   render() {
