@@ -60,7 +60,7 @@ export default class AccountTab extends Component {
     }
 
     return (
-        <View style={{flex:1}}>
+        <View style={{flex:1, paddingTop: 20}}>
         <ScrollView>
           <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowers.bind(this)}>
                 <Text>Followers</Text>
