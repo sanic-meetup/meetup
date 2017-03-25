@@ -92,7 +92,7 @@ export default class DiscoverTab extends Component {
     //@TODO use the createItem with map(...) when kiwi makes backend method
     return (
       //search bar
-      <View style={{flex:1}}>
+      <View style={{flex:1, paddingTop: 20}}>
       <SearchBar
       	ref='searchBar'
         autoCapitalize="none"
