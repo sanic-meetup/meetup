@@ -31,7 +31,6 @@ export default class DiscoverTab extends Component {
   * find a user
   */
   findUser(username, callback) {
-    console.warn(JSON.stringify(this.props.token));
     return fetch('https://'+server+'/api/users/?token='+this.state.token+"&username="+username, {
         method: 'GET',
         headers: {
@@ -41,8 +40,8 @@ export default class DiscoverTab extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.warn(JSON.stringify(responseJson));
-        this.setState({users: responseJson.username});
+        console.warn("submitted form: "+JSON.stringify(responseJson));
+        this.setState({users: [responseJson]});
       })
       .catch((error) => {
         console.error(error);
@@ -53,7 +52,7 @@ export default class DiscoverTab extends Component {
     // this.setState({ results });
     //@TODO:https://www.npmjs.com/package/react-native-searchbar
     // console.warn(results);
-    return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&username="+username, {
+    return fetch('https://'+server+'/api/users/search/?token='+this.state.token+"&limit=10&username="+username, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -63,7 +62,12 @@ export default class DiscoverTab extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         console.warn(JSON.stringify(responseJson));
-        this.setState({users: responseJson});
+        if (!responseJson.ok) {
+          console.warn("setting state");
+          this.setState({users: responseJson});
+        } else {
+          this.setState({users: "none found"})
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -75,25 +79,28 @@ export default class DiscoverTab extends Component {
     const createItem = (item) => (
       <View>
        <Text
-          // key={item.id}
+          key={item.id}
           style="">
-          {item}
+          {item.username}
        </Text>
        </View>
     )
+
+    console.warn("list: "+JSON.stringify(this.state.users));
     //@TODO use the createItem with map(...) when kiwi makes backend method
     return (
       //search bar
       <View style={{flex:1}}>
       <SearchBar
       	ref='searchBar'
+        autoCapitalize="none"
       	placeholder='Search'
       	onChangeText={this._handleResults.bind(this)}
       	onSearchButtonPress={this.findUser.bind(this)}
       	// onCancelButtonPress={...}
       	/>
         <ScrollView>
-        <Text>{this.state.users}</Text>
+        {this.state.users.map(createItem)}
         </ScrollView>
       </View>
     );
