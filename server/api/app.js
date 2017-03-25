@@ -280,6 +280,27 @@ app.get("/api/users/", function(req, res, next) {
   });
 });
 
+
+/**
+* Returns a list of users that match the query
+*/
+app.get("/api/users/search/", function(req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  req.query.username = sanitize(req.query.username);
+  req.query.limit = parseInt(sanitize(req.query.limit));
+
+  if(!req.query.limit || !req.query.username) return res.status(404).end(stat._404);
+
+  User.find({username: {$regex:req.query.username}},
+            {username: 1, _id: 0},
+            {limit: req.query.limit},
+            function (err, doc) {
+              if (err) return res.status(500).end(stat._500);
+              if(!doc) return res.status(404).end(stat._404);
+              res.status(200).send(doc);
+            });
+});
+
 /*
 * Set your the status of the current user
 */

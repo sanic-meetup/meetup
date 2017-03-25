@@ -147,6 +147,25 @@ or
 
 ```
 
+
+### Get User Info
+- description: Get a list of users that match the given query
+- request: `GET /api/users/search/`
+  - query:
+    - token: the request token
+    - username: partial username
+    - limit: the limit of returned results
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: list of objects
+    - usernames: (string) the username
+
+**example request body (postman)**,
+```
+
+```
+
+
 ### Delete a User
 - description: Delete the current/given user
 - request: `DELETE /api/users/`
@@ -159,6 +178,7 @@ or
 ```
 
 ```
+
 
 ## Status & Location API
 ### Get Status of Current Users
