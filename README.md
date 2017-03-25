@@ -11,11 +11,11 @@ friend, or a YouTube celebrity.
 
 - [ ] Cleaning front end code (IP) (Brandon)
 - [x] Fix TabBar (Brandon)
-- [ ] Discover Tab View (IP) (Daniel)
+- [x] Discover Tab View (IP) (Daniel)
 - [ ] Cleaning/Fixing Backend (Kiwi)
-- [ ] Fix routes on client
+- [x] Fix routes on client (Daniel)
 - [ ] Error handling so client doesn't crash
 - [ ] Unfollow (Client)
-- [ ] follow (Client)
+- [ ] follow (Client) (IP) (Daniel)
 - [ ] Status detail View
 - [ ] Update location
