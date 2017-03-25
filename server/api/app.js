@@ -289,7 +289,7 @@ app.get("/api/users/search/", function(req, res, next) {
   req.query.username = sanitize(req.query.username);
   req.query.limit = parseInt(sanitize(req.query.limit));
 
-  if(!req.query.limit || !req.query.username) return res.status(404).end(stat._404);
+  if(!req.query.limit || !req.query.username) return res.status(400).end(stat._400);
 
   User.find({username: {$regex:req.query.username}},
             {username: 1, _id: 0},
