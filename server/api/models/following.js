@@ -5,9 +5,13 @@ var Schema = mongoose.Schema;
 // create a schema
 var following_schema = new Schema({
   username: { type: String, required: true, unique: true },
-  following: {type: Array},
-  created_at: Date,
-  updated_at: Date
+  following: {type: Array}
+},
+{
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
+  }
 });
 
 // the schema is useless so far

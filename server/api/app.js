@@ -79,11 +79,21 @@ app.post("/users/", function (req, res, next) {
     email: req.body.email
   });
 
+  //TODO findout why insert doesn't work
   new_user.save(function(err) {
-    //if err user exists
-    if (err) res.status(409).send(stat._409);
+    if (err) return res.status(409).send(stat._409);
     else {
-      res.status(200).send(str({username:req.body.username}));
+      follower.findOneAndUpdate({username: req.body.username}, {followers: []}, {upsert: true}, function(err, data){
+        if (err) return res.status(409).send(stat._409);
+        else{
+          following.findOneAndUpdate({username: req.body.username}, {following: []}, {upsert: true}, function(err, data){
+            if (err)  return res.status(409).send(stat._409);
+            else{
+              return res.status(200).send(str({username:req.body.username}));
+            }
+          });
+        }
+      });
     }
   });
 
@@ -129,7 +139,7 @@ app.get("/api/testauth", function(req, res, next){
 /*
 * Update the user's location
 */
-app.put("/api/location/", function (req, res, next) {
+app.put("/api/users/location/", function (req, res, next) {
   //create the object & sanitize
   var newloc = {
     longitude: sanitize(req.body.longitude),
@@ -151,6 +161,7 @@ app.put("/api/location/", function (req, res, next) {
     //for response
     follower.findOne({username: req.body.username}, function (err, doc) {
       if (err) return res.status(500).end(stat._500);
+      if(!doc) return res.status(404).end(stat._404);
       //if user has followers notify them via push notification
       if (doc) {
         for (var i = 0; i < doc.followers.length; i ++) {
@@ -168,7 +179,7 @@ app.put("/api/location/", function (req, res, next) {
 /**
 * Follow a user
 */
-app.post("/api/follow/", function(req, res, next) {
+app.post("/api/users/follow/", function(req, res, next) {
   //standard sanitization
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
@@ -187,7 +198,7 @@ app.post("/api/follow/", function(req, res, next) {
 /**
 * Unfollow a user
 */
-app.post("/api/unfollow/", function(req, res, next) {
+app.post("/api/users/unfollow/", function(req, res, next) {
   //standard sanitization
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
@@ -218,6 +229,7 @@ app.get("/api/following/", function (req, res, next) {
 
   following.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
     if (doc) {
       // res.status(200).send({"following": doc.following});
       User.find ({username: {$in: doc.following}}, function (err, docs) {
@@ -240,6 +252,7 @@ app.get("/api/followers/", function(req, res, next) {
 
   follower.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
     if (doc) {
       res.status(200).send(str({"followers": doc.followers}));
       // User.find ({username: {$in: doc.followers}}, function (err, docs) {
@@ -252,7 +265,7 @@ app.get("/api/followers/", function(req, res, next) {
 /**
 * Returns the requesting users' info or if query param username is set then that
 */
-app.get("/api/user/", function(req, res, next) {
+app.get("/api/users/", function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
@@ -260,7 +273,9 @@ app.get("/api/user/", function(req, res, next) {
     u = req.query.username;
   }
 
-  User.findOne({username: u}, function (err, doc) {
+  User.findOne({username: u}, {}, function (err, doc) {
+    if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
     res.status(200).send(docstrip(doc));
   });
 });
@@ -268,7 +283,7 @@ app.get("/api/user/", function(req, res, next) {
 /*
 * Set your the status of the current user
 */
-app.put("/api/status/", function(req, res, next){
+app.put("/api/users/status/", function(req, res, next){
   res.setHeader('Content-Type', 'application/json');
   //sanitize & validate
   req.checkBody().notEmpty();
@@ -292,7 +307,7 @@ app.put("/api/status/", function(req, res, next){
 /*
 * Get current users status
 */
-app.get("/api/status/", function(req, res, next){
+app.get("/api/users/status/", function(req, res, next){
   res.setHeader('Content-Type', 'application/json');
   User.findOne({username: req.decoded._doc.username}, function(err, data) {
     if (err) return res.status(500).end(stat._500);
@@ -305,7 +320,7 @@ app.get("/api/status/", function(req, res, next){
 /*
 * Deletes the current user
 */
-app.delete("/api/user/", function(req, res, next){
+app.delete("/api/users/", function(req, res, next){
   res.setHeader('Content-Type', 'application/json');
   //sanitize & validate
   req.body.username = sanitize(req.body.username);

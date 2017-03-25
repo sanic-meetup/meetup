@@ -90,7 +90,7 @@ export default class Home extends Component {
     });
     this.getUserCurrentStatus((status) => { // get the users' status
     console.log("status",status, this.state.token);
-      if (!(status.success === false)) 
+      if (!(status.success === false))
         this.setState({user_status : status.status.availability});
     });
     if (callback)
@@ -159,7 +159,6 @@ export default class Home extends Component {
         console.error(error);
       });
   }
-
 
   _onTabPress = (tab) => {
     this.setState({tabViewSelected: tab});

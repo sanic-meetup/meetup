@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, Button } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
 
@@ -48,6 +48,10 @@ export default class AccountTab extends Component {
     Actions.followers({token: this.state.token, username: this.state.username});
   }
 
+  _getFollowing(){
+    Actions.following({token: this.state.token, username: this.state.username});
+  }
+
   render() {
     if (this.state.accinfo === undefined) {
       var accinfo = "no info";
@@ -57,12 +61,14 @@ export default class AccountTab extends Component {
 
     return (
         <View style={{flex:1}}>
-        <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowers.bind(this)}>
-          <View>
-              <Text>Followers</Text>
-          </View>
-        </TouchableOpacity>
-        <Text>other options</Text>
+        <ScrollView>
+          <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowers.bind(this)}>
+                <Text>Followers</Text>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowing.bind(this)}>
+                <Text>Following</Text>
+          </TouchableOpacity>
+        </ScrollView>
         </View>
       );
   }

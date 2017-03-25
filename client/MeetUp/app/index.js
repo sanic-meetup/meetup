@@ -11,6 +11,7 @@ const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
 // Scene's
 import Login from './views/Login';
 import Followers from './views/Followers';
+import Following from './views/Following';
 
 // Tab Scenes
 import Home from './views/Home';
@@ -93,7 +94,7 @@ export default class App extends React.Component {
             <Scene key="account_1" component={AccountTab} title="Tab #1_1"/>
           </Scene>
         </Scene>
-
+        
       </Scene>
     </Router>
   }

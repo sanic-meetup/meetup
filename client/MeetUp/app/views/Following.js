@@ -3,19 +3,20 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-nati
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
 
-export default class Followers extends Component {
+export default class Following extends Component {
   constructor(props) {
     super(props);
     this.state = {
       token: props.token,
       username: props.username,
-      followers: []
+      following: []
     };
   }
 
   componentWillMount() {
-    this.getFollowers((json) => { // get the users' status
-      this.setState({followers : json.followers});
+    this.getFollowing((json) => { // get the users' status
+      console.warn(json);
+      this.setState({following : json});
     });
   }
 
@@ -29,8 +30,8 @@ export default class Followers extends Component {
   /**
   * Sign in a user
   */
-  getFollowers(callback) {
-    return fetch('https://'+server+'/api/followers/?token='+this.state.token, {
+  getFollowing(callback) {
+    return fetch('https://'+server+'/api/following/?token='+this.state.token, {
         method: 'GET',
         headers: {
           'Accept': 'application/json',
@@ -47,23 +48,24 @@ export default class Followers extends Component {
   }
 
   render() {
-    if (this.state.followers === []) {
+    if (this.state.following === []) {
+      console.warn(this.state.following);
       return (<View>
-        <Text>You have no Followers</Text>
+        <Text>You are not Following anyone</Text>
         </View>)
     }
     const createItem = (item) => (
        <Text
           key={item.id}
           style={styles.cardContainer}>
-          {item}
+          {item.username}
        </Text>
     )
 
     return (
         <View style={{flex:1}}>
         <ScrollView>
-          {this.state.followers.map(createItem)}
+          {this.state.following.map(createItem)}
         </ScrollView>
         </View>
       );

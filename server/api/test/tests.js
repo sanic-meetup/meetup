@@ -134,7 +134,7 @@ describe('USER API Tests', () => {
     });//end desc
 
     //@TODO finish these tests
-    describe('/POST /api/follow', () => {
+    describe('/POST /api/users/follow', () => {
         before((done) => { //add user test
             new user(vars.testuser3).save();
             vars.get_token(vars.testuser3,
@@ -149,7 +149,7 @@ describe('USER API Tests', () => {
 
         after((done) => {
           //remove testuser3
-          agent.delete('/api/user/?token='+global.testuser3_token)
+          agent.delete('/api/users/?token='+global.testuser3_token)
           .type('json').end(function(err, res){
             done();
           });
