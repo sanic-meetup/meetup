@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Image, Text, View, LayoutAnimation, AsyncStorage } from 'react-native';
 import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import { colors } from './Constants';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const search = (<Icon name="magnifying-glass" size={30} color={colors.black} />)
 const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
@@ -143,9 +143,27 @@ class TabIcon extends React.Component {
 
 class HomeIcon extends React.Component {
   render(){
-    const home = (<Icon name="home" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const home = (<Icon name="ion-ios-home" size={30} color={this.props.selected ? colors.purple : colors.black} />)
     return (
       <View>{home}</View>
+    );
+  }
+}
+
+class SearchIcon extends React.Component {
+  render(){
+    const discover = (<Icon name="ion-android-search" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    return (
+      <View>{discover}</View>
+    );
+  }
+}
+
+class AccountIcon extends React.Component {
+  render(){
+    const account = (<Icon name="ion-android-person" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    return (
+      <View>{account}</View>
     );
   }
 }
