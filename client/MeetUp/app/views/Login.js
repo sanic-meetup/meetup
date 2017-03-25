@@ -96,7 +96,8 @@ export default class Login extends React.Component {
   }
 
   goToHome(props) {
-    Actions.home(props);
+    //Actions.tabbar(props);
+    Actions.tabbar(props);
   }
 
   componentDidMount() {

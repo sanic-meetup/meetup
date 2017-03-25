@@ -42,24 +42,23 @@ export default class Home extends Component {
       username: props.username,
       user_status: undefined,
       updateFormOpen: false,
-      statuses: undefined,
+      statuses: [],
       tabViewSelected: 'Home'
     }
   }
 
   componentWillMount() {
+    console.log("Mounting");
     // Update statuses of people User follows.
-    
+
     //setInterval(() => {this.updateStatuses()},2000);
 
     // Attempt to get the user's info.
     this.getUsername((res) => {
       if (res.success) { // on success...
-        console.log("USERNAME",res.username);
-        this.setState({username: res.username}); // set username in state
-        this.following((json) => {
-          this.setState({statuses: json}); // TODO: need to pull true statuses
-        });
+        this.setState({username: res.username, token: res.token}); // set username in state
+        console.log(this.state.token);
+        this.updateStatuses();
       } else { // couldn't get User's info
         console.warn("Couldn't get username... Back to login...");
         Actions.login();
@@ -90,7 +89,9 @@ export default class Home extends Component {
       this.setState({statuses: json});
     });
     this.getUserCurrentStatus((status) => { // get the users' status
-      this.setState({user_status : status.status.availability});
+    console.log("status",status, this.state.token);
+      if (!(status.success === false)) 
+        this.setState({user_status : status.status.availability});
     });
     if (callback)
       callback();
@@ -108,10 +109,11 @@ export default class Home extends Component {
   //  try to retrive a logged in user from local storage on device
   getUsername = async (callback) => {
     try {
-      const value = await AsyncStorage.getItem('username');
-      if (value !== null){
+      const name = await AsyncStorage.getItem('username');
+      const token = await AsyncStorage.getItem('token');
+      if (name !== null && token !== null){
         // We have data!!
-        callback({success: true, username: value});
+        callback({success: true, username: name, token: token});
       } else {
         console.warn("Login.js: username Not Set. Going back to login...");
         Actions.login();
@@ -158,50 +160,13 @@ export default class Home extends Component {
       });
   }
 
-  // Render the current selected tab
-  _renderTab() {
-    switch (this.state.tabViewSelected) {
-    case 'Home':
-      return (
-        <View style={{flex: 1}}>
-          <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
-          <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
-            <ScrollView
-              refreshControl={
-                <RefreshControl
-                  refreshing={this.state.refreshing}
-                  onRefresh={this._onRefresh.bind(this)}
-                />
-              }
-            >
-              {this.renderCards()}
-            </ScrollView>
-          </View>
-        </View>
-      );
-      break;
-    case 'Search':
-      return (
-        <DiscoverTab/>
-      );
-      break;
-    case 'Account':
-      return (
-        <AccountTab token={this.props.token} username={this.props.username}/>
-      );
-      break;
-    default:
-      return (<View><Text>No Tab Selected</Text></View>)
-
-    }
-  }
 
   _onTabPress = (tab) => {
     this.setState({tabViewSelected: tab});
   }
 
-  renderCards() {
-    if (!this.state.statuses)
+  renderCards() {console.log("statusesssss", this.state.statuses);
+    if (this.state.statuses.success === false)
       return <Text>No statuses</Text>
     return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
   }
@@ -215,9 +180,20 @@ export default class Home extends Component {
           onPress={this.toggleStatusForm.bind(this)}
           rightButton={rightButtonConfig}
         />
-        <TabBar tabSelected={this.state.tabViewSelected} onpress={this._onTabPress}>
-        {this._renderTab()}
-        </TabBar>
+
+        <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
+        <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
+          >
+            {this.renderCards()}
+          </ScrollView>
+        </View>
       </View>
     )
   }
