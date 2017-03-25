@@ -39,6 +39,7 @@ export default class DiscoverTab extends Component {
 
   render() {
     return (
+      <View>
         <Text>Discover Tab</Text>
       </View>
     );
