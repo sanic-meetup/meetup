@@ -161,7 +161,7 @@ export default class Home extends Component {
   }
 
   _onTabPress = (tab) => {
-    this.setState({tabViewSelected: tab, token:this.state.token});
+    this.setState({tabViewSelected: tab});
   }
 
   renderCards() {
