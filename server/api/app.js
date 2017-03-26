@@ -238,15 +238,15 @@ app.get("/api/following/", function (req, res, next) {
     u = req.query.username;
   }
 
-  //TODO check user
-
   // Finds users that current user (u) is following
   following.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
+    // Check user existence
     if(!doc) return res.status(404).end(stat._404);
     if (doc) {
       // Find the statuses of the returned list of users
       User.find ({username: {$in: doc.following}}, function (err, docs) {
+        //TODO Strip info
         res.status(200).send(docs);
       });
     } else res.status(200).send(str({"following": []}));
@@ -265,11 +265,10 @@ app.get("/api/followers/", function(req, res, next) {
     u = req.query.username;
   }
 
-    //TODO check user
-
   // Finds users that follow the current user (u)
   follower.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
+    // Check user existence
     if(!doc) return res.status(404).end(stat._404);
     if (doc) res.status(200).send(str({"followers": doc.followers}));
     else res.status(200).send(str({"followers": []}));
@@ -380,7 +379,10 @@ app.put("/api/users/status/", function(req, res, next){
   };
   req.body.inform = sanitize(req.body.inform);
 
-  //TODO check empty (not inform)
+  // Check existence, message and inform are optional
+  if(!req.body.availability || req.body.message || req.body.inform) {
+    return res.status(400).end(stat._400);
+  }
 
   //Find the current user and set new status
   User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
@@ -424,13 +426,17 @@ app.delete("/api/users/", function(req, res, next){
   }
 
   //Remove User and all their relations
-  User.remove({username: req.body.username}, function(err, doc) {
-    //TODO check err/doc
-    following.remove({username: req.body.username}, function(err, doc) {
-      follower.remove({username: req.body.username}, function(err, doc){
-        following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
-          follower.update({}, {$pull: {followers: req.body.username}}, {},function(err,docs){
-            res.sendStatus(200);
+  User.findOne({username: req.body.username}, function(err, data) {
+    if (err) return res.status(500).end(stat._500);
+    if (!data) return res.status(404).end(stat._404);
+    // If user exist remove from all DB's
+    User.remove({username: req.body.username}, function(err, doc) {
+      following.remove({username: req.body.username}, function(err, doc) {
+        follower.remove({username: req.body.username}, function(err, doc){
+          following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
+            follower.update({}, {$pull: {followers: req.body.username}}, {},function(err,docs){
+              res.sendStatus(200);
+            });
           });
         });
       });
