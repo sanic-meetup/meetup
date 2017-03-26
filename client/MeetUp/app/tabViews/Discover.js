@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Button } from 'react-native';
+import { View, Text, ScrollView, Button, TouchableOpacity, RefreshControl} from 'react-native';
 var SearchBar = require('react-native-search-bar');
 import 'react-native-vector-icons';
 import { server } from '../Constants';
@@ -11,7 +11,8 @@ export default class DiscoverTab extends Component {
     this.state = {
       token: props.token,
       username: props.username,
-      users: []
+      users: [],
+      refresh: false
     };
   }
 
@@ -76,8 +77,36 @@ export default class DiscoverTab extends Component {
     } else this.setState({users: []});
   }
 
-  get_followButton_title() {
+  get_followButton_title(following) {
+    if (following) return "Following";
     return "Follow";
+  }
+
+  get_followButton_bg(following) {
+    if (following) return "#B4CDCD";
+    return "#0EBFE9";
+  }
+
+  follow(username) {
+    return fetch('https://'+server+'/api/users/follow/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          token: this.state.token
+        })
+      })
+      .then((response) => response)
+      .then((responseJson) => {
+        //@TODO refresh
+        this._handleResults(username);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   render() {
@@ -91,13 +120,11 @@ export default class DiscoverTab extends Component {
             {item.username}
          </Text>
 
-         {<Button
-         title={this.get_followButton_title()}
-         color="#841584"
-         style = {{
-           backgroundColor: 'red'
-         }}
-         />}
+         <TouchableOpacity disabled={item.follows} onPress={this.follow.bind(this, item.username)}>
+          <Text style= {{backgroundColor: this.get_followButton_bg(item.follows)}}>
+            {this.get_followButton_title(item.follows)}
+          </Text>
+         </TouchableOpacity>
        </View>
     )
 
