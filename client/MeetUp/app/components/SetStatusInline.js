@@ -8,7 +8,7 @@ import { colors, server } from '../Constants';
 
 const styles = {
   sceneContainer: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.purple_dark,
     padding: 10,
     height: 84
   },
