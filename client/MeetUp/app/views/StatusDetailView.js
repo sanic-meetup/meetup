@@ -15,12 +15,19 @@ export default class StatusDetailView extends Component {
           longitude: props.location.longitude,
           latitudeDelta: 100,
           longitudeDelta: 100,
-      }
+        },
+        address: "unknown address",
+        token: this.props.token
     }
   }
 
   onRegionChange(region) {
     this.setState({ region });
+  }
+
+  componentWillMount() {
+    //todo
+    console.log(this.props.token);
   }
 
   render() {
@@ -44,8 +51,8 @@ export default class StatusDetailView extends Component {
                latitude: this.state.region.latitude,
                longitude: this.state.region.longitude
              }}
-            title="testmarker"
-            description="a description"
+            title={this.props.username+"'s location"}
+            description={this.state.address}
           />
         </MapView>
       </View>
