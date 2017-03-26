@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import {MapStyle} from  "../Constants";
 // var MapView = require('react-native-maps');
 

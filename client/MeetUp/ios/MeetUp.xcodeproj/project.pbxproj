@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -49,7 +50,6 @@
 		E05C4F28733547F5BCEA7F15 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F13270CC0DD472DB59A523D /* libAirMaps.a */; };
 		E6418B89C61141508DBB5407 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E6D634B7A5E14E1789354634 /* MaterialCommunityIcons.ttf */; };
 		EFCCFD8A1E86046E0062AC8E /* Fonts in Resources */ = {isa = PBXBuildFile; fileRef = EFCCFD891E86046E0062AC8E /* Fonts */; };
-		9DFCC6D639DA42F9BEF3112A /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 56BFD5B45CC444819574B6B2 /* libAirMaps.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -249,15 +249,9 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RNSearchBar;
 		};
-<<<<<<< HEAD
 		CA20A30A1E88295600678883 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2CBC9AC82DC14EB096EC20E2 /* AirMaps.xcodeproj */;
-=======
-		EFAD9C6F1E882C5000A25DF8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = EFAD9C6B1E882C5000A25DF8 /* AirMaps.xcodeproj */;
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 			proxyType = 2;
 			remoteGlobalIDString = 11FA5C511C4A1296003AC2EE;
 			remoteInfo = AirMaps;
@@ -312,10 +306,7 @@
 		DA656B4BE56F479DA563C567 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		DC3E48A88B574194A678CA18 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		E6D634B7A5E14E1789354634 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
-		EFAD9C6B1E882C5000A25DF8 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AirMaps.xcodeproj; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; };
 		EFCCFD891E86046E0062AC8E /* Fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Fonts; path = "../node_modules/react-native-vector-icons/Fonts"; sourceTree = "<group>"; };
-		5D5DDD01DA944932A6AF5646 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		56BFD5B45CC444819574B6B2 /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,11 +335,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				6EE1FF2D317E4279A85BB8D9 /* libRNSearchBar.a in Frameworks */,
 				22579DC575774990A0D10DEA /* libRNVectorIcons.a in Frameworks */,
-<<<<<<< HEAD
 				E05C4F28733547F5BCEA7F15 /* libAirMaps.a in Frameworks */,
-=======
-				9DFCC6D639DA42F9BEF3112A /* libAirMaps.a in Frameworks */,
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -534,11 +521,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				CEF7E3C064BB4CBC9BB2C09C /* RNSearchBar.xcodeproj */,
 				48E548AAF9654AF68B2970F8 /* RNVectorIcons.xcodeproj */,
-<<<<<<< HEAD
 				2CBC9AC82DC14EB096EC20E2 /* AirMaps.xcodeproj */,
-=======
-				5D5DDD01DA944932A6AF5646 /* AirMaps.xcodeproj */,
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -561,7 +544,6 @@
 				00E356EF1AD99517003FC87E /* MeetUpTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				635C9DC69B8A40218AFDE543 /* Resources */,
-				EFAD9C451E8823BB00A25DF8 /* Frameworks */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -586,25 +568,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-<<<<<<< HEAD
 		CA20A3071E88295600678883 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				CA20A30B1E88295600678883 /* libAirMaps.a */,
-=======
-		EFAD9C451E8823BB00A25DF8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				EFAD9C6B1E882C5000A25DF8 /* AirMaps.xcodeproj */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		EFAD9C6C1E882C5000A25DF8 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				EFAD9C701E882C5000A25DF8 /* libAirMaps.a */,
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -733,13 +700,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-<<<<<<< HEAD
 					ProductGroup = CA20A3071E88295600678883 /* Products */;
 					ProjectRef = 2CBC9AC82DC14EB096EC20E2 /* AirMaps.xcodeproj */;
-=======
-					ProductGroup = EFAD9C6C1E882C5000A25DF8 /* Products */;
-					ProjectRef = EFAD9C6B1E882C5000A25DF8 /* AirMaps.xcodeproj */;
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				},
 				{
 					ProductGroup = 00C302A81ABCB8CE00DB3ED1 /* Products */;
@@ -987,19 +949,11 @@
 			remoteRef = CA20A2CF1E86D68300678883 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-<<<<<<< HEAD
 		CA20A30B1E88295600678883 /* libAirMaps.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libAirMaps.a;
 			remoteRef = CA20A30A1E88295600678883 /* PBXContainerItemProxy */;
-=======
-		EFAD9C701E882C5000A25DF8 /* libAirMaps.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libAirMaps.a;
-			remoteRef = EFAD9C6F1E882C5000A25DF8 /* PBXContainerItemProxy */;
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		EFCCFD861E86036A0062AC8E /* libRNVectorIcons.a */ = {
@@ -1171,11 +1125,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1205,11 +1156,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1236,10 +1184,6 @@
 				);
 				INFOPLIST_FILE = MeetUp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Build/Products/Debug-iphonesimulator",
-				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1265,10 +1209,6 @@
 				);
 				INFOPLIST_FILE = MeetUp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/build/Build/Products/Debug-iphonesimulator",
-				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1303,11 +1243,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1344,11 +1281,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -1378,11 +1312,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.MeetUp-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1408,11 +1339,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-<<<<<<< HEAD
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-=======
->>>>>>> f12cbd87b4ba09dcafab0ded9664a776c75b680d
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.MeetUp-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
