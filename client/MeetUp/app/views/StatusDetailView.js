@@ -24,13 +24,13 @@ export default class StatusDetailView extends Component {
 
   render() {
     return(
-      <View>
+      <View style={{flex:1}}>
         <Text>Status Detail View</Text>
         <Text>{this.props.username}</Text>
         <MapView
           style={{
-            height:100,
-            width: 100
+            flex:1,
+            alignSelf: 'stretch',
           }}
           region={{
             latitude: 37.78825,
