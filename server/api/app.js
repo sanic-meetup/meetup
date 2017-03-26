@@ -157,7 +157,7 @@ app.put("/api/users/location/", function (req, res, next) {
 
   //check permissions
   if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
-    return res.status(401).end(stat._400);
+    return res.status(400).end(stat._400);
   }
   //update and return the location info
   User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
