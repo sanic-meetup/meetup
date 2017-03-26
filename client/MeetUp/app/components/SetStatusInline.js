@@ -5,7 +5,6 @@ import { Button, Text, TouchableOpacity, View, ScrollView, AsyncStorage, Animate
 import { Actions } from 'react-native-router-flux';
 import { colors, server } from '../Constants';
 
-
 const styles = {
   sceneContainer: {
     backgroundColor: colors.purple_dark,
@@ -142,7 +141,7 @@ export default class SetStatusInline extends Component {
         <View style={styles.sceneContainer}>
           <View>
             <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
-            <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
+            <Text>{this.state.location?this.state.location.coords.longitude:"not set"}</Text>
           </View>
 
           <View style={styles.availabilityButtons}>
