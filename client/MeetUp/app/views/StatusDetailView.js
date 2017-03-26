@@ -8,12 +8,13 @@ var MapView = require('react-native-maps');
 export default class StatusDetailView extends Component {
   constructor(props) {
     super(props);
+    console.log("Status detail props",props.location);
     this.state = {
         region: {
-        latitude: this.props.latitude,
-        longitude: this.props.longitude,
-        latitudeDelta: 100,
-        longitudeDelta: 100,
+          latitude: props.location.latitude,
+          longitude: props.location.longitude,
+          latitudeDelta: 100,
+          longitudeDelta: 100,
       }
     }
   }
@@ -33,8 +34,8 @@ export default class StatusDetailView extends Component {
             alignSelf: 'stretch',
           }}
           region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
+            latitude: this.props.location.latitude,
+            longitude: this.props.location.longitude,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}>

@@ -151,7 +151,7 @@ export default class Home extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
+        console.log("Following:", responseJson);
         callback(responseJson);
       })
       .catch((error) => {
@@ -165,7 +165,6 @@ export default class Home extends Component {
 
   renderCards() {
     if (this.state.statuses.success === false) {
-      console.warn(this.state.statuses.message);
       return <Text>No statuses</Text>
     }
     return (this.state.statuses.map((curr) => {return(<Card onPress={this.goToStatusDetailView.bind(this, curr)} key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
@@ -181,7 +180,11 @@ export default class Home extends Component {
           rightButton={rightButtonConfig}
         />
 
-        <SetStatusInline open={this.state.updateFormOpen} token={this.state.token}/>
+        <SetStatusInline
+          open={this.state.updateFormOpen}
+          token={this.state.token}
+          username={this.props.username}
+          token={this.props.token}/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView
             refreshControl={
