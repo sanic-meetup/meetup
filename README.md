@@ -12,10 +12,17 @@ friend, or a YouTube celebrity.
 - [x] Fix token/username prop passing (Brandon)
 - [x] Fix TabBar (Brandon)
 - [x] Discover Tab View (IP) (Daniel)
-- [ ] Cleaning/Fixing Backend (Kiwi)
 - [x] Fix routes on client (Daniel)
-- [ ] Error handling so client doesn't crash
 - [x] Unfollow (Client) (Needs Cleanup/extra Testing) (Daniel)
 - [x] follow (Client) (Needs Cleanup/extra Testing) (IP) (Daniel)
-- [ ] Status detail View (IPR)
-- [ ] Update location
+- [x] Status detail View (IPR)
+- [x] Update location
+- [ ] Sign Up page
+- [ ] More info on account page
+- [ ] Styles
+- [ ] log out
+
+#### Ongoing:
+
+- [ ] Cleaning/Fixing Backend (Kiwi)
+- [ ] Error handling so client doesn't crash
