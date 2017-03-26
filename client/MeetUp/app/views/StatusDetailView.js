@@ -10,7 +10,6 @@ export default class StatusDetailView extends Component {
       location: props.location,
       latitudeDelta: 100,
       longitudeDelta: 100,
-      address: "unknown address",
       token: this.props.token
     }
   }
@@ -21,8 +20,8 @@ export default class StatusDetailView extends Component {
 
   componentWillMount() {
     //todo
-    console.log(this.props.token);
   }
+
 
   render() {
     return(
@@ -49,7 +48,10 @@ export default class StatusDetailView extends Component {
                longitude: this.state.location.longitude
              }}
             title={this.props.username+"'s location"}
-            description={this.state.address}
+            description={
+              this.state.location.address ?
+               this.state.location.address: "Uknown Address"
+             }
           />
         </MapView>):(<Text>No location</Text>)}
       </View>
