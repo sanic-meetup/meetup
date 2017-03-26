@@ -19,6 +19,8 @@ const STATUS_BAR_HEIGHT = 20;
 const styles = {
   navBarContainer: {
     backgroundColor: colors.white,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd"
   },
   statusBar: {
     height: STATUS_BAR_HEIGHT,
@@ -65,11 +67,20 @@ const styles = {
     color: colors.black,
     fontWeight: '500',
   },
+  navTitleButton: {
+    width: 150,
+    alignItems: 'center'
+  },
+  underlined: {
+    paddingBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#aaaaaa"
+  }
 };
 
 const strings = {
-  avail : "Available 🎉",
-  busy : "Busy 🚫",
+  avail : "🎉 Available 🎉",
+  busy : "🚫 Busy 🚫",
   unset : "Set your status!"
 }
 
@@ -120,9 +131,11 @@ export default class Navbar extends React.Component {
   // Logic for rendering the correct title of the Navbar.
   _renderTitle() {
     return (
-      <TouchableOpacity onPress={this._onPress.bind(this)} style={styles.customTitle}>
-        <Text style={styles.navBarTitleText}>{this.state.status}</Text>
-      </TouchableOpacity>
+      <View style={styles.customTitle}>
+        <TouchableOpacity onPress={this._onPress.bind(this)} style={[styles.navTitleButton, styles.underlined]}>
+          <Text style={styles.navBarTitleText}>{this.state.status}</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 

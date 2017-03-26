@@ -276,7 +276,16 @@ app.get("/api/users/", function(req, res, next) {
   User.findOne({username: u}, {}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
     if(!doc) return res.status(404).end(stat._404);
-    res.status(200).send(docstrip(doc));
+    following.findOne({username: req.decoded._doc.username},
+                      {},
+                      function (err, usr){
+                        if (err) return res.status(500).end(stat._500);
+                        if (!usr) usr = {following: []};
+                        doc = JSON.parse(docstrip(doc));
+                        var fdoc = {};
+                        Object.assign(fdoc, doc, {follows: usr.following.includes(doc.username)});
+                        return res.status(200).send(fdoc);
+                      });
   });
 });
 
@@ -297,7 +306,17 @@ app.get("/api/users/search/", function(req, res, next) {
             function (err, doc) {
               if (err) return res.status(500).end(stat._500);
               if(!doc) return res.status(404).end(stat._404);
-              res.status(200).send(doc);
+              following.findOne({username: req.decoded._doc.username},
+                                {},
+                                function (err, usr){
+                                  if (err) return res.status(500).end(stat._500);
+                                  if (!usr) usr = {following: []};
+                                  doc = doc.map(function(element) {
+                                    return {username: element.username,
+                                            follows: usr.following.includes(element.username)};
+                                  });
+                                  return res.status(200).send(doc);
+                                });
             });
 });
 

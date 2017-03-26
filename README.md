@@ -10,6 +10,7 @@ friend, or a YouTube celebrity.
 # TODO:
 
 - [ ] Cleaning front end code (IP) (Brandon)
+- [x] Fix token/username prop passing (Brandon)
 - [x] Fix TabBar (Brandon)
 - [x] Discover Tab View (IP) (Daniel)
 - [ ] Cleaning/Fixing Backend (Kiwi)
