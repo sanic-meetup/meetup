@@ -10,8 +10,8 @@ export default class StatusDetailView extends Component {
     super(props);
     this.state = {
         region: {
-        latitude: 37.78825,
-        longitude: -122.4324,
+        latitude: this.props.latitude,
+        longitude: this.props.longitude,
         latitudeDelta: 100,
         longitudeDelta: 100,
       }
@@ -37,8 +37,16 @@ export default class StatusDetailView extends Component {
             longitude: -122.4324,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
-          }}
-        />
+          }}>
+          <MapView.Marker
+            coordinate={{
+               latitude: this.state.region.latitude,
+               longitude: this.state.region.longitude
+             }}
+            title="testmarker"
+            description="a description"
+          />
+        </MapView>
       </View>
     );
   }
