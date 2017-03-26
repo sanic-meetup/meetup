@@ -221,8 +221,8 @@ or
   - content-type: `application/json`
   - body: object
     - availability: (enum: ["Available", "Busy", "Not Available"]) availability status
-    - message: (string) status message
-    - inform: (boolean) if followers should be notified
+    - message: (optional, string) status message
+    - inform: (optional, boolean) if followers should be notified
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
   - content-type: `application/json`
   - body: object
