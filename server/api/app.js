@@ -262,6 +262,29 @@ app.get("/api/followers/", function(req, res, next) {
   });
 });
 
+
+/**
+* Giving a user check if the current user follows them
+* If user doesn't exist false is returned.
+*/
+app.get("/api/following/check/", function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
+  req.query.username = sanitize(req.query.username);
+
+  if(!req.query.username) return res.status(400).end(stat._400);
+
+  following.findOne({username: req.decoded._doc.username},
+                    {},
+                    function (err, usr){
+                      if (err) return res.status(500).end(stat._500);
+                      if (!usr) usr = {following: []};
+                      var fdoc = {follows: usr.following.includes(req.query.username)};
+                      return res.status(200).send(fdoc);
+                    });
+});
+
+
+
 /**
 * Returns the requesting users' info or if query param username is set then that
 */
