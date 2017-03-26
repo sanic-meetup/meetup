@@ -35,7 +35,6 @@ const rightButtonConfig = {
 export default class Home extends Component {
   constructor(props) {
     super(props);
-    console.log("Home props", props);
     this.state = {
       refreshing: false,
       token: props.token,

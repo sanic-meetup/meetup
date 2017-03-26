@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import {MapStyle} from  "../Constants";
-// var MapView = require('react-native-maps');
-
+import { MapStyle } from  "../Constants";
 var MapView = require('react-native-maps');
 
 export default class StatusDetailView extends Component {
   constructor(props) {
     super(props);
-    console.log("Status detail props",props.location);
     this.state = {
-        region: {
-        latitude: props.location.latitude,
-        longitude: props.location.longitude,
-        latitudeDelta: 100,
-        longitudeDelta: 100,
-      }
+      location: props.location,
+      latitudeDelta: 100,
+      longitudeDelta: 100,
     }
   }
 
@@ -28,18 +22,22 @@ export default class StatusDetailView extends Component {
       <View style={{flex:1}}>
         <Text>Status Detail View</Text>
         <Text>{this.props.username}</Text>
-        <MapView
-          style={{
-            flex:1,
-            alignSelf: 'stretch',
-          }}
-          region={{
-            latitude: this.props.location.latitude,
-            longitude: this.props.location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
-          }}
-        />
+
+        {/* Display location if exists in state */}
+        {this.state.location?(<MapView
+            style={{
+              flex:1,
+              alignSelf: 'stretch',
+            }}
+            region={{
+              latitude: this.state.location.latitude,
+              longitude: this.state.location.longitude,
+              latitudeDelta: 0.00922,
+              longitudeDelta: 0.00421
+            }}
+          />)
+          :(<Text>No location</Text>)}
+
       </View>
     );
   }
