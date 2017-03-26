@@ -5,7 +5,6 @@ import { Button, Text, TouchableOpacity, View, ScrollView, AsyncStorage, Animate
 import { Actions } from 'react-native-router-flux';
 import { colors, server } from '../Constants';
 
-
 const styles = {
   sceneContainer: {
     backgroundColor: colors.purple_dark,
@@ -59,10 +58,10 @@ export default class SetStatusInline extends Component {
     super(props);
     this.state = {
       token: props.token,
+      username: props.username,
       selected: undefined,
       message: "",
       inform: false,
-      location: undefined,
       open: props.open,
       location: undefined
     }
@@ -100,11 +99,38 @@ export default class SetStatusInline extends Component {
           availability: this.state.selected,
           message: this.state.message,
           inform: this.state.inform,
+          latitude: this.state.location.coords.latitude,
+          longitude: this.state.location.coords.longitude
         })
       })
       .then((response) => response.json())
       .then((responseJson) => {
+        this.updateLocation();
         //callback(responseJson);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  updateLocation() {
+    return fetch('https://'+server+'/api/users/location/', {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token: this.state.token,
+          username: this.state.username,
+          latitude: this.state.location.coords.latitude,
+          longitude: this.state.location.coords.longitude,
+          height: 0,
+        })
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+
       })
       .catch((error) => {
         console.error(error);
@@ -142,7 +168,7 @@ export default class SetStatusInline extends Component {
         <View style={styles.sceneContainer}>
           <View>
             <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
-            <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
+            <Text>{this.state.location?this.state.location.coords.longitude:"not set"}</Text>
           </View>
 
           <View style={styles.availabilityButtons}>
