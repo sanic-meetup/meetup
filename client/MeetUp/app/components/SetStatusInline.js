@@ -10,7 +10,7 @@ const styles = {
   sceneContainer: {
     backgroundColor: colors.purple_dark,
     padding: 10,
-    height: 84
+    height: 110,
   },
   availabilityButtons: {
     flexDirection: 'row',
@@ -63,11 +63,13 @@ export default class SetStatusInline extends Component {
       message: "",
       inform: false,
       location: undefined,
-      open: props.open
+      open: props.open,
+      location: undefined
     }
-    // Not part of the state, but necessary to view.
-    this.height = 0
   }
+  // Not part of the state, but necessary to view.
+  height = 0;
+  watchID: ?number = null;
 
   componentWillMount() {
     this.setState({open: this.props.open});
@@ -115,11 +117,34 @@ export default class SetStatusInline extends Component {
 
   componentDidUpdate() {}
 
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = JSON.stringify(position);
+        this.setState({initialPosition});
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      this.setState({location: position});
+    });
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
+  }
+
   render() {
-    this.height = this.state.open?84:0;
+    this.height = this.state.open?110:0;
     return (
       <View style={[{height: this.height}, {overflow: 'hidden'}]}>
         <View style={styles.sceneContainer}>
+          <View>
+            <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
+            <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
+          </View>
+
           <View style={styles.availabilityButtons}>
             <TouchableOpacity
               style={[
