@@ -15,6 +15,7 @@ import Following from './views/Following';
 
 // Tab Scenes
 import Home from './views/Home';
+import StatusDetailView from './views/StatusDetailView';
 import { AccountTab, DiscoverTab } from './tabViews';
 
 
@@ -83,7 +84,6 @@ export default class App extends React.Component {
     this.getUsername((res) => {
       if (res.success) { // on success...
         this.setState({username: res.username, token: res.token}); // set username in state
-        console.log("root", this.state);
         Actions.tabbar({username: res.username, token: res.token});
       } else { // couldn't get User's info
         console.warn("Couldn't get username... Back to login...");
@@ -119,14 +119,15 @@ export default class App extends React.Component {
         <Scene key="login" component={Login} title="Login" type={ActionConst.REPLACE}/>
 
         <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff"}} tabs={true} type={ActionConst.REPLACE}>
-          <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} tabBarTitle="Tab #1" hideNavBar >
-            <Scene key="home_1" component={Home} title="Tab #1_1"/>
+          <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} hideNavBar >
+            <Scene key="home_1" component={Home}/>
+            <Scene key="status_detail_view" component={StatusDetailView} animationStyle={animationStyle}/>
           </Scene>
           <Scene key="discover" icon={SearchIcon}  onPress={this._onPress.bind(this, "discover")} component={DiscoverTab} hideNavBar/>
           <Scene key="account" icon={AccountIcon}  onPress={this._onPress.bind(this, "account")} hideNavBar>
-            <Scene key="account_1" component={AccountTab} title="Tab #1_1" animationStyle={animationStyle}/>
-            <Scene key="account_followers" component={Followers} title="Tab #1_1" animationStyle={animationStyle}/>
-            <Scene key="account_following" component={Following} title="Tab #1_1" animationStyle={animationStyle}/>
+            <Scene key="account_1" component={AccountTab} animationStyle={animationStyle}/>
+            <Scene key="account_followers" component={Followers} animationStyle={animationStyle}/>
+            <Scene key="account_following" component={Following} animationStyle={animationStyle}/>
           </Scene>
         </Scene>
 
