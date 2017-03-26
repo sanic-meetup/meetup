@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Button, AsyncStorage} from 'react-native';
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
 
@@ -52,6 +52,12 @@ export default class AccountTab extends Component {
     Actions.account_following({token: this.state.token, username: this.state.username});
   }
 
+  _logout(){
+    AsyncStorage.removeItem('token', function() {
+      Actions.login();
+    });
+  }
+
   render() {
     if (this.state.accinfo === undefined) {
       var accinfo = "no info";
@@ -68,6 +74,11 @@ export default class AccountTab extends Component {
           <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowing.bind(this)}>
                 <Text>Following</Text>
           </TouchableOpacity>
+          <Button
+            onPress={this._logout}
+            title="Sign Out"
+            color="#841584"
+          />
         </ScrollView>
         </View>
       );
