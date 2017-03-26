@@ -62,7 +62,7 @@ apiRoutes.use(utils.tokenauth);
 app.use('/api', apiRoutes);
 
 /**
-* for creating a new user, see docs
+* For creating a new user, see docs
 */
 app.post("/users/", function (req, res, next) {
   //some basic validation
@@ -70,7 +70,7 @@ app.post("/users/", function (req, res, next) {
   req.body.username = sanitize(req.body.username);
   req.body.password = sanitize(req.body.password);
   req.body.email = sanitize(req.body.email);
-
+  // Check if empty
   if (!req.body.username || !req.body.password || !req.body.email) return res.status(400).end(stat._400);
 
   var new_user = new User({
@@ -80,15 +80,19 @@ app.post("/users/", function (req, res, next) {
   });
 
   //TODO findout why insert doesn't work
+  //Create new User in DB
   new_user.save(function(err) {
     if (err) return res.status(409).send(stat._409);
     else {
+      // Push user to Follower DB
       follower.findOneAndUpdate({username: req.body.username}, {followers: []}, {upsert: true}, function(err, data){
         if (err) return res.status(409).send(stat._409);
         else{
+          // Push user to FOllowing DB
           following.findOneAndUpdate({username: req.body.username}, {following: []}, {upsert: true}, function(err, data){
             if (err)  return res.status(409).send(stat._409);
             else{
+              // If all is successful return username
               return res.status(200).send(str({username:req.body.username}));
             }
           });
@@ -104,7 +108,7 @@ app.post("/users/", function (req, res, next) {
 * log in was valid. 400 if Unauthorized.
 */
 app.post('/signin/', function (req, res, next) {
-  //sanitize
+  // Sanitize + Check if empty
   req.body.username = sanitize(req.body.username);
   req.body.password = sanitize(req.body.password);
   if (!req.body.username || ! req.body.password) return res.status(400).send(stat._400);
@@ -113,7 +117,7 @@ app.post('/signin/', function (req, res, next) {
       username: req.body.username,
       password: req.body.password
     });
-
+  //Check user existence
   User.find({username: user.username}, function(err, result){
     if (err) return res.status(500).end(stat._500);
     if (!result[0] || !checkPassword(result[0], user.password)) return res.status(401).end(stat._401);
@@ -180,16 +184,22 @@ app.put("/api/users/location/", function (req, res, next) {
 * Follow a user
 */
 app.post("/api/users/follow/", function(req, res, next) {
-  //standard sanitization
+  // Standard sanitization
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
-  follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
+  // Check user existence
+  User.findOne({username: req.body.username}, {}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
-    //add to following list
-    following.findOneAndUpdate({username: req.decoded._doc.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+    if(!doc) return res.status(404).end(stat._404);
+    // Update Follower DB
+    follower.findOneAndUpdate({username: req.body.username}, {$addToSet: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
       if (err) return res.status(500).end(stat._500);
-      res.sendStatus(200);
+      // Add to following list
+      following.findOneAndUpdate({username: req.decoded._doc.username}, {$addToSet: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+        if (err) return res.status(500).end(stat._500);
+        res.sendStatus(200);
+      });
     });
   });
 });
@@ -203,9 +213,10 @@ app.post("/api/users/unfollow/", function(req, res, next) {
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
+  // Update the Follower DB
   follower.update({username: req.body.username}, {$pull: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
     if (err) return res.status(500).end(err);
-    //add to following list
+    // Remove from the Following DB
     following.update({username: req.decoded._doc.username}, {$pull: {following: req.body.username}}, {upsert: true}, function(err, doc) {
       if (err) return res.status(500).end(err);
       res.sendStatus(200);
@@ -220,22 +231,25 @@ app.post("/api/users/unfollow/", function(req, res, next) {
 */
 app.get("/api/following/", function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
-  // a function to get everyone you follow
+  // Sanitize and assign
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
   if (req.query.username) {
     u = req.query.username;
   }
 
+  //TODO check user
+
+  // Finds users that current user (u) is following
   following.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
     if(!doc) return res.status(404).end(stat._404);
     if (doc) {
-      // res.status(200).send({"following": doc.following});
+      // Find the statuses of the returned list of users
       User.find ({username: {$in: doc.following}}, function (err, docs) {
         res.status(200).send(docs);
       });
-    } else { res.status(200).send(str({"following": []})); }
+    } else res.status(200).send(str({"following": []}));
   });
 });
 
@@ -244,21 +258,21 @@ app.get("/api/following/", function (req, res, next) {
 */
 app.get("/api/followers/", function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
+  // Sanitize and assign
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
   if (req.query.username) {
     u = req.query.username;
   }
 
+    //TODO check user
+
+  // Finds users that follow the current user (u)
   follower.findOne({username: u}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
     if(!doc) return res.status(404).end(stat._404);
-    if (doc) {
-      res.status(200).send(str({"followers": doc.followers}));
-      // User.find ({username: {$in: doc.followers}}, function (err, docs) {
-      //   res.status(200).send(docs);
-      // });
-    } else { res.status(200).send(str({"followers": []})); }
+    if (doc) res.status(200).send(str({"followers": doc.followers}));
+    else res.status(200).send(str({"followers": []}));
   });
 });
 
@@ -269,15 +283,17 @@ app.get("/api/followers/", function(req, res, next) {
 */
 app.get("/api/following/check/", function (req, res, next) {
   res.setHeader('Content-Type', 'application/json');
+  // Sanitize and check if empty
   req.query.username = sanitize(req.query.username);
-
   if(!req.query.username) return res.status(400).end(stat._400);
 
+  // Find the list of users the current user is following
   following.findOne({username: req.decoded._doc.username},
                     {},
                     function (err, usr){
                       if (err) return res.status(500).end(stat._500);
                       if (!usr) usr = {following: []};
+                      // Check is the given user exist inside the list of following users
                       var fdoc = {follows: usr.following.includes(req.query.username)};
                       return res.status(200).send(fdoc);
                     });
@@ -290,15 +306,18 @@ app.get("/api/following/check/", function (req, res, next) {
 */
 app.get("/api/users/", function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
+  // Sanitize and assign
   var u = req.decoded._doc.username;
   req.query.username = sanitize(req.query.username);
   if (req.query.username) {
     u = req.query.username;
   }
 
+  // Find the current or given user
   User.findOne({username: u}, {}, function (err, doc) {
     if (err) return res.status(500).end(stat._500);
     if(!doc) return res.status(404).end(stat._404);
+    // Find the list of users the current user(u) is following
     following.findOne({username: req.decoded._doc.username},
                       {},
                       function (err, usr){
@@ -306,6 +325,7 @@ app.get("/api/users/", function(req, res, next) {
                         if (!usr) usr = {following: []};
                         doc = JSON.parse(docstrip(doc));
                         var fdoc = {};
+                        // Add a check if the current user is following u
                         Object.assign(fdoc, doc, {follows: usr.following.includes(doc.username)});
                         return res.status(200).send(fdoc);
                       });
@@ -318,23 +338,27 @@ app.get("/api/users/", function(req, res, next) {
 */
 app.get("/api/users/search/", function(req, res, next) {
   res.setHeader('Content-Type', 'application/json');
+  // Sanitize and check if empty
   req.query.username = sanitize(req.query.username);
   req.query.limit = parseInt(sanitize(req.query.limit));
-
   if(!req.query.limit || !req.query.username) return res.status(400).end(stat._400);
 
+  // Find all users that match the query
   User.find({username: {$regex:req.query.username}},
             {username: 1, _id: 0},
             {limit: req.query.limit},
             function (err, doc) {
               if (err) return res.status(500).end(stat._500);
               if(!doc) return res.status(404).end(stat._404);
+              // Find the list of users the current user is following
               following.findOne({username: req.decoded._doc.username},
                                 {},
                                 function (err, usr){
                                   if (err) return res.status(500).end(stat._500);
                                   if (!usr) usr = {following: []};
+                                  // Loop through each user
                                   doc = doc.map(function(element) {
+                                    // Add a check if the current user is following u
                                     return {username: element.username,
                                             follows: usr.following.includes(element.username)};
                                   });
@@ -356,6 +380,9 @@ app.put("/api/users/status/", function(req, res, next){
   };
   req.body.inform = sanitize(req.body.inform);
 
+  //TODO check empty (not inform)
+
+  //Find the current user and set new status
   User.findOneAndUpdate({username: req.decoded._doc.username}, {status: new_status}, {upsert: true}, function(err, data) {
     if (err) return res.status(500).end(stat._500);
     //for response
@@ -372,8 +399,10 @@ app.put("/api/users/status/", function(req, res, next){
 */
 app.get("/api/users/status/", function(req, res, next){
   res.setHeader('Content-Type', 'application/json');
+  //Find the current user and get new status
   User.findOne({username: req.decoded._doc.username}, function(err, data) {
     if (err) return res.status(500).end(stat._500);
+    // No need to check for existence as user logged in
     //for response
     res.status(200).send(str(data.status));
   });
@@ -396,6 +425,7 @@ app.delete("/api/users/", function(req, res, next){
 
   //Remove User and all their relations
   User.remove({username: req.body.username}, function(err, doc) {
+    //TODO check err/doc
     following.remove({username: req.body.username}, function(err, doc) {
       follower.remove({username: req.body.username}, function(err, doc){
         following.update({}, {$pull: {following: req.body.username}}, {}, function (err, docs){
