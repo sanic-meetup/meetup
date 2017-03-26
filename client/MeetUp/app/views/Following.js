@@ -27,6 +27,30 @@ export default class Following extends Component {
     } return true;
   }
 
+  unfollow(username) {
+    return fetch('https://'+server+'/api/users/unfollow/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          token: this.state.token
+        })
+      })
+      .then((response) => response)
+      .then((responseJson) => {
+        this.getFollowing((json) => { // get the users' status
+          console.warn(json);
+          this.setState({following : json});
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   /**
   * Sign in a user
   */
@@ -54,16 +78,27 @@ export default class Following extends Component {
         <Text>You are not Following anyone</Text>
         </View>)
     }
+
     const createItem = (item) => (
+      /**
+      *items each have status as well!
+      */
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
        <Text
           key={item.id}
           style={styles.cardContainer}>
           {item.username}
        </Text>
+       <TouchableOpacity onPress={this.unfollow.bind(this, item.username)}>
+        <Text style= {{backgroundColor: "#CD5555"}}>
+          Unfollow
+        </Text>
+       </TouchableOpacity>
+       </View>
     )
 
     return (
-        <View style={{flex:1}}>
+        <View style={{flex:1, paddingTop: 20}}>
         <ScrollView>
           {this.state.following.map(createItem)}
         </ScrollView>

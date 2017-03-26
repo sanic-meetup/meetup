@@ -8,7 +8,7 @@ import { colors, server } from '../Constants';
 
 const styles = {
   sceneContainer: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.purple_dark,
     padding: 10,
     height: 84
   },
@@ -88,7 +88,7 @@ export default class SetStatusInline extends Component {
 
   submitUpdateAvailability(callback) {
     this.setState({open: !this.state.open});
-    return fetch('https://'+server+'/api/status/?token='+this.state.token, {
+    return fetch('https://'+server+'/api/users/status/?token='+this.state.token, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
