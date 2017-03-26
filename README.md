@@ -9,7 +9,6 @@ friend, or a YouTube celebrity.
 
 # TODO:
 
-- [ ] Cleaning front end code (IP) (Brandon)
 - [x] Fix token/username prop passing (Brandon)
 - [x] Fix TabBar (Brandon)
 - [x] Discover Tab View (IP) (Daniel)
@@ -18,5 +17,5 @@ friend, or a YouTube celebrity.
 - [ ] Error handling so client doesn't crash
 - [x] Unfollow (Client) (Needs Cleanup/extra Testing) (Daniel)
 - [x] follow (Client) (Needs Cleanup/extra Testing) (IP) (Daniel)
-- [ ] Status detail View
+- [ ] Status detail View (IPR)
 - [ ] Update location
