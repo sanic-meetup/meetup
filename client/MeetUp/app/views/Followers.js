@@ -19,6 +19,24 @@ export default class Followers extends Component {
     });
   }
 
+  checkFollows(username) {
+    return fetch('https://'+server+'/api/following/check/?username='+username
+      +'&token='+this.state.token, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        return responseJson.follows;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
   // Determine if we should re-render
   shouldComponentUpdate(nextProps, nextState) {
     if (JSON.stringify(this.state) == JSON.stringify(nextState)) { // TODO: no string comparison
@@ -53,11 +71,13 @@ export default class Followers extends Component {
         </View>)
     }
     const createItem = (item) => (
+      <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
        <Text
           key={item.id}
-          style={styles.cardContainer}>
+          style=''>
           {item}
        </Text>
+       </View>
     )
 
     return (
@@ -69,60 +89,3 @@ export default class Followers extends Component {
       );
   }
 }
-const styles = {
-  cardContainer: {
-    marginTop: 4,
-    marginBottom: 4,
-    borderRadius: 8,
-    backgroundColor: 'white',
-    borderBottomWidth: 4,
-    borderLeftWidth: 2,
-    borderRightWidth: 2,
-    borderColor: '#e9e9e9',
-  },
-  contentContainer: {
-    padding: 8,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
-  },
-  profileImageContainer: {
-    position: 'relative',
-    width: 40,
-  },
-  available: {
-    borderColor: 'white',
-    borderWidth: 2,
-    backgroundColor: 'rgb(76, 217, 100)',
-  },
-  busy: {
-    borderColor: 'white',
-    borderWidth: 2,
-    backgroundColor: 'rgb(255, 59, 48)',
-  },
-  profileImageStatus: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    borderRadius: 7,
-    width: 14,
-    height: 14,
-    zIndex: 10,
-  },
-  cardContext: {
-    flex: 1,
-    flexDirection: 'column',
-    marginLeft: 8,
-  },
-  username: {
-
-  },
-  locationName: {
-
-  }
-};
