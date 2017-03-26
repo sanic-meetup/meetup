@@ -128,6 +128,7 @@ export default class Login extends React.Component {
 
   render() {
     //this.goToHome(); // HACK: bypasses login
+    //@TODO Implement Sign Up
     return(
       <View style={[{flex: 1}, styles.container]}>
         <Navbar title="Login" status_enabled={false}/>
@@ -141,8 +142,10 @@ export default class Login extends React.Component {
           <View style={styles.borderWrapper}>
             <TextInput autoCapitalize={'none'} placeholder="password" secureTextEntry={true} onChangeText={text => this.setState({password: text})} style={styles.inputField}/>
           </View>
-          <Button onPress={this.signIn.bind(this, this.state.username, this.state.password)} title="Sign In"/>
-
+          <View style={{flexDirection:'row', justifyContent:"center"}}>
+            <Button onPress={this.signIn.bind(this, this.state.username, this.state.password)} title="Sign In"/>
+            <Button onPress={console.warn("sign up, implement me")} title="Sign Up"/>
+          </View>
         </View>
       </View>
     );
