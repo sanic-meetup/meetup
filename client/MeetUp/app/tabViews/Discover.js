@@ -12,6 +12,7 @@ export default class DiscoverTab extends Component {
       token: props.token,
       username: props.username,
       users: [],
+      cstext: '',
       refresh: false
     };
   }
@@ -66,7 +67,7 @@ export default class DiscoverTab extends Component {
           console.warn(JSON.stringify(responseJson));
           if (!responseJson.ok) {
             console.warn("setting state");
-            this.setState({users: responseJson});
+            this.setState({users: responseJson, cstext: username});
           } else {
             this.setState({users: []});
           }
@@ -101,8 +102,8 @@ export default class DiscoverTab extends Component {
       })
       .then((response) => response)
       .then((responseJson) => {
-        //@TODO refresh
-        this._handleResults(username);
+        //@TODO refresh using same cstext (current search text)
+        this._handleResults(this.state.cstext);
       })
       .catch((error) => {
         console.error(error);
