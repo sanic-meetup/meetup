@@ -16,7 +16,7 @@ friend, or a YouTube celebrity.
 - [ ] Cleaning/Fixing Backend (Kiwi)
 - [x] Fix routes on client (Daniel)
 - [ ] Error handling so client doesn't crash
-- [ ] Unfollow (Client)
-- [ ] follow (Client) (IP) (Daniel)
+- [x] Unfollow (Client) (Needs Cleanup/extra Testing) (Daniel)
+- [x] follow (Client) (Needs Cleanup/extra Testing) (IP) (Daniel)
 - [ ] Status detail View
 - [ ] Update location
