@@ -1,7 +1,7 @@
 'use-strict'
 
 import React, { Component, LayoutAnimation } from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 const styles = {
   cardContainer: {
@@ -73,7 +73,7 @@ export default class Card extends Component {
   }
 
   render() {
-    return <View style={[styles.cardContainer]}>
+    return <TouchableOpacity onPress={this.props.onPress} style={[styles.cardContainer]}>
       <View style={styles.contentContainer}>
         <View style={styles.profileImageContainer}>
           <View style={[styles.profileImageStatus, this.props.available?styles.available:styles.busy]}></View>
@@ -84,6 +84,6 @@ export default class Card extends Component {
           <Text style={styles.locationName}>{this.props.locationName}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   }
 };

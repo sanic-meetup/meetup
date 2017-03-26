@@ -57,7 +57,6 @@ export default class Home extends Component {
     this.getUsername((res) => {
       if (res.success) { // on success...
         this.setState({username: res.username, token: res.token}); // set username in state
-        console.log(this.state.token);
         this.updateStatuses();
       } else { // couldn't get User's info
         console.warn("Couldn't get username... Back to login...");
@@ -152,6 +151,7 @@ export default class Home extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson);
         callback(responseJson);
       })
       .catch((error) => {
@@ -159,14 +159,16 @@ export default class Home extends Component {
       });
   }
 
-  _onTabPress = (tab) => {
-    this.setState({tabViewSelected: tab});
+  goToStatusDetailView(context) {
+    Actions.status_detail_view(context);
   }
 
   renderCards() {
-    if (this.state.statuses.success === false)
+    if (this.state.statuses.success === false) {
+      console.warn(this.state.statuses.message);
       return <Text>No statuses</Text>
-    return (this.state.statuses.map((curr) => {return(<Card key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
+    }
+    return (this.state.statuses.map((curr) => {return(<Card onPress={this.goToStatusDetailView.bind(this, curr)} key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
   }
 
   render() {

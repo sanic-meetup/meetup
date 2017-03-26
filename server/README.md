@@ -149,7 +149,24 @@ or
 ```
 
 
-### Get User Info
+### Check if following a User
+- description: Giving a user check if the current user follows them. If user doesn't exist false is returned.
+- request: `GET /api/following/check/`
+  - query:
+    - token: the request token
+    - username: username of a user
+- response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
+  - content-type: `application/json`
+  - body: object
+    - follows: (boolean) true iff current user follows the associated user
+
+**example request body (postman)**,
+```
+
+```
+
+
+### Search for a User
 - description: Get a list of users that match the given query
 - request: `GET /api/users/search/`
   - query:

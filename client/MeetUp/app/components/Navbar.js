@@ -18,9 +18,9 @@ const STATUS_BAR_HEIGHT = 20;
 */
 const styles = {
   navBarContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.purple,
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd"
+    borderBottomColor: "#8C588F"
   },
   statusBar: {
     height: STATUS_BAR_HEIGHT,
@@ -64,7 +64,7 @@ const styles = {
   navBarTitleText: {
     fontSize: 17,
     letterSpacing: 0.5,
-    color: colors.black,
+    color: colors.white,
     fontWeight: '500',
   },
   navTitleButton: {
@@ -73,8 +73,8 @@ const styles = {
   },
   underlined: {
     paddingBottom: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#aaaaaa"
+    borderBottomWidth: 4,
+    borderBottomColor: "#8D5591"
   }
 };
 
