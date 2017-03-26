@@ -106,24 +106,6 @@ export default class Navbar extends React.Component {
 
   componentWillMount() {}
 
-  // Get the User's status and update UI in callback()
-  getUserCurrentStatus(callback) {
-    return fetch('https://'+server+'/api/user/?token='+this.state.token+'&?username='+this.state.username, {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        callback(responseJson);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   _onPress() {
     this.props.onPress();
   }
