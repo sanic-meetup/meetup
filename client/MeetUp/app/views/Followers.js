@@ -61,7 +61,7 @@ export default class Followers extends Component {
     )
 
     return (
-        <View style={{flex:1}}>
+        <View style={{flex:1, paddingTop: 20}}>
         <ScrollView>
           {this.state.followers.map(createItem)}
         </ScrollView>
