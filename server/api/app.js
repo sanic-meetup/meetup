@@ -14,6 +14,8 @@ var crypto = require('crypto'),
   stat = utils.statcodes,
   docstrip = utils.docstrip,
   str = utils.stringify,
+  fetch = require('node-fetch'),
+  map_lookup = utils.map_lookup,
   checkPassword = utils.checkPassword,
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
@@ -144,11 +146,13 @@ app.get("/api/testauth", function(req, res, next){
 * Update the user's location
 */
 app.put("/api/users/location/", function (req, res, next) {
+  res.setHeader('Content-Type', 'application/json');
   //create the object & sanitize
   var newloc = {
     longitude: sanitize(req.body.longitude),
     latitude: sanitize(req.body.latitude),
-    height: sanitize(req.body.height)
+    height: sanitize(req.body.height),
+    address : ""
   };
 
   //sanitize & validate
@@ -159,25 +163,44 @@ app.put("/api/users/location/", function (req, res, next) {
   if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
     return res.status(400).end(stat._400);
   }
-  //update and return the location info
-  User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
-    if (err) return res.status(500).end(stat._500);
-    //for response
-    follower.findOne({username: req.body.username}, function (err, doc) {
-      if (err) return res.status(500).end(stat._500);
-      if(!doc) return res.status(404).end(stat._404);
-      //if user has followers notify them via push notification
-      if (doc) {
-        for (var i = 0; i < doc.followers.length; i ++) {
-          pusher.trigger(doc.followers[i], 'location-update', {
-            username: req.body.username,
-            location: data.location
-          });
-        }
+
+  fetch(map_lookup + String(req.body.latitude) + "," + String(req.body.longitude), {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
       }
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // console.log(responseJson, responseJson.results[0].formatted_address);
+      newloc.address = responseJson.results[0].formatted_address;
+
+      //update and return the location info
+      User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
+        if (err) return res.status(500).end(stat._500);
+        //for response
+        follower.findOne({username: req.body.username}, function (err, doc) {
+          if (err) return res.status(500).end(stat._500);
+          if(!doc) return res.status(404).end(stat._404);
+          //if user has followers notify them via push notification
+          if (doc) {
+            for (var i = 0; i < doc.followers.length; i ++) {
+              pusher.trigger(doc.followers[i], 'location-update', {
+                username: req.body.username,
+                location: data.location
+              });
+            }
+          }
+        });
+        return res.status(200).send(str(data.location));
+      });
+
+    })
+    .catch((error) => {
+      console.error(error);
     });
-    res.status(200).send(str(data.location));
-  });
+
 });
 
 /**

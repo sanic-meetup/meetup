@@ -145,3 +145,7 @@ exports.mongo_options = {
       }
     }
   };
+
+var maps_apikey = "AIzaSyBGb5QiisgCg5wzHMPEAX2eDz5saOyo0BM";
+
+exports.map_lookup = "https://maps.googleapis.com/maps/api/geocode/json?key=" + maps_apikey + "&latlng=";
