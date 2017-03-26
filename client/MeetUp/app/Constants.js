@@ -5,7 +5,8 @@ const server = "sanic.ca:2096";
 
 const colors = {
   black: "#262626",
-  purple: '#8c1aff',
+  purple: '#B063B5',
+  purple_dark: '#38213A',
   white: '#ffffff'
 };
 
