@@ -163,7 +163,7 @@ export default class Home extends Component {
   }
 
   renderCards() {
-    if (this.state.statuses.success === false) {
+    if (this.state.statuses.success === false || this.state.statuses.length == []) { // IDK WHY THIS WORKS
       return <Text>No statuses</Text>
     }
     return (this.state.statuses.map((curr) => {return(<Card onPress={this.goToStatusDetailView.bind(this, curr)} key={Math.random(36)} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));

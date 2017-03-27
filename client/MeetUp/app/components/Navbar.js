@@ -116,7 +116,7 @@ export default class Navbar extends React.Component {
       <View style={styles.customTitle}>
         {(!this.props.status_enabled)?(<Text>{this.props.title}</Text>):
         (<TouchableOpacity onPress={this._onPress.bind(this)} style={[styles.navTitleButton, styles.underlined]}>
-          <Text style={styles.navBarTitleText}>{this.state.status}</Text>
+          <Text style={styles.navBarTitleText}>{this.state.status?this.state.status:strings.unset}</Text>
         </TouchableOpacity>)
         }
       </View>
