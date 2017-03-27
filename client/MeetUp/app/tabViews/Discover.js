@@ -17,8 +17,9 @@ export default class DiscoverTab extends Component {
     };
   }
 
-  componentWillMount() {
-    //todo
+  componentDidMount() {
+    //show keyboard
+    this.refs.searchBar.focus();
     console.log(this.props.token);
   }
 
@@ -33,6 +34,9 @@ export default class DiscoverTab extends Component {
   * find a user
   */
   findUser(username, callback) {
+    //hide the search bar after search
+    this.refs.searchBar.unFocus();
+
     return fetch('https://'+server+'/api/users/?token='+this.state.token+"&username="+username, {
         method: 'GET',
         headers: {
@@ -42,7 +46,7 @@ export default class DiscoverTab extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.warn("submitted form: "+JSON.stringify(responseJson));
+        // console.warn("submitted form: "+JSON.stringify(responseJson));
         this.setState({users: [responseJson]});
       })
       .catch((error) => {
@@ -64,9 +68,9 @@ export default class DiscoverTab extends Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.warn(JSON.stringify(responseJson));
+          // console.warn(JSON.stringify(responseJson));
           if (!responseJson.ok) {
-            console.warn("setting state");
+            // console.warn("setting state");
             this.setState({users: responseJson, cstext: username});
           } else {
             this.setState({users: []});
@@ -110,6 +114,11 @@ export default class DiscoverTab extends Component {
       });
   }
 
+  //a workaround to hide keyboard on cancel
+  hide_keyboard(){
+    this.refs.searchBar.unFocus();
+  }
+
   render() {
     //each user will be contained in this
     const createItem = (item) => (
@@ -139,7 +148,7 @@ export default class DiscoverTab extends Component {
       	placeholder='Search'
       	onChangeText={this._handleResults.bind(this)}
       	onSearchButtonPress={this.findUser.bind(this)}
-      	// onCancelButtonPress={...}
+      	onCancelButtonPress={this.hide_keyboard.bind(this)}
       	/>
         <ScrollView>
         {this.state.users.map(createItem)}

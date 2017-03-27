@@ -31,6 +31,8 @@ export default class StatusDetailView extends Component {
 
         {/* Display location if exists in state */}
         {this.state.location?(<MapView
+            showsIndoors={true}
+            scrollEnabled={false}
             style={{
               flex:1,
               alignSelf: 'stretch',
