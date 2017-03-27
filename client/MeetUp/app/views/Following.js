@@ -83,83 +83,35 @@ export default class Following extends Component {
       /**
       *items each have status as well!
       */
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-       <Text
-          key={item.id}
-          style={styles.cardContainer}>
-          {item.username}
-       </Text>
-       <TouchableOpacity onPress={this.unfollow.bind(this, item.username)}>
-        <Text style= {{backgroundColor: "#CD5555"}}>
-          Unfollow
-        </Text>
-       </TouchableOpacity>
+      <View style={{
+        padding: 15, flexDirection: 'column',
+        borderRadius: 4,
+        borderWidth: 0.5,
+        borderColor: '#d6d7da'
+      }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+         <Text
+            key={item.id}
+            style={{fontSize: 20}}>
+            {item.username}
+         </Text>
+         <TouchableOpacity onPress={this.unfollow.bind(this, item.username)}>
+          <Text style= {{fontSize:20, color: "#ff0033"}}>
+            Unfollow
+          </Text>
+         </TouchableOpacity>
+         </View>
        </View>
     )
 
     return (
         <View style={{flex:1, paddingTop: 20}}>
-        <ScrollView>
+        <ScrollView
+        style={{flexDirection: 'column'}}
+        >
           {this.state.following.map(createItem)}
         </ScrollView>
         </View>
       );
   }
 }
-const styles = {
-  cardContainer: {
-    marginTop: 4,
-    marginBottom: 4,
-    borderRadius: 8,
-    backgroundColor: 'white',
-    borderBottomWidth: 4,
-    borderLeftWidth: 2,
-    borderRightWidth: 2,
-    borderColor: '#e9e9e9',
-  },
-  contentContainer: {
-    padding: 8,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20
-  },
-  profileImageContainer: {
-    position: 'relative',
-    width: 40,
-  },
-  available: {
-    borderColor: 'white',
-    borderWidth: 2,
-    backgroundColor: 'rgb(76, 217, 100)',
-  },
-  busy: {
-    borderColor: 'white',
-    borderWidth: 2,
-    backgroundColor: 'rgb(255, 59, 48)',
-  },
-  profileImageStatus: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    borderRadius: 7,
-    width: 14,
-    height: 14,
-    zIndex: 10,
-  },
-  cardContext: {
-    flex: 1,
-    flexDirection: 'column',
-    marginLeft: 8,
-  },
-  username: {
-
-  },
-  locationName: {
-
-  }
-};

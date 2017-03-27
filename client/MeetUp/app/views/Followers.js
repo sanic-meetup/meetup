@@ -71,10 +71,19 @@ export default class Followers extends Component {
         </View>)
     }
     const createItem = (item) => (
-      <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
+      <View style={{
+        flexDirection:'row',
+        justifyContent: 'center',
+        borderRadius: 4,
+        borderWidth: 0.5,
+        borderColor: '#d6d7da',
+        padding: 15
+      }}>
        <Text
           key={item.id}
-          style=''>
+          style={{
+            fontSize:20,
+          }}>
           {item}
        </Text>
        </View>
