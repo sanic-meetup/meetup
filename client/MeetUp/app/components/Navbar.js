@@ -114,9 +114,11 @@ export default class Navbar extends React.Component {
   _renderTitle() {
     return (
       <View style={styles.customTitle}>
-        <TouchableOpacity onPress={this._onPress.bind(this)} style={[styles.navTitleButton, styles.underlined]}>
+        {(!this.props.status_enabled)?(<Text>{this.props.title}</Text>):
+        (<TouchableOpacity onPress={this._onPress.bind(this)} style={[styles.navTitleButton, styles.underlined]}>
           <Text style={styles.navBarTitleText}>{this.state.status}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>)
+        }
       </View>
     );
   }

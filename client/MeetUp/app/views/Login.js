@@ -140,8 +140,6 @@ export default class Login extends React.Component {
         <Navbar title="Login" status_enabled={false}/>
         <View style={styles.formContainer}>
 
-          <Button onPress={this.goToHome.bind(this)} title="Go To Home"/>
-
           <View style={styles.borderWrapper}>
             <TextInput autoCapitalize={'none'} placeholder="username" onChangeText={text => this.setState({username: text})} style={styles.inputField}/>
           </View>
