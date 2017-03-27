@@ -17,7 +17,7 @@ friend, or a YouTube celebrity.
 - [x] follow (Client) (Needs Cleanup/extra Testing) (IP) (Daniel)
 - [x] Status detail View (IPR)
 - [x] Update location
-- [ ] Sign Up page
+- [x] Sign Up page
 - [ ] More info on account page
 - [ ] Styles
 - [x] log out

@@ -63,7 +63,7 @@ export default class Login extends React.Component {
 
   // /users/
   createNewUser(username, password, email) {
-    if (email === "" && password === "" && email === "")
+    if (username === "" && password === "" && email === "" || (!email || !password || !username))
       return
     return fetch('https://'+server+'/users/', {
         method: 'POST',
@@ -126,8 +126,11 @@ export default class Login extends React.Component {
   }
 
   goToHome(props) {
-    console.log("props from login", props);
     Actions.tabbar(props);
+  }
+
+  goToLogin() {
+    Actions.login();
   }
 
   componentDidMount() {
@@ -157,7 +160,6 @@ export default class Login extends React.Component {
   }
 
   render() {
-    //@TODO Implement Sign Up
     return(
       <View style={[{flex: 1}, styles.container]}>
         <Navbar title="Sign Up" status_enabled={false}/>
@@ -177,8 +179,8 @@ export default class Login extends React.Component {
           </View>
 
           <View style={{flexDirection:'row', justifyContent:"center"}}>
-            <Button onPress={this.createNewUser.bind(this, this.state.username, this.state.password, this.state.email)} title="Sign In"/>
-            <Button onPress={console.warn("sign up, implement me")} title="Sign Up"/>
+            <Button onPress={this.createNewUser.bind(this, this.state.username, this.state.password, this.state.email)} title="Sign Up"/>
+            <Button onPress={this.goToLogin.bind(this)} title="back"/>
           </View>
         </View>
       </View>

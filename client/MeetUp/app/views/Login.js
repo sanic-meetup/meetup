@@ -64,6 +64,8 @@ export default class Login extends React.Component {
   * Sign in a user
   */
   signIn(username, password) {
+    if (username === "" && password === "" || (!password || !username))
+      return;
     console.log(username, password);
     return fetch('https://'+server+'/signin/', {
         method: 'POST',
