@@ -26,3 +26,5 @@ friend, or a YouTube celebrity.
 
 - [ ] Cleaning/Fixing Backend (Kiwi)
 - [ ] Error handling so client doesn't crash
+- [ ] API Documentation
+- [ ] Video Presentation
