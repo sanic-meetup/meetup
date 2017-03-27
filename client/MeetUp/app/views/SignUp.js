@@ -38,7 +38,8 @@ export default class Login extends React.Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      email: ""
     }
   }
 
@@ -58,6 +59,35 @@ export default class Login extends React.Component {
       // Error retrieving data
       console.error(error);
     }
+  }
+
+  // /users/
+  createNewUser(username, password, email) {
+    if (email === "" && password === "" && email === "")
+      return
+    return fetch('https://'+server+'/users/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+          email: email
+        })
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.response === 'Unauthorized' || !responseJson.username)
+          return;
+
+        this.signIn(username, password);
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   /**
@@ -126,16 +156,11 @@ export default class Login extends React.Component {
 
   }
 
-  goToSignUp() {
-    Actions.signup();
-  }
-
   render() {
-    //this.goToHome(); // HACK: bypasses login
     //@TODO Implement Sign Up
     return(
       <View style={[{flex: 1}, styles.container]}>
-        <Navbar title="Login" status_enabled={false}/>
+        <Navbar title="Sign Up" status_enabled={false}/>
         <View style={styles.formContainer}>
 
           <Button onPress={this.goToHome.bind(this)} title="Go To Home"/>
@@ -146,9 +171,14 @@ export default class Login extends React.Component {
           <View style={styles.borderWrapper}>
             <TextInput autoCapitalize={'none'} placeholder="password" secureTextEntry={true} onChangeText={text => this.setState({password: text})} style={styles.inputField}/>
           </View>
+
+          <View style={styles.borderWrapper}>
+            <TextInput autoCapitalize={'none'} keyboardType="email-address" placeholder="email" onChangeText={text => this.setState({email: text})} style={styles.inputField}/>
+          </View>
+
           <View style={{flexDirection:'row', justifyContent:"center"}}>
-            <Button onPress={this.signIn.bind(this, this.state.username, this.state.password)} title="Sign In"/>
-            <Button onPress={this.goToSignUp.bind(this)} title="Sign Up"/>
+            <Button onPress={this.createNewUser.bind(this, this.state.username, this.state.password, this.state.email)} title="Sign In"/>
+            <Button onPress={console.warn("sign up, implement me")} title="Sign Up"/>
           </View>
         </View>
       </View>
