@@ -20,7 +20,7 @@ friend, or a YouTube celebrity.
 - [ ] Sign Up page
 - [ ] More info on account page
 - [ ] Styles
-- [ ] log out
+- [x] log out
 
 #### Ongoing:
 
