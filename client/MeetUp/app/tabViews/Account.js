@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Button, AsyncStorage} from 'react-native';
+import {
+   View, Text, TouchableOpacity, ScrollView, Button,
+   AsyncStorage, StyleSheet
+ } from 'react-native';
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
 
@@ -67,20 +70,52 @@ export default class AccountTab extends Component {
 
     return (
         <View style={{flex:1, paddingTop: 20}}>
-        <ScrollView>
-          <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowers.bind(this)}>
-                <Text>Followers</Text>
+        <ScrollView
+        centerContent
+        >
+          <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.3}
+          onPress={this._getFollowers.bind(this)}>
+                <Text style={styles.text}>Followers</Text>
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.3} onPress={this._getFollowing.bind(this)}>
-                <Text>Following</Text>
+
+          <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.3}
+          onPress={this._getFollowing.bind(this)}>
+                <Text style={styles.text}>Following</Text>
           </TouchableOpacity>
+
           <Button
             onPress={this._logout}
             title="Sign Out"
-            color="#841584"
+            style={{fontSize:20}}
+            color="#ff0033"
           />
         </ScrollView>
         </View>
       );
   }
 }
+
+/*mostly taken from react-native listview docs, with some mods mods*/
+var styles = StyleSheet.create({
+  scrollView: {
+    flexDirection: 'column',
+    backgroundColor: '#6A85B1',
+    height: '100%',
+    justifyContent: 'center'
+  },
+  text: {
+    fontSize: 20,
+    color: '#888888'
+  },
+  button: {
+    margin: 7,
+    padding: 7,
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    borderRadius: 3,
+  }
+});

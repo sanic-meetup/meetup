@@ -88,8 +88,8 @@ export default class DiscoverTab extends Component {
   }
 
   get_followButton_bg(following) {
-    if (following) return "#B4CDCD";
-    return "#0EBFE9";
+    if (following) return {color: "#B4CDCD", fontSize:20};
+    return {color: "#0EBFE9", fontSize:20};
   }
 
   follow(username) {
@@ -122,19 +122,28 @@ export default class DiscoverTab extends Component {
   render() {
     //each user will be contained in this
     const createItem = (item) => (
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-         <Text
-            key={item.id}
-            style=''
-          >
-            {item.username}
-         </Text>
+      <View style={{
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: 20,
+        borderRadius: 4,
+        borderWidth: 0.5,
+        borderColor: '#d6d7da'
+      }}>
+        <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
+           <Text
+              key={item.id}
+              style={{fontSize:20}}
+            >
+              {item.username}
+           </Text>
 
-         <TouchableOpacity disabled={item.follows} onPress={this.follow.bind(this, item.username)}>
-          <Text style= {{backgroundColor: this.get_followButton_bg(item.follows)}}>
-            {this.get_followButton_title(item.follows)}
-          </Text>
-         </TouchableOpacity>
+           <TouchableOpacity disabled={item.follows} onPress={this.follow.bind(this, item.username)}>
+            <Text style={this.get_followButton_bg(item.follows)}>
+              {this.get_followButton_title(item.follows)}
+            </Text>
+           </TouchableOpacity>
+         </View>
        </View>
     )
 
@@ -150,7 +159,9 @@ export default class DiscoverTab extends Component {
       	onSearchButtonPress={this.findUser.bind(this)}
       	onCancelButtonPress={this.hide_keyboard.bind(this)}
       	/>
-        <ScrollView>
+        <ScrollView
+        style={{flexDirection: 'column'}}
+        >
         {this.state.users.map(createItem)}
         </ScrollView>
       </View>
