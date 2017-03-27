@@ -64,6 +64,8 @@ export default class Login extends React.Component {
   * Sign in a user
   */
   signIn(username, password) {
+    if (username === "" && password === "" || (!password || !username))
+      return;
     console.log(username, password);
     return fetch('https://'+server+'/signin/', {
         method: 'POST',
@@ -137,8 +139,6 @@ export default class Login extends React.Component {
       <View style={[{flex: 1}, styles.container]}>
         <Navbar title="Login" status_enabled={false}/>
         <View style={styles.formContainer}>
-
-          <Button onPress={this.goToHome.bind(this)} title="Go To Home"/>
 
           <View style={styles.borderWrapper}>
             <TextInput autoCapitalize={'none'} placeholder="username" onChangeText={text => this.setState({username: text})} style={styles.inputField}/>
