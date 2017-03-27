@@ -21,7 +21,7 @@ exports.docstrip = function(doc) {
     status: doc.status,
     location: doc.location
   };
-  return JSON.stringify(new_doc);
+  return new_doc;
 };
 
 exports.stringify = function(obj) {
