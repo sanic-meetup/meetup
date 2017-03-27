@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
    View, Text, TouchableOpacity, ScrollView, Button,
-   AsyncStorage, StyleSheet
+   AsyncStorage, StyleSheet, Alert
  } from 'react-native';
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
@@ -12,8 +12,8 @@ export default class AccountTab extends Component {
     this.state = {
       token: props.token,
       username: props.username,
-      info: undefined,
-      followerView: false
+      accinfo: undefined,
+      followerView: false,
     };
   }
 
@@ -61,6 +61,21 @@ export default class AccountTab extends Component {
     });
   }
 
+  _accInfo() {
+    var alert_body = 'username: '+this.state.username
+    +"\n email: "+ this.state.accinfo.email
+    +"\n status: "+ this.state.accinfo.status.availability
+    +"\n location: "+this.state.accinfo.location.address;
+    Alert.alert(
+      'Account Info.',
+      alert_body,
+      [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      { cancelable: false }
+    )
+  }
+
   render() {
     if (this.state.accinfo === undefined) {
       var accinfo = "no info";
@@ -73,6 +88,13 @@ export default class AccountTab extends Component {
         <ScrollView
         centerContent
         >
+        <TouchableOpacity
+        style={styles.button}
+        activeOpacity={0.3}
+        onPress={this._accInfo.bind(this)}>
+              <Text style={styles.text}>Account Info.</Text>
+        </TouchableOpacity>
+
           <TouchableOpacity
           style={styles.button}
           activeOpacity={0.3}
