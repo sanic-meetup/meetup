@@ -9,7 +9,8 @@ const styles = {
   sceneContainer: {
     backgroundColor: colors.purple_dark,
     padding: 10,
-    height: 110,
+    paddingTop: 20,
+    height: 100,
   },
   availabilityButtons: {
     flexDirection: 'row',
@@ -166,10 +167,6 @@ export default class SetStatusInline extends Component {
     return (
       <View style={[{height: this.height}, {overflow: 'hidden'}]}>
         <View style={styles.sceneContainer}>
-          <View>
-            <Text>{this.state.location?this.state.location.coords.latitude:"not set"}</Text>
-            <Text>{this.state.location?this.state.location.coords.longitude:"not set"}</Text>
-          </View>
 
           <View style={styles.availabilityButtons}>
             <TouchableOpacity
