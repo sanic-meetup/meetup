@@ -86,7 +86,7 @@ exports.render_index = function(req, res, next) {
       v += data;
       v += "</xmp><script src=\"/static/strapdown.js\"></script></html>";
         return res.send(v);
-      } else return res.send("It Works!");
+      } else return res.send("Docs are not available in production.");
     });
 };
 
