@@ -71,8 +71,7 @@ export default class AccountTab extends Component {
       alert_body,
       [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      { cancelable: false }
+      ]
     )
   }
 
