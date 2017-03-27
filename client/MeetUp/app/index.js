@@ -10,6 +10,7 @@ const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
 
 // Scene's
 import Login from './views/Login';
+import SignUp from './views/SignUp';
 import Followers from './views/Followers';
 import Following from './views/Following';
 
@@ -117,6 +118,7 @@ export default class App extends React.Component {
     return <Router>
       <Scene key="root" hideNavBar type={ActionConst.REPLACE}>
         <Scene key="login" component={Login} title="Login" type={ActionConst.REPLACE}/>
+        <Scene key="signup" component={SignUp} title="Login" type={ActionConst.REPLACE}/>
 
         <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff"}} tabs={true} type={ActionConst.REPLACE}>
           <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} hideNavBar >
