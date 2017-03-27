@@ -21,7 +21,7 @@ exports.docstrip = function(doc) {
     status: doc.status,
     location: doc.location
   };
-  return JSON.stringify(new_doc);
+  return new_doc;
 };
 
 exports.stringify = function(obj) {
@@ -81,7 +81,7 @@ exports.render_index = function(req, res, next) {
     if (err) {
       return res.send("could not load api docs");
     }
-    if (mode === "dev") {
+    if (!process.env.NODE_ENV) {
       var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
       v += data;
       v += "</xmp><script src=\"/static/strapdown.js\"></script></html>";

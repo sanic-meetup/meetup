@@ -81,7 +81,6 @@ app.post("/users/", function (req, res, next) {
     email: req.body.email
   });
 
-  //TODO findout why insert doesn't work
   //Create new User in DB
   new_user.save(function(err) {
     if (err) return res.status(409).send(stat._409);
@@ -130,7 +129,7 @@ app.post('/signin/', function (req, res, next) {
       expiresIn: t // expires in 24 hours (measured in seconds)
     });
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(str({username: user.username, token: token, expiesIn: t}));
+    return res.status(200).send(str({username: user.username, token: token, expiesIn: t}));
   });
 });
 
@@ -138,7 +137,7 @@ app.post('/signin/', function (req, res, next) {
 * test route only
 */
 app.get("/api/testauth", function(req, res, next){
-    res.status(200).send(str({success: true}));
+    return res.status(200).send(str({success: true}));
 });
 
 
@@ -158,6 +157,11 @@ app.put("/api/users/location/", function (req, res, next) {
   //sanitize & validate
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
+
+  // Check input is not null
+  if(req.body.longitude || req.body.latitude || req.body.height || req.body.username){
+    return res.status(400).end(stat._400);
+  }
 
   //check permissions
   if (!req.decoded._doc.admin && req.decoded._doc.username !== req.body.username) {
@@ -180,25 +184,15 @@ app.put("/api/users/location/", function (req, res, next) {
       User.findOneAndUpdate({username: req.body.username}, {location: newloc}, {upsert: true}, function(err, data) {
         if (err) return res.status(500).end(stat._500);
         //for response
-        follower.findOne({username: req.body.username}, function (err, doc) {
-          if (err) return res.status(500).end(stat._500);
-          if(!doc) return res.status(404).end(stat._404);
-          //if user has followers notify them via push notification
-          if (doc) {
-            for (var i = 0; i < doc.followers.length; i ++) {
-              pusher.trigger(doc.followers[i], 'location-update', {
-                username: req.body.username,
-                location: data.location
-              });
-            }
-          }
-        });
+        var notify = {};
+        Object.assign(notify, data.location);
+        utils.notifyFollowers(req.body.username, 'location-update', notify);
         return res.status(200).send(str(data.location));
       });
 
     })
     .catch((error) => {
-      console.error(error);
+      if (error) return res.status(500).end(stat._500);
     });
 
 });
@@ -236,13 +230,18 @@ app.post("/api/users/unfollow/", function(req, res, next) {
   req.body.username = sanitize(req.body.username);
   req.checkBody().notEmpty();
 
-  // Update the Follower DB
-  follower.update({username: req.body.username}, {$pull: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
-    if (err) return res.status(500).end(err);
-    // Remove from the Following DB
-    following.update({username: req.decoded._doc.username}, {$pull: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+  // Check user existence
+  User.findOne({username: req.body.username}, {}, function (err, doc) {
+    if (err) return res.status(500).end(stat._500);
+    if(!doc) return res.status(404).end(stat._404);
+    // Update the Follower DB
+    follower.update({username: req.body.username}, {$pull: {followers: req.decoded._doc.username}}, {upsert: true}, function(err, doc) {
       if (err) return res.status(500).end(err);
-      res.sendStatus(200);
+      // Remove from the Following DB
+      following.update({username: req.decoded._doc.username}, {$pull: {following: req.body.username}}, {upsert: true}, function(err, doc) {
+        if (err) return res.status(500).end(err);
+        res.sendStatus(200);
+      });
     });
   });
 });
@@ -269,10 +268,15 @@ app.get("/api/following/", function (req, res, next) {
     if (doc) {
       // Find the statuses of the returned list of users
       User.find ({username: {$in: doc.following}}, function (err, docs) {
-        //TODO Strip info
-        res.status(200).send(docs);
+        if(err) return res.status(500).end(stat._500);
+        // Filter to results
+        docs = docs.map(function(element) {
+          // Add a check if the current user is following u
+          return docstrip(element);
+        });
+        return res.status(200).send(docs);
       });
-    } else res.status(200).send(str({"following": []}));
+    } else return res.status(200).send(str({"following": []}));
   });
 });
 
@@ -293,8 +297,8 @@ app.get("/api/followers/", function(req, res, next) {
     if (err) return res.status(500).end(stat._500);
     // Check user existence
     if(!doc) return res.status(404).end(stat._404);
-    if (doc) res.status(200).send(str({"followers": doc.followers}));
-    else res.status(200).send(str({"followers": []}));
+    if (doc) return res.status(200).send(str({"followers": doc.followers}));
+    else return res.status(200).send(str({"followers": []}));
   });
 });
 
@@ -345,7 +349,7 @@ app.get("/api/users/", function(req, res, next) {
                       function (err, usr){
                         if (err) return res.status(500).end(stat._500);
                         if (!usr) usr = {following: []};
-                        doc = JSON.parse(docstrip(doc));
+                        doc = docstrip(doc);
                         var fdoc = {};
                         // Add a check if the current user is following u
                         Object.assign(fdoc, doc, {follows: usr.following.includes(doc.username)});
@@ -412,9 +416,11 @@ app.put("/api/users/status/", function(req, res, next){
     if (err) return res.status(500).end(stat._500);
     //for response
     if(req.body.inform){
-      utils.notifyFollowers(req.decoded._doc.username, 'status_update', data);
+      var notify = {};
+      Object.assign(notify, data.status);
+      utils.notifyFollowers(req.decoded._doc.username, 'status_update', notify);
     }
-    res.status(200).send(str(data.status));
+    return res.status(200).send(str(data.status));
   });
 });
 
@@ -429,7 +435,7 @@ app.get("/api/users/status/", function(req, res, next){
     if (err) return res.status(500).end(stat._500);
     // No need to check for existence as user logged in
     //for response
-    res.status(200).send(str(data.status));
+    return res.status(200).send(str(data.status));
   });
 });
 

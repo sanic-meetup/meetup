@@ -16,4 +16,4 @@ RUN npm install -g nodemon
 #DO NOT EXPOSE 3000!!
 EXPOSE 5000
 # run the nodejs application
-CMD node app.js
+CMD NODE_ENV=production node app.js
