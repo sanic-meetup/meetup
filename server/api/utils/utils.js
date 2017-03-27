@@ -81,7 +81,7 @@ exports.render_index = function(req, res, next) {
     if (err) {
       return res.send("could not load api docs");
     }
-    if (app.settings.env == "development") {
+    if (!process.env.NODE_ENV) {
       var v = "<!DOCTYPE html> <html><title>API Documentation</title><xmp theme=\"united\" style=\"display:none;\">";
       v += data;
       v += "</xmp><script src=\"/static/strapdown.js\"></script></html>";
