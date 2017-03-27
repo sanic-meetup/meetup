@@ -54,10 +54,10 @@ export default class Login extends React.Component {
         // We have data!!
         callback({success: true, token: token, username: name})
       } else
-        console.warn("Login.js: User Token Not Set.");
+        //console("Login.js: User Token Not Set.");
     } catch (error) {
       // Error retrieving data
-      console.error(error);
+      //consoleor(error);
     }
   }
 
@@ -86,7 +86,7 @@ export default class Login extends React.Component {
 
       })
       .catch((error) => {
-        console.error(error);
+        //consoleor(error);
       });
   }
 
@@ -117,11 +117,11 @@ export default class Login extends React.Component {
           if (responseJson.username)
             this.goToHome({token: responseJson.token});
         } catch (error) {
-          console.error(error);
+          //consoleor(error);
         }
       })
       .catch((error) => {
-        console.error(error);
+        //consoleor(error);
       });
   }
 
@@ -151,7 +151,7 @@ export default class Login extends React.Component {
             }
           })
           .catch((error) => {
-            console.error(error);
+            //consoleor(error);
           });
       } else console.log("User not authenticated.")
     });

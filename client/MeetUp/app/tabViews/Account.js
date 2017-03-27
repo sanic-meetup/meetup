@@ -64,14 +64,15 @@ export default class AccountTab extends Component {
   _accInfo() {
     var alert_body = 'username: '+this.state.username
     +"\n email: "+ this.state.accinfo.email
-    +"\n status: "+ this.state.accinfo.status.availability
+    +"\n status: "+ JSON.stringify(this.state.accinfo.status)
     +"\n location: "+this.state.accinfo.location.address;
     Alert.alert(
       'Account Info.',
       alert_body,
       [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ]
+      ],
+      { cancelable: false }
     )
   }
 

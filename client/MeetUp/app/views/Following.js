@@ -15,7 +15,7 @@ export default class Following extends Component {
 
   componentWillMount() {
     this.getFollowing((json) => { // get the users' status
-      console.warn(json);
+      //console.warn(json);
       this.setState({following : json});
     });
   }
@@ -42,12 +42,11 @@ export default class Following extends Component {
       .then((response) => response)
       .then((responseJson) => {
         this.getFollowing((json) => { // get the users' status
-          console.warn(json);
           this.setState({following : json});
         });
       })
       .catch((error) => {
-        console.error(error);
+        //console.error(error);
       });
   }
 
@@ -67,13 +66,13 @@ export default class Following extends Component {
         callback(responseJson);
       })
       .catch((error) => {
-        console.error(error);
+        //console.error(error);
       });
   }
 
   render() {
     if (this.state.following === []) {
-      console.warn(this.state.following);
+      //console.warn(this.state.following);
       return (<View>
         <Text>You are not Following anyone</Text>
         </View>)
