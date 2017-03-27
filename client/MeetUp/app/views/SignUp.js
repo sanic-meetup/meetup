@@ -53,11 +53,11 @@ export default class Login extends React.Component {
       if (token !== null){
         // We have data!!
         callback({success: true, token: token, username: name})
-      } else
+      }
         //console("Login.js: User Token Not Set.");
     } catch (error) {
       // Error retrieving data
-      //consoleor(error);
+      console.log(error);
     }
   }
 
