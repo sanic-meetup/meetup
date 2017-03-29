@@ -159,7 +159,7 @@ app.put("/api/users/location/", function (req, res, next) {
   req.checkBody().notEmpty();
 
   // Check input is not null
-  if(req.body.longitude || req.body.latitude || req.body.height || req.body.username){
+  if(!req.body.longitude || !req.body.latitude || !req.body.height || !req.body.username){
     return res.status(400).end(stat._400);
   }
 
@@ -177,7 +177,7 @@ app.put("/api/users/location/", function (req, res, next) {
     })
     .then((response) => response.json())
     .then((responseJson) => {
-      // console.log(responseJson, responseJson.results[0].formatted_address);
+      //console.log(responseJson, responseJson.results[0].formatted_address);
       newloc.address = responseJson.results[0].formatted_address;
 
       //update and return the location info
@@ -407,7 +407,7 @@ app.put("/api/users/status/", function(req, res, next){
   req.body.inform = sanitize(req.body.inform);
 
   // Check existence, message and inform are optional
-  if(!req.body.availability || req.body.message || req.body.inform) {
+  if(!req.body.availability || !req.body.message) {
     return res.status(400).end(stat._400);
   }
 
