@@ -51,6 +51,7 @@ A React Native app that broadcasts your availability and location to your friend
 -  sendgrid for mailing things to users
   - implemented on  backend, not  being used on front-end due to time constrictions
 -  Mongoose & MongoDB (hosted on MLab)
+- Pusher for socket & Push notification support (backend only)
 
 
 ## Technical Challenges
