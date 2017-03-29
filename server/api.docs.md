@@ -13,7 +13,7 @@
   - body: object
     - username: (string) the username of new user
 
-**example**,
+**example**
 ```
 curl -X POST -H "Content-Type: application/json" -d '{
   "username": "test",
@@ -37,7 +37,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
     - token: (string) the token used to authenticate in other methods
     - expiresIn: (int) when the token expires in seconds
 
-**example**,
+**example**
 ```
 curl -X POST -H "Content-Type: application/json" -d '{
   "username": "test",
@@ -66,7 +66,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
     - email: (string) email of the user
     - follows: (boolean) true iff current user follows the associated user
 
-**example**,
+**example**
 ```
 curl -X GET  "https://api.sanic.ca/api/users/?username=test&token=TOKEN"
 ```
@@ -83,7 +83,7 @@ curl -X GET  "https://api.sanic.ca/api/users/?username=test&token=TOKEN"
     - availability: (enum) availability status
     - message: (string) status message
 
-**example**,
+**example**
 ```
 curl -X GET -H "Cache-Control: no-cache" -H "Postman-Token: ec310d8e-6c4d-a898-e39f-38fe80aeaf9b" "http://localhost:5000/api/users/status/?token=TOKEN"
 ```
@@ -103,7 +103,7 @@ curl -X GET -H "Cache-Control: no-cache" -H "Postman-Token: ec310d8e-6c4d-a898-e
     - availability: (enum) availability status
     - message: (string) status message
 
-**example**,
+**example**
 ```
 curl -X PUT -H "Content-Type: application/json" -d '{
 	"availability" : "Busy",
@@ -132,7 +132,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{
     - latitude: (number) the latitude
     - height: (number) the height
 
-**example**,
+**example**
 ```
 curl -X PUT -H "Content-Type: application/json" -d '{
 	"username": "test",
@@ -155,7 +155,7 @@ curl -X PUT -H "Content-Type: application/json" -d '{
   - content-type: `application/json`
   - body: None
 
-**example**,
+**example**
 ```
 curl -X POST -H "Content-Type: application/json" -d '{
   "username": "test",
@@ -176,7 +176,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
   - content-type: `application/json`
   - body: None
 
-**example**,
+**example**
 ```
 curl -X POST -H "Content-Type: application/json" -d '{
   "username": "test",
@@ -198,7 +198,7 @@ curl -X POST -H "Content-Type: application/json" -d '{
     - usernames: (string) the username
     - follows: (boolean) true iff current user follows the associated user
 
-**example**,
+**example**
 ```
 curl -X GET "https://api.sanic.ca/api/users/search/?username=es&limit=10&token=TOKEN"
 ```
@@ -213,7 +213,7 @@ curl -X GET "https://api.sanic.ca/api/users/search/?username=es&limit=10&token=T
     - username: username of the current user (can differ for admin)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
 
-**example**,
+**example**
 ```
 curl -X DELETE "http://localhost:5000/api/users/?username=test&token=TOKEN"
 ```
@@ -231,7 +231,7 @@ curl -X DELETE "http://localhost:5000/api/users/?username=test&token=TOKEN"
   - body: list of object
     - usernames: (string) the username
 
-**example**,
+**example**
 ```
 curl -X GET "http://localhost:5000/api/followers/?username=test&token=TOKEN"
 ```
@@ -256,7 +256,7 @@ curl -X GET "http://localhost:5000/api/followers/?username=test&token=TOKEN"
       - availability: (enum) availability status
       - message: (string) status message
 
-**example request body (postman)**,
+**example**
 ```
 curl -X GET "http://localhost:5000/api/following/?username=test&token=TOKEN"
 ```
@@ -273,7 +273,7 @@ curl -X GET "http://localhost:5000/api/following/?username=test&token=TOKEN"
   - body: object
     - follows: (boolean) true iff current user follows the associated user
 
-**example request body (postman)**,
+**example**
 ```
 curl -X GET "http://localhost:5000/api/following/check/?username=test&token=TOKEN"
 ```
