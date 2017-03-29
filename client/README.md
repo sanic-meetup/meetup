@@ -37,4 +37,4 @@ if you encounter an error '<' could not parse or somthing along those lines, or 
 `api.sanic.ca`  
 we also have an alternate server hosted at  
 `sanic.ca:2096`  
-if you want to use this server please change the server variable in [constants.js](./Meetup/app/constants.js)
+if you want to use this server please change the server variable in [constants.js](./MeetUp/app/Constants.js)
