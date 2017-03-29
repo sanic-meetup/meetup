@@ -4,6 +4,7 @@
 #### Run from command line
 to run on iOS, must be using a Mac and have Xcode installed.
 - Move into MeetUp Directory
+- `$ npm install`
 - `$ react-native run-ios`
 
 #### Run on device/ run from Xcode
