@@ -212,9 +212,9 @@ curl -X GET "https://api.sanic.ca/api/users/search/?username=es&limit=10&token=T
     - username: username of the current user (can differ for admin)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
 
-**example request body (postman)**,
+**example**,
 ```
-
+curl -X DELETE "http://localhost:5000/api/users/?username=test&token=TOKEN"
 ```
 
 
