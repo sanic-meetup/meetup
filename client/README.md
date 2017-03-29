@@ -36,5 +36,5 @@ channel.bind('my-event', function(data) {
 if you encounter an error '<' could not parse or somthing along those lines, or a Network Error, that means the server is down. The server is hosted on cms-weblabs so simply restarting it will fix that error. (the server should not crash on its own though.) The server is hosted at  
 `api.sanic.ca`  
 we also have an alternate server hosted at  
-`sanic.ca:2096` 
+`sanic.ca:2096`  
 if you want to use this server please change the server variable in [constants.js](./Meetup/app/constants.js)
