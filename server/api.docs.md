@@ -207,7 +207,8 @@ curl -X GET "https://api.sanic.ca/api/users/search/?username=es&limit=10&token=T
 ### Delete a User
 - description: Delete the current/given user
 - request: `DELETE /api/users/`
-  - query:
+  - content-type: `application/json`
+  - body: object
     - token: the request token
     - username: username of the current user (can differ for admin)
 - response: 200 | 500 if server error | 401 if Unauthorized | 400 if bad req.
