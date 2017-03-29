@@ -3,10 +3,9 @@
 Sanic/MeetUp is a tool to help you meet up in real life; whether it's a good
 friend, or a YouTube celebrity.
 
-you can see a final report that summarizes our progress [here](./final.report.md)
-
-# How it works
+# Documentation & Reports
 - [Video required for Final Ver.](https://youtu.be/86L2xrDqnQM)
+- [Final Report (Progress  Summary)](./final.report.md)
 - [API documentation and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/server)
 - [Client app docs and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/client/)
 
