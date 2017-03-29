@@ -16,12 +16,12 @@ A React Native app that broadcasts your availability and location to your friend
 
 ## Features
 ### Key Features (BETA)
-[x] locating the app user
-[x] RESTful API that can successfully let the user know who's nearby
-[x] RESTful API: friends list (adding ,removing, viewing), user logins (OAuth or Phone #'s or UserName + Pass), accounts, profiles, user status, etc.
+- [x] locating the app user
+- [x] RESTful API that can successfully let the user know who's nearby
+- [x] RESTful API: friends list (adding ,removing, viewing), user logins (OAuth or Phone #'s or UserName + Pass), accounts, profiles, user status, etc.
   - profiles not implemented on client due to time restrictions
   - status limited to busy/available due to time restrictions
-[x] A usable front-end that allows the user to make use of above features meaningfully
+- [x] A usable front-end that allows the user to make use of above features meaningfully
 
 ### Additional Features (Final Ver.)
 - polished web-app and mobile app.
