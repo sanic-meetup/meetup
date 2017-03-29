@@ -27,7 +27,7 @@ you can see a final report that summarizes our progress [here](./final.report.md
 
 #### Ongoing:
 
-- [~] Cleaning/Fixing Backend (Kiwi)
-- [~] Error handling so client doesn't crash
+- [] Cleaning/Fixing Backend (Kiwi)
+- [] Error handling so client doesn't crash
 - [x] API Documentation
 - [x] Video Presentation
