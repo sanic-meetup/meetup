@@ -9,7 +9,8 @@ friend, or a YouTube celebrity.
 - [API documentation and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/server)
 - [Client app docs and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/client/)
 
-# TODO:
+<!-- DEV ONLY -->
+<!-- # TODO:
 
 - [x] Fix token/username prop passing (Brandon)
 - [x] Fix TabBar (Brandon)
@@ -30,6 +31,4 @@ friend, or a YouTube celebrity.
 - [ ] Error handling so client doesn't crash
 - [x] API Documentation
 - [x] Video Presentation
-
-## YouTube Video
-<iframe width="560" height="315" src="https://www.youtube.com/embed/86L2xrDqnQM" frameborder="0" allowfullscreen></iframe>
+-->
