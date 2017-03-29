@@ -1,4 +1,8 @@
 # Server
+
+## Api Documentation
+see [here](./api.docs.md)
+
 ## Current HTTPS Endpoint(s)
 ``https://api.sanic.ca`` (signed certificate, suitable for production use, hosted on cms-weberver use for grading)
 
@@ -13,9 +17,6 @@
 
 **http requests disabled for sanic.ca**
 
-## Memcached Server(s)
-- not yet impl
-
 ## local setup
 ``npm install``
 - open the conf.js file and set your username and password, if no file exists see the sample conf.js contents below and copy paste it into a conf.js file or copy the conf.js file in the root of this repo (change the credentials though)
@@ -24,9 +25,6 @@
 or
 ``nodemon app.js``
 - connect @ **https**://localhost:3000
-
-## Api Documentation
-see [here](./api.docs.md)
 
 ## Sample conf.js file
 ```
