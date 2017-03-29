@@ -46,14 +46,14 @@ A React Native app that broadcasts your availability and location to your friend
   - opted for native map client instead (Apple Maps for iOS / Google Maps for Android) this is for easier apple core location support
 - [x] Apple Core Location (for height location in buildings)
 
-### additions
+### additions to tech stack since BETA.
 -  Mocha, Chai, SuperTest, & chai-http for server side testing
 -  sendgrid for mailing things to users
   - implemented on  backend, not  being used on front-end due to time constrictions
 -  Mongoose & MongoDB (hosted on MLab)
 
 
-### Technical Challenges
+## Technical Challenges
 - [x] Learning React (and Native) FrameWorks
 - [x] Learning and Setting up Google Maps (& Apple Maps) API
 - [x] Learning and Setting up Apple Core location
