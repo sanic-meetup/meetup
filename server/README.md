@@ -27,6 +27,7 @@ or
 - connect @ **https**://localhost:3000
 
 ## Sample conf.js file
+if you clone the repository you will need to create a conf.js file in /api with the following contents.
 ```
 var username = 'username';
 var password = 'password';
