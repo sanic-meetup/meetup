@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
+import Navbar from "../components/Navbar";
 
 export default class Followers extends Component {
   constructor(props) {
@@ -91,6 +92,7 @@ export default class Followers extends Component {
 
     return (
         <View style={{flex:1, paddingTop: 20}}>
+        <Navbar title="Followers" status_enabled={false}/>
         <ScrollView>
           {this.state.followers.map(createItem)}
         </ScrollView>

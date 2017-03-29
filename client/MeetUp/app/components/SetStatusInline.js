@@ -147,8 +147,8 @@ export default class SetStatusInline extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        var initialPosition = JSON.stringify(position);
-        this.setState({initialPosition});
+        console.log(position);
+        this.setState({location: position});
       },
       (error) => alert(JSON.stringify(error)),
       {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}

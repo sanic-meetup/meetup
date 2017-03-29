@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { MapStyle } from  "../Constants";
+import Navbar from "../components/Navbar";
 var MapView = require('react-native-maps');
 
 export default class StatusDetailView extends Component {
@@ -26,9 +27,7 @@ export default class StatusDetailView extends Component {
   render() {
     return(
       <View style={{flex:1}}>
-        <Text>Status Detail View</Text>
-        <Text>{this.props.username}</Text>
-
+      <Navbar title={this.props.username} status_enabled={false}/>
         {/* Display location if exists in state */}
         {this.state.location?(<MapView
             showsIndoors={true}
