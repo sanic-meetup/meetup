@@ -2,7 +2,8 @@
 var follower = require("../models/follower"),
   helper = require('sendgrid').mail,
   fs = require('fs'),
-  crypto = require('crypto');
+  crypto = require('crypto'),
+  pusher = require('pusher');
 
 exports.statcodes = {
   _400: JSON.stringify({response:"bad request"}),
