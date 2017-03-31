@@ -91,7 +91,7 @@ export default class SetStatusInline extends Component {
   submitUpdateAvailability(callback) {
     this.setState({open: !this.state.open});
     console.log(this.state.selected);
-    return fetch('https://'+server+'/api/users/status/?token='+this.state.token, {
+    fetch('https://'+server+'/api/users/status/?token='+this.state.token, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -100,7 +100,7 @@ export default class SetStatusInline extends Component {
         body: JSON.stringify({
           availability: this.state.selected,
           message: this.state.message,
-          inform: this.state.inform,
+          inform: this.state.inform
           //latitude: this.state.location.coords.latitude,
           //longitude: this.state.location.coords.longitude
         })
@@ -108,8 +108,7 @@ export default class SetStatusInline extends Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.updateLocation();
-        console.log(responseJson);
-        //callback(responseJson);
+        // callback(responseJson);
       })
       .catch((error) => {
         console.error(error);
@@ -117,23 +116,23 @@ export default class SetStatusInline extends Component {
   }
 
   updateLocation() {
-    return fetch('https://'+server+'/api/users/location/', {
+
+    fetch('https://'+server+'/api/users/location/?token='+this.state.token, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          token: this.state.token,
           username: this.state.username,
           latitude: this.state.location.coords.latitude,
           longitude: this.state.location.coords.longitude,
-          height: 0,
+          height: -1,
         })
       })
       .then((response) => response.json())
       .then((responseJson) => {
-
+        console.log(responseJson);
       })
       .catch((error) => {
         console.error(error);

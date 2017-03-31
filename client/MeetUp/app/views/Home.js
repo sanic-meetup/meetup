@@ -48,6 +48,10 @@ export default class Home extends Component {
 
   componentWillMount() {
     console.log("Mounting");
+    //have to do this because when using tabbar and switching from another tab
+    //the token is removed from state so either do this and get the token again
+    //from login's props OR grab from async storage
+    if (!this.state.token) Actions.login();
     // Update statuses of people User follows.
 
     //setInterval(() => {this.updateStatuses()},2000);
@@ -158,10 +162,12 @@ export default class Home extends Component {
   }
 
   goToStatusDetailView(context) {
+    // console.error(context);
     Actions.status_detail_view(context);
   }
 
   renderCards() {
+
     if (this.state.statuses.success === false || this.state.statuses.length == []) { // IDK WHY THIS WORKS
       return <Text>No statuses</Text>
     }
@@ -181,8 +187,7 @@ export default class Home extends Component {
         <SetStatusInline
           open={this.state.updateFormOpen}
           token={this.state.token}
-          username={this.state.username}
-          token={this.state.token}/>
+          username={this.state.username}/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView
             refreshControl={
