@@ -27,12 +27,13 @@ export default class AccountTab extends Component {
         // We have data!!
         callback({success: true, username: name, token: token});
       } else {
-        console.warn("Login.js: username Not Set. Going back to login...");
+        // console.warn("Login.js: username Not Set. Going back to login...");
         Actions.login();
       }
     } catch (error) {
       // Error retrieving data
-      console.error(error);
+      // console.error(error);
+      console.log(error);
     }
   }
 
@@ -86,10 +87,17 @@ export default class AccountTab extends Component {
   }
 
   _accInfo() {
-    var alert_body = 'username: '+this.state.username
-    +"\n email: "+ this.state.accinfo.email
-    +"\n status: "+ JSON.stringify(this.state.accinfo.status)
-    +"\n location: "+this.state.accinfo.location.address;
+    //some QOL validation to increase readability by user
+    var email = this.state.accinfo.email ? this.state.accinfo.email : "Unretrievable";
+    var avail = this.state.accinfo.status.availability ?
+      this.state.accinfo.status.availability : "Not Set"
+    var addr = this.state.accinfo.location.address ?
+      this.state.accinfo.location.address : "Uknown";
+
+    var alert_body = 'username: ' + this.state.username
+    +"\n email: "+ email
+    +"\n status: "+ avail
+    +"\n location: "+ addr;
     Alert.alert(
       'Account Info.',
       alert_body,
