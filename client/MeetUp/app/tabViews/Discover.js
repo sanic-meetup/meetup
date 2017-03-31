@@ -177,7 +177,6 @@ export default class DiscoverTab extends Component {
 
     //@TODO use the createItem with map(...) when kiwi makes backend method
     return (
-      //search bar
       <View style={{flex:1, paddingTop: 20}}>
       <SearchBar
       	ref='searchBar'
@@ -188,7 +187,8 @@ export default class DiscoverTab extends Component {
         onCancelButtonPress={this.hide_keyboard.bind(this)}
       	/>
         <ScrollView
-        style={{flexDirection: 'column'}}
+        onScroll={this.hide_keyboard.bind(this)}
+        style={{flexDirection: 'column', flex: 1}}
         >
         {this.state.users.map(createItem)}
         </ScrollView>
