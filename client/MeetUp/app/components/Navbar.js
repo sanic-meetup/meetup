@@ -18,9 +18,9 @@ const STATUS_BAR_HEIGHT = 20;
 */
 const styles = {
   navBarContainer: {
-    backgroundColor: colors.purple,
+    backgroundColor: colors.primary,
     borderBottomWidth: 1,
-    borderBottomColor: "#8C588F"
+    borderBottomColor: colors.primary_shadow
   },
   statusBar: {
     height: STATUS_BAR_HEIGHT,
@@ -74,7 +74,7 @@ const styles = {
   underlined: {
     paddingBottom: 5,
     borderBottomWidth: 4,
-    borderBottomColor: "#8D5591"
+    borderBottomColor: colors.primary_shadow
   }
 };
 

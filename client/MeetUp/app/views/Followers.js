@@ -93,7 +93,7 @@ export default class Followers extends Component {
     )
 
     return (
-        <View style={{flex:1, paddingTop: 20}}>
+        <View style={{flex:1}}>
         <Navbar title="Followers" status_enabled={false}/>
         <ScrollView>
           {this.state.followers.map(createItem)}

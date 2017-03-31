@@ -109,7 +109,7 @@ export default class Following extends Component {
     )
 
     return (
-        <View style={{flex:1, paddingTop: 20}}>
+        <View style={{flex:1}}>
         <Navbar title="Following" status_enabled={false}/>
         <ScrollView
         style={{flexDirection: 'column'}}

@@ -7,7 +7,7 @@ import { colors, server } from '../Constants';
 
 const styles = {
   sceneContainer: {
-    backgroundColor: colors.purple_dark,
+    backgroundColor: "#1C345F",
     padding: 10,
     paddingTop: 20,
     height: 100,
@@ -39,7 +39,7 @@ const styles = {
     backgroundColor: colors.white
   },
   availButtonselectedText: {
-    color: colors.purple,
+    color: colors.primary,
   }
 };
 

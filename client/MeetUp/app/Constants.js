@@ -5,6 +5,8 @@ const server = "api.sanic.ca";
 
 const colors = {
   black: "#262626",
+  primary: '#4080FF',
+  primary_shadow: '#19418F',
   purple: '#B063B5',
   purple_dark: '#38213A',
   white: '#ffffff'

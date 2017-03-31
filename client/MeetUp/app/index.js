@@ -5,9 +5,6 @@ import { Actions, ActionConst, Scene, Router } from 'react-native-router-flux';
 import { colors } from './Constants';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const search = (<Icon name="magnifying-glass" size={30} color={colors.black} />)
-const account = (<Icon name="emoji-flirt" size={30} color={colors.black} />)
-
 // Scene's
 import Login from './views/Login';
 import SignUp from './views/SignUp';
@@ -122,7 +119,7 @@ export default class App extends React.Component {
         <Scene key="login" component={Login} title="Login"type={ActionConst.REPLACE}/>
         <Scene key="signup" component={SignUp} title="SignUp" type={ActionConst.REPLACE}/>
 
-        <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff"}} tabs={true} type={ActionConst.REPLACE}>
+        <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff", borderTopWidth:1, borderTopColor:"#a0a4aC"}} tabs={true} type={ActionConst.REPLACE}>
           <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} hideNavBar >
             <Scene key="home_1" component={Home}/>
             <Scene key="status_detail_view" component={StatusDetailView} animationStyle={animationStyle}/>
@@ -150,7 +147,7 @@ class TabIcon extends React.Component {
 
 class HomeIcon extends React.Component {
   render(){
-    const home = (<Icon name="home" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const home = (<Icon name="home" size={30} color={this.props.selected ? colors.primary : colors.black} />)
     return (
       <View>{home}</View>
     );
@@ -159,7 +156,7 @@ class HomeIcon extends React.Component {
 
 class SearchIcon extends React.Component {
   render(){
-    const discover = (<Icon name="search" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const discover = (<Icon name="search" size={30} color={this.props.selected ? colors.primary : colors.black} />)
     return (
       <View>{discover}</View>
     );
@@ -168,7 +165,7 @@ class SearchIcon extends React.Component {
 
 class AccountIcon extends React.Component {
   render(){
-    const account = (<Icon name="person" size={30} color={this.props.selected ? colors.purple : colors.black} />)
+    const account = (<Icon name="person" size={30} color={this.props.selected ? colors.primary : colors.black} />)
     return (
       <View>{account}</View>
     );

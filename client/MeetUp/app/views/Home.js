@@ -10,6 +10,7 @@ import {
   RefreshControl,
   } from 'react-native';
 import { Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Navbar from "../components/Navbar";
 import Card from "../components/Card";
 import SetStatusInline from "../components/SetStatusInline";
@@ -21,7 +22,7 @@ var uuid = require('react-native-uuid');
 
 const styles = {
   sceneContainer: {
-    backgroundColor: "#eeeeee"
+    backgroundColor: "#FCFCFC"
   }
 };
 
@@ -169,7 +170,7 @@ export default class Home extends Component {
   renderCards() {
 
     if (this.state.statuses.success === false || this.state.statuses.length == []) { // IDK WHY THIS WORKS
-      return <Text>No statuses</Text>
+      return <View style={{flex:1, height:500, alignItems:'center', justifyContent:'center'}}><Text style={{color: '#90949C', fontSize: 30}}>🌚</Text><Text style={{color: '#90949C', fontSize: 18}}>No statuses</Text></View>
     }
     return (this.state.statuses.map((curr) => {return(<Card onPress={this.goToStatusDetailView.bind(this, curr)} key={uuid.v1()} available={curr.status?(curr.status.availability=='Busy'?false:true):false} username={curr.username}/>)}));
   }
@@ -190,6 +191,7 @@ export default class Home extends Component {
           username={this.state.username}/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView
+            style={{flex:1,marginTop: 8}}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -204,3 +206,12 @@ export default class Home extends Component {
     )
   }
 };
+
+class EmptyStatusIcon extends React.Component {
+  render(){
+    const account = (<Icon name="sentiment-dissatisfied" size={40} color='#90949C' style={{paddingBottom: 10}}/>)
+    return (
+      <View>{account}</View>
+    );
+  }
+}

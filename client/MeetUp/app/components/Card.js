@@ -9,9 +9,10 @@ const styles = {
     marginBottom: 4,
     borderRadius: 8,
     backgroundColor: 'white',
+    borderTopWidth: 1,
     borderBottomWidth: 4,
-    borderLeftWidth: 2,
-    borderRightWidth: 2,
+    borderLeftWidth: 3,
+    borderRightWidth: 3,
     borderColor: '#e9e9e9',
   },
   contentContainer: {
