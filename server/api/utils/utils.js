@@ -39,17 +39,17 @@ exports.pusher_conf = {
 /**
 * Helper Function to send notification to all following users.
 */
-exports.notifyFollowers = function (username, nevent, data){
-  follower.findOne({username: username}, function (err, doc) {
-    if (err) return res.status(500).end(stat._500);
-    //if user has followers notify them via push notification
-    if (doc) {
-      for (var i = 0; i < doc.followers.length; i ++) {
-        pusher.trigger(doc.followers[i], nevent, data);
-      }
-    }
-  });
-};
+// exports.notifyFollowers = function (username, nevent, data){
+//   follower.findOne({username: username}, function (err, doc) {
+//     if (err) return res.status(500).end(stat._500);
+//     //if user has followers notify them via push notification
+//     if (doc) {
+//       for (var i = 0; i < doc.followers.length; i ++) {
+//         pusher.trigger(doc.followers[i], nevent, data);
+//       }
+//     }
+//   });
+// };
 
 /**
 * a helper function that sends email (from support@sanic.ca)
