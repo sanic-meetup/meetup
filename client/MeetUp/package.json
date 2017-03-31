@@ -12,6 +12,7 @@
     "react-native-maps": "^0.13.1",
     "react-native-router-flux": "^3.38.0",
     "react-native-search-bar": "^3.0.0",
+    "react-native-uuid": "^1.4.9",
     "react-native-vector-icons": "^4.0.0"
   },
   "devDependencies": {

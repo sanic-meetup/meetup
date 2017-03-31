@@ -5,6 +5,7 @@ import { AsyncStorage, View, Text, ScrollView, Button, TouchableOpacity,
 import 'react-native-vector-icons';
 import { server } from '../Constants';
 var SearchBar = require('react-native-search-bar');
+var uuid = require('react-native-uuid');
 
 
 export default class DiscoverTab extends Component {
@@ -144,7 +145,7 @@ export default class DiscoverTab extends Component {
   //a workaround to hide keyboard on cancel
   hide_keyboard(){
     this.refs.searchBar.unFocus();
-    Keyboard.dismiss();
+    // Keyboard.dismiss();
   }
 
   render() {
@@ -160,7 +161,7 @@ export default class DiscoverTab extends Component {
       }}>
         <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
            <Text
-              key={item.id}
+              key={uuid.v1()}
               style={{fontSize:20}}
             >
               {item.username}
@@ -185,11 +186,15 @@ export default class DiscoverTab extends Component {
       	onChangeText={this._handleResults.bind(this)}
       	onSearchButtonPress={this.findUser.bind(this)}
         onCancelButtonPress={this.hide_keyboard.bind(this)}
+        showsCancelButton={true}
+        searchBarStyle='minimal'
       	/>
+
         <ScrollView
         onScroll={this.hide_keyboard.bind(this)}
         style={{flexDirection: 'column', flex: 1}}
         >
+
         {this.state.users.map(createItem)}
         </ScrollView>
       </View>
