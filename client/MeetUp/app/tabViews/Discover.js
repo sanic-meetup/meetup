@@ -11,7 +11,7 @@ var uuid = require('react-native-uuid');
 export default class DiscoverTab extends Component {
   constructor(props) {
     super(props);
-    console.log("discover", props.username);
+    // console.log("discover", props.username);
     this.state = {
       token: props.token,
       username: props.username,
@@ -158,10 +158,11 @@ export default class DiscoverTab extends Component {
         borderRadius: 4,
         borderWidth: 0.5,
         borderColor: '#d6d7da'
-      }}>
+      }}
+      key={uuid.v1()}
+      >
         <View style={{flexDirection: 'row', justifyContent:'space-between'}}>
            <Text
-              key={uuid.v1()}
               style={{fontSize:20}}
             >
               {item.username}

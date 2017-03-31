@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-nati
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
+var uuid = require('react-native-uuid');
 
 export default class Following extends Component {
   constructor(props) {
@@ -89,10 +90,12 @@ export default class Following extends Component {
         borderRadius: 4,
         borderWidth: 0.5,
         borderColor: '#d6d7da'
-      }}>
+      }}
+      key={uuid.v1()}
+      >
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
          <Text
-            key={item.id}
+            key={uuid.v1}
             style={{fontSize: 20}}>
             {item.username}
          </Text>

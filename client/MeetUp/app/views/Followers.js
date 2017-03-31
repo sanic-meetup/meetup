@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-nati
 import { server } from '../Constants';
 import { Actions } from 'react-native-router-flux';
 import Navbar from "../components/Navbar";
+var uuid = require('react-native-uuid');
 
 export default class Followers extends Component {
   constructor(props) {
@@ -79,9 +80,10 @@ export default class Followers extends Component {
         borderWidth: 0.5,
         borderColor: '#d6d7da',
         padding: 15
-      }}>
+      }}
+      key={uuid.v1()}
+      >
        <Text
-          key={item.id}
           style={{
             fontSize:20,
           }}>
