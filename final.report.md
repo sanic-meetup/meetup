@@ -59,6 +59,8 @@ A React Native app that broadcasts your availability and location to your friend
 - [x] Learning and Setting up Google Maps (& Apple Maps) API
 - [x] Learning and Setting up Apple Core location
 - [ ] (optional) Learn & work with Swift for iOS app
+- [x] cloudflare cnd setup and synchro with servers
+  - load balancing not implemented since its a premuim feature
 - [x] Deploying and configuring RestAPI to work with mobile devices
 
 <!--##Proposal \#2
