@@ -61,7 +61,7 @@ export default class SetStatusInline extends Component {
       token: props.token,
       username: props.username,
       selected: undefined,
-      message: "",
+      message: "test",
       inform: false,
       open: props.open,
       location: undefined
@@ -90,6 +90,7 @@ export default class SetStatusInline extends Component {
 
   submitUpdateAvailability(callback) {
     this.setState({open: !this.state.open});
+    console.log(this.state.selected);
     return fetch('https://'+server+'/api/users/status/?token='+this.state.token, {
         method: 'PUT',
         headers: {
@@ -100,13 +101,14 @@ export default class SetStatusInline extends Component {
           availability: this.state.selected,
           message: this.state.message,
           inform: this.state.inform,
-          latitude: this.state.location.coords.latitude,
-          longitude: this.state.location.coords.longitude
+          //latitude: this.state.location.coords.latitude,
+          //longitude: this.state.location.coords.longitude
         })
       })
       .then((response) => response.json())
       .then((responseJson) => {
         this.updateLocation();
+        console.log(responseJson);
         //callback(responseJson);
       })
       .catch((error) => {

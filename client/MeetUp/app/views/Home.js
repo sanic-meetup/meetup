@@ -150,7 +150,6 @@ export default class Home extends Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log("Following:", responseJson);
         callback(responseJson);
       })
       .catch((error) => {
@@ -182,8 +181,8 @@ export default class Home extends Component {
         <SetStatusInline
           open={this.state.updateFormOpen}
           token={this.state.token}
-          username={this.props.username}
-          token={this.props.token}/>
+          username={this.state.username}
+          token={this.state.token}/>
         <View style={{flex: 1, marginLeft: 10, marginRight: 10}}>
           <ScrollView
             refreshControl={

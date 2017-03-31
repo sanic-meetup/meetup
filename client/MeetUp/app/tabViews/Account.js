@@ -9,6 +9,7 @@ import { Actions } from 'react-native-router-flux';
 export default class AccountTab extends Component {
   constructor(props) {
     super(props);
+    console.log("Account:",this.props);
     this.state = {
       token: props.token,
       username: props.username,
@@ -17,9 +18,32 @@ export default class AccountTab extends Component {
     };
   }
 
+  //  try to retrive a logged in user from local storage on device
+  getUsername = async (callback) => {
+    try {
+      const name = await AsyncStorage.getItem('username');
+      const token = await AsyncStorage.getItem('token');
+      if (name !== null && token !== null){
+        // We have data!!
+        callback({success: true, username: name, token: token});
+      } else {
+        console.warn("Login.js: username Not Set. Going back to login...");
+        Actions.login();
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+  }
+
   componentWillMount() {
-    this.getAccInfo((json) => { // get the users' status
-      this.setState({accinfo : json});
+    this.getUsername((res) => {
+      if (res.success) {
+        this.setState({username: res.username, token: res.token});
+        this.getAccInfo((json) => { // get the users' status
+          this.setState({accinfo : json});
+        });
+      }
     });
   }
 
@@ -56,9 +80,9 @@ export default class AccountTab extends Component {
   }
 
   _logout(){
-    AsyncStorage.removeItem('token', function() {
+    AsyncStorage.removeItem('token', function() { AsyncStorage.removeItem('username', function() {
       Actions.login();
-    });
+    })});
   }
 
   _accInfo() {

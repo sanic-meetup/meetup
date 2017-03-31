@@ -53,6 +53,7 @@ export default class Login extends React.Component {
         // We have data!!
         callback({success: true, token: token, username: name})
       }
+      callback({success: false})
         //console.warn("Login.js: User Token Not Set.");
     } catch (error) {
       // Error retrieving data
@@ -85,9 +86,8 @@ export default class Login extends React.Component {
         try {
           AsyncStorage.setItem('username', responseJson.username);
           AsyncStorage.setItem('token', responseJson.token);
-          console.log(responseJson.username);
           if (responseJson.username)
-            this.goToHome({token: responseJson.token});
+            this.goToHome({token: responseJson.token, username: responseJson.username});
         } catch (error) {
           console.error(error);
         }
@@ -98,7 +98,6 @@ export default class Login extends React.Component {
   }
 
   goToHome(props) {
-    console.log("props from login", props);
     Actions.tabbar(props);
   }
 

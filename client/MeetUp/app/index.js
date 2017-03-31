@@ -79,6 +79,8 @@ export const animationStyle = (props) => {
 export default class App extends React.Component {
   constructor() {
     super();
+    this.userData = {};
+    this.state = {};
   }
 
   componentWillMount() {
@@ -111,22 +113,22 @@ export default class App extends React.Component {
   }
 
   _onPress(scene) {
-    Actions[scene](this.state);
+    Actions[scene]();
   }
 
   render() {
     return <Router>
       <Scene key="root" hideNavBar type={ActionConst.REPLACE}>
-        <Scene key="login" component={Login} title="Login" type={ActionConst.REPLACE}/>
-        <Scene key="signup" component={SignUp} title="Login" type={ActionConst.REPLACE}/>
+        <Scene key="login" component={Login} title="Login"type={ActionConst.REPLACE}/>
+        <Scene key="signup" component={SignUp} title="SignUp" type={ActionConst.REPLACE}/>
 
         <Scene key="tabbar" tabBarStyle={{backgroundColor: "#fff"}} tabs={true} type={ActionConst.REPLACE}>
           <Scene key="home" onPress={this._onPress.bind(this, "home")} initial={true} icon={HomeIcon} hideNavBar >
             <Scene key="home_1" component={Home}/>
             <Scene key="status_detail_view" component={StatusDetailView} animationStyle={animationStyle}/>
           </Scene>
-          <Scene key="discover" icon={SearchIcon}  onPress={this._onPress.bind(this, "discover")} component={DiscoverTab} hideNavBar/>
-          <Scene key="account" icon={AccountIcon}  onPress={this._onPress.bind(this, "account")} hideNavBar>
+          <Scene key="discover" icon={SearchIcon} onPress={this._onPress.bind(this, "discover")} component={DiscoverTab} hideNavBar/>
+          <Scene key="account" icon={AccountIcon} onPress={this._onPress.bind(this, "account")} hideNavBar>
             <Scene key="account_1" component={AccountTab} animationStyle={animationStyle}/>
             <Scene key="account_followers" component={Followers} animationStyle={animationStyle}/>
             <Scene key="account_following" component={Following} animationStyle={animationStyle}/>

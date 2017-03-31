@@ -55,6 +55,7 @@ export default class Following extends Component {
   * Sign in a user
   */
   getFollowing(callback) {
+    console.log(this.state.token);
     return fetch('https://'+server+'/api/following/?token='+this.state.token, {
         method: 'GET',
         headers: {

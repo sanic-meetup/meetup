@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Button, TouchableOpacity, RefreshControl} from 'react-native';
-var SearchBar = require('react-native-search-bar');
+import { AsyncStorage, View, Text, ScrollView, Button, TouchableOpacity,
+  RefreshControl, Keyboard
+} from 'react-native';
 import 'react-native-vector-icons';
 import { server } from '../Constants';
+var SearchBar = require('react-native-search-bar');
+
 
 export default class DiscoverTab extends Component {
   constructor(props) {
@@ -17,10 +20,34 @@ export default class DiscoverTab extends Component {
     };
   }
 
+  //  try to retrive a logged in user from local storage on device
+  getUsername = async (callback) => {
+    try {
+      const name = await AsyncStorage.getItem('username');
+      const token = await AsyncStorage.getItem('token');
+      if (name !== null && token !== null){
+        // We have data!!
+        callback({success: true, username: name, token: token});
+      } else {
+        console.warn("Login.js: username Not Set. Going back to login...");
+        Actions.login();
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+  }
+
   componentDidMount() {
+
+    this.getUsername((res) => {
+      if (res.success) {
+        this.setState({username: res.username, token: res.token});
+      }
+    });
+
     //show keyboard
     this.refs.searchBar.focus();
-    console.log(this.props.token);
   }
 
   // Determine if we should re-render
@@ -117,6 +144,7 @@ export default class DiscoverTab extends Component {
   //a workaround to hide keyboard on cancel
   hide_keyboard(){
     this.refs.searchBar.unFocus();
+    Keyboard.dismiss();
   }
 
   render() {
@@ -157,7 +185,7 @@ export default class DiscoverTab extends Component {
       	placeholder='Search'
       	onChangeText={this._handleResults.bind(this)}
       	onSearchButtonPress={this.findUser.bind(this)}
-      	onCancelButtonPress={this.hide_keyboard.bind(this)}
+        onCancelButtonPress={this.hide_keyboard.bind(this)}
       	/>
         <ScrollView
         style={{flexDirection: 'column'}}
