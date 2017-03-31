@@ -39,7 +39,7 @@ exports.pusher_conf = {
 /**
 * Helper Function to send notification to all following users.
 */
-// exports.notifyFollowers = function (username, nevent, data){
+exports.notifyFollowers = function (username, nevent, data){
 //   follower.findOne({username: username}, function (err, doc) {
 //     if (err) return res.status(500).end(stat._500);
 //     //if user has followers notify them via push notification
@@ -49,7 +49,7 @@ exports.pusher_conf = {
 //       }
 //     }
 //   });
-// };
+};
 
 /**
 * a helper function that sends email (from support@sanic.ca)
