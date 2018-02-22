@@ -6,8 +6,8 @@ friend, or a YouTube celebrity.
 # Documentation & Reports
 - <img src=https://image.freepik.com/free-icon/youtube-symbol_318-64721.jpg width='20px' height='auto'/> [Video required for Final Ver.](https://youtu.be/86L2xrDqnQM)
 - [Final Report (Progress  Summary)](./final.report.md)
-- [API documentation and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/server)
-- [Client app docs and source code can be found here.](https://github.com/UTSCC09/sanic/tree/master/client/)
+- [API documentation and source code can be found here.](./server)
+- [Client app docs and source code can be found here.](./client/)
 
 <!-- DEV ONLY -->
 <!-- # TODO:
